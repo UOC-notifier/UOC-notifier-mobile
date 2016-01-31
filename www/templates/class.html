@@ -13,7 +13,7 @@
         <br>
         <ion-list>
           <div class="item item-divider" ng-if="currentclass.events.length">Activitats</div>
-          <ion-item ng-repeat="event in currentclass.events" class="item event {{event.eventstate}}">
+          <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}">
           <div class="row">
             <div class="col">{{event.name}}</div>
             <div class="col text-center">

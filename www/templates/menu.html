@@ -8,6 +8,8 @@
         </button>
       </ion-nav-buttons>
       <ion-nav-buttons side="right">
+        <span class="badge badge-assertive" ng-if="messages > critical">{{messages}}</span>
+        <span class="badge badge-energized" ng-if="messages <= critical && messages > 0">{{messages}}</span>
         <ion-spinner ng-if="loading"></ion-spinner>
       </ion-nav-buttons>
     </ion-nav-bar>

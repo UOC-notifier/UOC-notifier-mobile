@@ -1,6 +1,6 @@
-angular.module('uoc-notifier', ['pascalprecht.translate'])
+angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
-.controller('AppCtrl', function($scope, $translate) {
+.controller('AppCtrl', function($scope, $translate, $cordovaBadge) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -12,6 +12,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate'])
   $scope.allclasses = Classes.get_all();
   $scope.classes = Classes.get_notified();
   $scope.critical = get_critical();
+  $scope.messages = Classes.messages;
 
   $scope.doRefresh = function() {
     $scope.loading = true;
@@ -21,9 +22,15 @@ angular.module('uoc-notifier', ['pascalprecht.translate'])
       $scope.$broadcast('scroll.refreshComplete');
       $scope.loading = false;
       $scope.critical = get_critical();
+      $scope.messages = Classes.messages;
+      if ($scope.messages > 0) {
+        $cordovaBadge.set($scope.messages);
+      } else {
+        $cordovaBadge.clear();
+      }
     });
   };
-  //$scope.doRefresh();
+  $scope.doRefresh();
 })
 
 .controller('SettingsCtrl', function($scope, $state, $translate) {
@@ -48,7 +55,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate'])
     save_today(settings.today_tab);
     Classes.save();
     $scope.doRefresh();
-    $state.transitionTo('app.main');
+    $state.go('app.main');
   };
 
   $scope.save_classes = function(settings) {
@@ -108,7 +115,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate'])
         evnt.endtext = false;
         evnt.soltext = false;
       } else {
-        unset(evnt);
+        evnt.hide = true;
       }
     }
 
