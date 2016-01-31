@@ -1,0 +1,62 @@
+<ion-view view-title="Options">
+  <ion-content>
+    <form ng-submit="save(settings)">
+        <div class="list">
+          <div class="item item-divider">Entrada</div>
+            <label class="item item-input" for="username">
+              <div class="input-label"><i class="icon ion-person"></i>  Username</div>
+              <input id="username" type="text" ng-model="settings.username" placeholder="username">
+            </label>
+
+            <label class="item item-input" for="password">
+              <div class="input-label"><i class="icon ion-locked"></i> Password</div>
+              <input id="password" type="password" ng-model="settings.password" placeholder="password">
+            </label>
+
+          <div class="item item-divider">Opcions</div>
+
+            <label class="item item-input item-select" for="uni">
+              <div class="input-label">
+                <i class="icon ion-earth"></i> Universitat
+              </div>
+              <select id="uni" ng-model="settings.uni">
+                <option value="UOCc">UOC catalana</option>
+                <option value="UOCi">UOC iberoamericana</option>
+              </select>
+            </label>
+
+            <label class="item item-input" for="check_interval">
+              <div class="input-label">
+                <i class="icon ion-clock"></i> Interval de comprovació
+              </div>
+              <input id="check_interval" disabled type="number" ng-model="settings.check_interval" min="20" step="10">
+            </label>
+
+            <label class="item item-input" for="critical">
+              <div class="input-label">
+                <i class="icon ion-alert-circled"></i> Mínim de missatges per considerar crític i notificar
+              </div>
+              <input id="critical" type="number" ng-model="settings.critical" min="0">
+            </label>
+
+            <ion-toggle ng-model="settings.notification"><i class="icon ion-speakerphone"></i> Notificacions push</ion-toggle>
+
+          <div class="item item-divider">Mostra</div>
+
+            <label class="item item-input" for="today_tab">
+              <div class="input-label">
+                <i class="icon ion-flag"></i> Dies per mostrar als esdeveniments propers
+              </div>
+              <input id="today_tab" disabled type="number" ng-model="settings.today_tab" min="0">
+            </label>
+
+          <div class="item item-divider">Mostra i notifica aules</div>
+
+          <ion-toggle ng-repeat="classroom in allclasses" ng-model="classroom.notify"><span class="class-color" style="background-color: #{{classroom.color}};"></span> <span ng-if="classroom.subject_code">{{classroom.subject_code}}</span> {{classroom.title}}</ion-toggle>
+        </div>
+        <div class="padding">
+          <button type="submit" class="button button-block button-positive">Save</button>
+        </div>
+    </form>
+  </ion-content>
+</ion-view>

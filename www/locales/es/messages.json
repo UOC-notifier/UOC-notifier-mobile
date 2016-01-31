@@ -1,0 +1,435 @@
+{
+    "TITLE" : {
+        "message" : "UOC Notifier"
+    },
+    "DESCRIPTION" : {
+        "message" : "Notificador de la UOC para Google Chrome"
+    },
+    "__LOGIN__" : {
+        "message" : "Entrada"
+    },
+    "__OPTIONS__" : {
+        "message" : "Opciones"
+    },
+    "__USER__" : {
+        "message" : "Usuario"
+    },
+    "__PASSWORD__" : {
+        "message" : "Contraseña"
+    },
+    "__UNI__" : {
+        "message" : "Universidad"
+    },
+    "__INTERVAL__" : {
+        "message" : "Intervalo de comprobación"
+    },
+    "__CRITICAL__" : {
+        "message" : "Mínimo de mensajes para considerar crítico y notificar"
+    },
+    "__NOTIFICATION__" : {
+        "message" : "Mensajes emergentes"
+    },
+    "__MESSAGES__" : {
+        "message" : "Mensajes"
+    },
+    "__SAVE__" : {
+        "message" : "Guardar"
+    },
+    "__CLASS_NOTIFY__" : {
+        "message" : "Notificar y mostrar aulas"
+    },
+    "__MINUTES__" : {
+        "message" : "minutos"
+    },
+    "__SHOW__" : {
+        "message" : "Mostrar"
+    },
+    "__SAVED_OPTIONS__" : {
+        "message" : "Opciones guardadas. Espera a que se actualizen las aulas..."
+    },
+    "__VERSION__" : {
+        "message" : "Versión"
+    },
+    "__CLASSROOM__" : {
+        "message" : "Aula"
+    },
+    "__RESET_CLASSROOMS__" : {
+        "message" : "Reset classrooms"
+    },
+    "__RESET_CONFIRM__" : {
+        "message" : "Esta acción eliminará toda la información de las aulas para volverlas a descargar, ¿estás seguro?"
+    },
+
+    "__GRADE_RESUME__" : {
+        "message" : "Resumen de notas"
+    },
+    "__EXAM_REVISION__" : {
+        "message" : "Rev. de exámen"
+    },
+    "__FINAL_GRADES__" : {
+        "message" : "Notas finales"
+    },
+    "__PROV_GRADE__" : {
+        "message" : "Nota provisional"
+    },
+    "__EXAM_SELECT__" : {
+        "message" : "Hoja de pruebas"
+    },
+    "__STATS__" : {
+        "message" : "Estadísticas"
+    },
+    "__USERS__" : {
+        "message" : "Usuarios"
+    },
+    "__CONNECTED__" : {
+        "message" : "Conectado"
+    },
+    "__DISCONNECTED__" : {
+        "message" : "Desconectado"
+    },
+    "__ENROLL_PROP__" : {
+        "message" : "Propuesta Matrícula"
+    },
+    "__ENROLL__" : {
+        "message" : "Matrícula"
+    },
+    "__GRADES_SMS__" : {
+        "message" : "Notas por correo-e"
+    },
+    "__EXPEDIENT__" : {
+        "message" : "Expediente"
+    },
+    "__PERSONAL__" : {
+        "message" : "Personal"
+    },
+    "__OLD_AGENDA__" : {
+        "message" : "Agenda antigua"
+    },
+    "__NEW_AGENDA__" : {
+        "message" : "Agenda nueva"
+    },
+    "__PERSONAL_AGENDA__" : {
+        "message" : "Agenda personal"
+    },
+    "__FILES__" : {
+        "message" : "`Area de ficheros"
+    },
+    "__WORKING_GROUPS__" : {
+        "message" : "Grupos de trabajo"
+    },
+    "__OLD_CLASSROOMS__" : {
+        "message" : "Aulas anteriores"
+    },
+    "__FINAL_TESTS__" : {
+        "message" : "Pruebas de evaluación final en $seu$ el día $date$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "seu": {
+            "content": "$2"
+          }
+        }
+    },
+    "__FINAL_TESTS_CLASS__" : {
+        "message" : "$class$ - Pruebas de evaluación final ",
+        "placeholders": {
+          "class": {
+            "content": "$1"
+          }
+        }
+    },
+    "__FINAL_TESTS_CLASS_TITLE__" : {
+        "message" : "$time$ $type$ en $seu$ $place$",
+        "placeholders": {
+          "type": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          },
+          "seu": {
+            "content": "$3"
+          },
+          "place": {
+            "content": "$4"
+          }
+        }
+    },
+    "__COMMITTED__" : {
+        "message" : "Entregado"
+    },
+    "__COMMITTED_VIEWED__" : {
+        "message" : "Entregado y visto por el consultor:  $date$ a las $time$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          }
+        }
+    },
+    "__NOT_COMMITTED__" : {
+        "message" : "No entregado"
+    },
+    "__EQUIPMENT__" : {
+        "message" : "Materiales"
+    },
+    "__LINK_TO_EQUIPMENT__" : {
+      "message" : "Enlace a los materiales"
+    },
+    "__TEACHING_PLAN__" : {
+        "message" : "Plan Docente"
+    },
+    "__GOTO_CAMPUS__" : {
+        "message" : "Ir al campus"
+    },
+    "__GOTO_CLASS__" : {
+        "message" : "Ir al aula"
+    },
+    "__GOTO_RES__" : {
+        "message" : "Ir al recurso"
+    },
+    "__START__" : {
+        "message" : "Inicio"
+    },
+    "__END__" : {
+        "message" : "Fin"
+    },
+    "__SOLUTION__" : {
+        "message" : "Solución"
+    },
+    "__GRADE__" : {
+        "message" : "Nota"
+    },
+    "__GRADES__" : {
+        "message" : "Notas"
+    },
+    "__NEWS__" : {
+        "message" : "Noticias"
+    },
+    "__AGENDA__" : {
+        "message" : "Agenda"
+    },
+    "__LINKS_TO_CAMPUS__" : {
+        "message" : "Enlaces del campus"
+    },
+    "__UOC__" : {
+        "message" : "UOC"
+    },
+    "__STUDY_GUIDE__" : {
+        "message" : "Guía de estudio"
+    },
+    "__MODULE__" : {
+        "message" : "Módulo"
+    },
+    "__ASSIGNMENT__" : {
+        "message" : "Entrega"
+    },
+    "__ASSIGNMENTS__" : {
+        "message" : "Entregas"
+    },
+    "__SHOW_MODULE_DATES__" : {
+        "message" : "Fechas de los módulos"
+    },
+    "__UPDATE__" : {
+        "message" : "Actualizar"
+    },
+    "__TODAY__" : {
+        "message" : "Hoy"
+    },
+    "__UPCOMMING_DAYS__" : {
+        "message" : "Dias para mostrar en los eventos cercanos"
+    },
+    "__SHOW_UPCOMMING__" : {
+        "message" : "Mostrar eventos cercanos"
+    },
+    "__ONLY_ASSIGNMENTS__" : {
+        "message" : "Mostrar sólo tareas"
+    },
+    "__NOTHING_AHEAD_" : {
+      "message" : "No hay tareas a la vista"
+    },
+    "__DAYS__" : {
+        "message" : "dias"
+    },
+    "__TEACHER__" : {
+        "message" : "Consultor/a"
+    },
+    "__MAIL__" : {
+        "message" : "Correo"
+    },
+    "__UNREAD_MAIL__" : {
+        "message" : "Correos pendientes: $messages$",
+        "placeholders": {
+          "messages": {
+            "content": "$1"
+          }
+        }
+    },
+    "__SUBJECT__" : {
+        "message" : "Asignatura"
+    },
+    "__VIEWED_LAST_TIME__" : {
+        "message" : "Visto por última vez: $date$ a las $time$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          }
+        }
+    },
+    "__NOTIFICATION_UNREAD__" : {
+        "message" : "Tienes $messages$ mensajes por leer",
+        "placeholders": {
+          "messages": {
+            "content": "$1"
+          }
+        }
+    },
+    "__NOTIFICATION_MAIL__" : {
+        "message" : "Tienes $messages$ correos por leer",
+        "placeholders": {
+          "messages": {
+            "content": "$1"
+          }
+        }
+    },
+    "__UOC_WORKING__" : {
+        "message" : "La UOC ha vuelto"
+    },
+    "__PRACT_START__" : {
+        "message" : "Hoy empieza la $pract$ de $class$",
+        "placeholders": {
+          "pract": {
+            "content": "$1"
+          },
+          "class": {
+            "content": "$2"
+          }
+        }
+    },
+    "__PRACT_END__" : {
+        "message" : "Hoy acaba la $pract$ de $class$",
+        "placeholders": {
+          "pract": {
+            "content": "$1"
+          },
+          "class": {
+            "content": "$2"
+          }
+        }
+    },
+    "__PRACT_GRADE__" : {
+        "message" : "Has sacado una $grade$ en la $pract$ de $class$",
+        "placeholders": {
+          "grade": {
+            "content": "$1"
+          },
+          "pract": {
+            "content": "$2"
+          },
+          "class": {
+            "content": "$3"
+          }
+        }
+    },
+    "__FINAL_GRADE__" : {
+        "message" : "Has sacado una $grade$ en $final$ de $class$",
+        "placeholders": {
+          "grade": {
+            "content": "$1"
+          },
+          "final": {
+            "content": "$2"
+          },
+          "class": {
+            "content": "$3"
+          }
+        }
+    },
+    "__FINAL_GRADE_PROV__" : {
+        "message" : "Has sacado una $grade$ en $final$ de $class$ (Nota provisional)",
+        "placeholders": {
+          "grade": {
+            "content": "$1"
+          },
+          "final": {
+            "content": "$2"
+          },
+          "class": {
+            "content": "$3"
+          }
+        }
+    },
+    "__SHOW_COMMENT__" : {
+        "message" : "Mostrar comentario"
+    },
+    "__COMMENT__" : {
+        "message" : "Comentario del día $date$ a las $time$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          }
+        }
+    },
+    "__NOT_STATS__" : {
+        "message" : "Han salido les estadísticas de $class$",
+        "placeholders": {
+          "class": {
+            "content": "$1"
+          }
+        }
+    },
+    "__INCORRECT_USER__" : {
+        "message" : "El usuario/password no es correcto<br>Si este error persiste, haz login <a href=\"https://cv.uoc.edu/webapps/cas/login?renew=true\" target=\"_blank\">aquí</a>"
+    },
+    "__NO_USER_PASSWORD__" : {
+        "message" : "No hay usuario y password..."
+    },
+    "__WAITING_TO_LOGIN__" : {
+        "message" : "Esperando a entrar... Si el mensaje no desaparece puede que el usuari y password sean incorrectos."
+    },
+    "__ATTENTION__" : {
+        "message" : "Atención"
+    },
+    "__NO_CLASSROOMS__" : {
+        "message" : "No hay aulas visibles. Confirma en la configuración las aulas que quieres visualizar"
+    },
+    "__FAQ_LINK__": {
+        "message" : "Tienes problemas? Visita las"
+    },
+    "__C__": {
+        "message" : "Nota de Evaluación Continuada"
+    },
+    "__P__": {
+        "message" : "Nota final de actividades prácticas"
+    },
+    "__FC__": {
+        "message" : "Nota final de Evaluación Continuada"
+    },
+    "__PS__": {
+        "message" : "Prueba de Síntesis"
+    },
+    "__PV__": {
+        "message" : "Prueba de Validación"
+    },
+    "__EX__": {
+        "message" : "Exámen"
+    },
+    "__PF__": {
+        "message" : "Prueba Final"
+    },
+    "__FE__": {
+        "message" : "Nota final de Exámenes (P+EX)"
+    },
+    "__FA__": {
+        "message" : "Nota final de la Asignatura"
+    }
+}

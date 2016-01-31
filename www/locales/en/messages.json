@@ -1,0 +1,435 @@
+{
+    "TITLE" : {
+        "message" : "UOC Notifier"
+    },
+    "DESCRIPTION" : {
+        "message" : "UOC notifier for Google Chrome"
+    },
+    "__LOGIN__" : {
+        "message" : "Log in"
+    },
+    "__OPTIONS__" : {
+        "message" : "Options"
+    },
+    "__USER__" : {
+        "message" : "User"
+    },
+    "__PASSWORD__" : {
+        "message" : "Password"
+    },
+    "__UNI__" : {
+        "message" : "University"
+    },
+    "__INTERVAL__" : {
+        "message" : "Checking interval"
+    },
+    "__CRITICAL__" : {
+        "message" : "Mínimum messages to consider it critical and notify"
+    },
+    "__NOTIFICATION__" : {
+        "message" : "Popup notifications"
+    },
+    "__MESSAGES__" : {
+        "message" : "Messages"
+    },
+    "__SAVE__" : {
+        "message" : "Save"
+    },
+    "__CLASS_NOTIFY__" : {
+        "message" : "Classrooms to show and notify"
+    },
+    "__MINUTES__" : {
+        "message" : "minutes"
+    },
+    "__SHOW__" : {
+        "message" : "Show"
+    },
+    "__SAVED_OPTIONS__" : {
+        "message" : "Options saved. Wait to the classrooms to be updated..."
+    },
+    "__VERSION__" : {
+        "message" : "Version"
+    },
+    "__CLASSROOM__" : {
+        "message" : "Classroom"
+    },
+    "__RESET_CLASSROOMS__" : {
+        "message" : "Reiniciar aulas"
+    },
+    "__RESET_CONFIRM__" : {
+        "message" : "This will erase all classroom information to download it again, are you sure?"
+    },
+
+    "__GRADE_RESUME__" : {
+        "message" : "Grades resume"
+    },
+    "__EXAM_REVISION__" : {
+        "message" : "Exam revision"
+    },
+    "__FINAL_GRADES__" : {
+        "message" : "Final grades"
+    },
+    "__PROV_GRADE__" : {
+        "message" : "Provisional grade"
+    },
+    "__EXAM_SELECT__" : {
+        "message" : "Exam sheet"
+    },
+    "__STATS__" : {
+        "message" : "Statistics"
+    },
+    "__USERS__" : {
+        "message" : "Users"
+    },
+    "__CONNECTED__" : {
+        "message" : "Connected"
+    },
+    "__DISCONNECTED__" : {
+        "message" : "Disconnected"
+    },
+    "__ENROLL_PROP__" : {
+        "message" : "Enroll propose"
+    },
+    "__ENROLL__" : {
+        "message" : "Enrollment"
+    },
+    "__GRADES_SMS__" : {
+        "message" : "Grades by e-mail"
+    },
+    "__EXPEDIENT__" : {
+        "message" : "Expedient"
+    },
+    "__PERSONAL__" : {
+        "message" : "Personal"
+    },
+    "__OLD_AGENDA__" : {
+        "message" : "Old agenda"
+    },
+    "__NEW_AGENDA__" : {
+        "message" : "New agenda"
+    },
+    "__PERSONAL_AGENDA__" : {
+        "message" : "Personal agenda"
+    },
+    "__FILES__" : {
+        "message" : "File area"
+    },
+    "__WORKING_GROUPS__" : {
+        "message" : "Working groups"
+    },
+    "__OLD_CLASSROOMS__" : {
+        "message" : "Old classrooms"
+    },
+    "__FINAL_TESTS__" : {
+        "message" : "Final tests on $seu$ on $date$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "seu": {
+            "content": "$2"
+          }
+        }
+    },
+    "__FINAL_TESTS_CLASS__" : {
+        "message" : "$class$ - Final tests",
+        "placeholders": {
+          "class": {
+            "content": "$1"
+          }
+        }
+    },
+    "__FINAL_TESTS_CLASS_TITLE__" : {
+        "message" : "$time$ $type$ on $seu$ $place$",
+        "placeholders": {
+          "type": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          },
+          "seu": {
+            "content": "$3"
+          },
+          "place": {
+            "content": "$4"
+          }
+        }
+    },
+    "__COMMITTED__" : {
+        "message" : "Committed"
+    },
+    "__COMMITTED_VIEWED__" : {
+        "message" : "Committed and seen by the teacher: $date$ at $time$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          }
+        }
+    },
+    "__NOT_COMMITTED__" : {
+        "message" : "Not committed"
+    },
+    "__EQUIPMENT__" : {
+        "message" : "Equipment"
+    },
+    "__LINK_TO_EQUIPMENT__" : {
+      "message" : "Link to Equipment"
+    },
+    "__TEACHING_PLAN__" : {
+        "message" : "Teaching Plan"
+    },
+    "__GOTO_CAMPUS__" : {
+        "message" : "Go to Campus"
+    },
+    "__GOTO_CLASS__" : {
+        "message" : "Go to Classroom"
+    },
+    "__GOTO_RES__" : {
+        "message" : "Go to Resource"
+    },
+    "__START__" : {
+        "message" : "Start"
+    },
+    "__END__" : {
+        "message" : "End"
+    },
+    "__SOLUTION__" : {
+        "message" : "Solution"
+    },
+    "__GRADE__" : {
+        "message" : "Grade"
+    },
+    "__GRADES__" : {
+        "message" : "Grades"
+    },
+    "__NEWS__" : {
+        "message" : "News"
+    },
+    "__AGENDA__" : {
+        "message" : "Agenda"
+    },
+    "__LINKS_TO_CAMPUS__" : {
+        "message" : "Links to Campus"
+    },
+    "__UOC__" : {
+        "message" : "UOC"
+    },
+    "__STUDY_GUIDE__" : {
+        "message" : "Study guide"
+    },
+    "__MODULE__" : {
+        "message" : "Module"
+    },
+    "__ASSIGNMENT__" : {
+        "message" : "Assignment"
+    },
+    "__ASSIGNMENTS__" : {
+        "message" : "Assignments"
+    },
+    "__SHOW_MODULE_DATES__" : {
+        "message" : "Module dates"
+    },
+    "__UPDATE__" : {
+        "message" : "Update"
+    },
+    "__TODAY__" : {
+        "message" : "Today"
+    },
+    "__UPCOMMING_DAYS__" : {
+        "message" : "Days to show on upcomming events"
+    },
+    "__SHOW_UPCOMMING__" : {
+        "message" : "Show upcomming events"
+    },
+    "__ONLY_ASSIGNMENTS__" : {
+        "message" : "Show only assignments"
+    },
+    "__NOTHING_AHEAD_" : {
+      "message" : "No tasks ahead"
+    },
+    "__DAYS__" : {
+        "message" : "days"
+    },
+    "__TEACHER__" : {
+        "message" : "Teacher"
+    },
+    "__MAIL__" : {
+        "message" : "Mail"
+    },
+    "__UNREAD_MAIL__" : {
+        "message" : "Pending mails: $messages$",
+        "placeholders": {
+          "messages": {
+            "content": "$1"
+          }
+        }
+    },
+    "__SUBJECT__" : {
+        "message" : "Subject"
+    },
+    "__VIEWED_LAST_TIME__" : {
+        "message" : "Viewed last time: $date$ at $time$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          }
+        }
+    },
+    "__NOTIFICATION_UNREAD__" : {
+        "message" : "You have $messages$ messages to read",
+        "placeholders": {
+          "messages": {
+            "content": "$1"
+          }
+        }
+    },
+    "__NOTIFICATION_MAIL__" : {
+        "message" : "You have $messages$ mails to read",
+        "placeholders": {
+          "messages": {
+            "content": "$1"
+          }
+        }
+    },
+    "__UOC_WORKING__" : {
+        "message" : "UOC is back"
+    },
+    "__PRACT_START__" : {
+        "message" : "$pract$ of $class$ starts today",
+        "placeholders": {
+          "pract": {
+            "content": "$1"
+          },
+          "class": {
+            "content": "$2"
+          }
+        }
+    },
+    "__PRACT_END__" : {
+        "message" : "$pract$ of $class$ ends today",
+        "placeholders": {
+          "pract": {
+            "content": "$1"
+          },
+          "class": {
+            "content": "$2"
+          }
+        }
+    },
+    "__PRACT_GRADE__" : {
+        "message" : "You've got a $grade$ in $pract$ of $class$",
+        "placeholders": {
+          "grade": {
+            "content": "$1"
+          },
+          "pract": {
+            "content": "$2"
+          },
+          "class": {
+            "content": "$3"
+          }
+        }
+    },
+    "__FINAL_GRADE__" : {
+        "message" : "You've got a $grade$ in $final$ of $class$",
+        "placeholders": {
+          "grade": {
+            "content": "$1"
+          },
+          "final": {
+            "content": "$2"
+          },
+          "class": {
+            "content": "$3"
+          }
+        }
+    },
+    "__FINAL_GRADE_PROV__" : {
+        "message" : "You've got a $grade$ in $final$ of $class$ (Provisional grade)",
+        "placeholders": {
+          "grade": {
+            "content": "$1"
+          },
+          "final": {
+            "content": "$2"
+          },
+          "class": {
+            "content": "$3"
+          }
+        }
+    },
+    "__SHOW_COMMENT__" : {
+        "message" : "Show comment"
+    },
+    "__COMMENT__" : {
+        "message" : "Commented on $date$ at $time$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          }
+        }
+    },
+    "__NOT_STATS__" : {
+        "message" : "New stats for $class$",
+        "placeholders": {
+          "class": {
+            "content": "$1"
+          }
+        }
+    },
+    "__INCORRECT_USER__" : {
+        "message" : "User/password incorrect<br>If this error persists, please login <a href=\"https://cv.uoc.edu/webapps/cas/login?renew=true\" target=\"_blank\">here</a>"
+    },
+    "__NO_USER_PASSWORD__" : {
+        "message" : "Empty user or password..."
+    },
+    "__WAITING_TO_LOGIN__" : {
+        "message" : "Waiting to log in... If this message does not dissapear, please check user and password are correct."
+    },
+    "__ATTENTION__" : {
+        "message" : "Attention"
+    },
+    "__NO_CLASSROOMS__" : {
+        "message" : "There aren't visible classrooms. Check on settings the classrooms to show"
+    },
+    "__FAQ_LINK__": {
+        "message" : "Any problem? Visit the"
+    },
+    "__C__": {
+        "message" : "Grade of Continuous Assessment"
+    },
+    "__P__": {
+        "message" : "Final Grade of Practical Activities"
+    },
+    "__FC__": {
+        "message" : "Final Grade of Continuous Assessment"
+    },
+    "__PS__": {
+        "message" : "Synthesis Test"
+    },
+    "__PV__": {
+        "message" : "Validation Test"
+    },
+    "__EX__": {
+        "message" : "Exam"
+    },
+    "__PF__": {
+        "message" : "Final"
+    },
+    "__FE__": {
+        "message" : "Final Grade of Exams (P+EX)"
+    },
+    "__FA__": {
+        "message" : "Final Grade of the Subject"
+    }
+}

@@ -1,0 +1,436 @@
+{
+    "TITLE" : {
+        "message" : "UOC Notifier"
+    },
+    "DESCRIPTION" : {
+        "message" : "Notificador de la UOC per Google Chrome"
+    },
+    "__LOGIN__" : {
+        "message" : "Entrada"
+    },
+    "__OPTIONS__" : {
+        "message" : "Opcions"
+    },
+    "__USER__" : {
+        "message" : "Usuari"
+    },
+    "__PASSWORD__" : {
+        "message" : "Contrasenya"
+    },
+    "__UNI__" : {
+        "message" : "Universitat"
+    },
+    "__INTERVAL__" : {
+        "message" : "Interval de comprovació"
+    },
+    "__CRITICAL__" : {
+        "message" : "Mínim de missatges per considerar crític i notificar"
+    },
+    "__NOTIFICATION__" : {
+        "message" : "Missatges emergents"
+    },
+    "__MESSAGES__" : {
+        "message" : "Missatges"
+    },
+    "__SAVE__" : {
+        "message" : "Desa"
+    },
+    "__CLASS_NOTIFY__" : {
+        "message" : "Mostra i notifica aules"
+    },
+    "__MINUTES__" : {
+        "message" : "minuts"
+    },
+    "__SHOW__" : {
+        "message" : "Mostra"
+    },
+    "__SAVED_OPTIONS__" : {
+        "message" : "Opcions desades. Espera a que s'actualitzin les aules..."
+    },
+    "__VERSION__" : {
+        "message" : "Versió"
+    },
+    "__CLASSROOM__" : {
+        "message" : "Aula"
+    },
+    "__RESET_CLASSROOMS__" : {
+        "message" : "Reinicia les aules"
+    },
+    "__RESET_CONFIRM__" : {
+        "message" : "Això esborrarà la informació de les aules per tornar-les a descarregar, esteu segurs?"
+    },
+
+    "__GRADE_RESUME__" : {
+        "message" : "Resum de notes"
+    },
+    "__EXAM_REVISION__" : {
+        "message" : "Rev. exàmen"
+    },
+    "__FINAL_GRADES__" : {
+        "message" : "Notes finals"
+    },
+    "__PROV_GRADE__" : {
+        "message" : "Nota provisional"
+    },
+    "__EXAM_SELECT__" : {
+        "message" : "Full de proves"
+    },
+    "__STATS__" : {
+        "message" : "Estadístiques"
+    },
+    "__USERS__" : {
+        "message" : "Usuaris"
+    },
+    "__CONNECTED__" : {
+        "message" : "Connectat"
+    },
+    "__DISCONNECTED__" : {
+        "message" : "Desconnectat"
+    },
+    "__ENROLL_PROP__" : {
+        "message" : "Proposta Matrícula"
+    },
+    "__ENROLL__" : {
+        "message" : "Matrícula"
+    },
+    "__GRADES_SMS__" : {
+        "message" : "Notes per correu-e"
+    },
+    "__EXPEDIENT__" : {
+        "message" : "Expedient"
+    },
+    "__PERSONAL__" : {
+        "message" : "Personal"
+    },
+    "__OLD_AGENDA__" : {
+        "message" : "Agenda antiga"
+    },
+    "__NEW_AGENDA__" : {
+        "message" : "Agenda nova"
+    },
+    "__PERSONAL_AGENDA__" : {
+        "message" : "Agenda personal"
+    },
+    "__FILES__" : {
+        "message" : "Àrea de fitxers"
+    },
+    "__WORKING_GROUPS__" : {
+        "message" : "Grups de treball"
+    },
+    "__OLD_CLASSROOMS__" : {
+        "message" : "Aules anteriors"
+    },
+    "__FINAL_TESTS__" : {
+        "message" : "Proves d'avaluacio final a $seu$ el dia $date$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "seu": {
+            "content": "$2"
+          }
+        }
+    },
+    "__FINAL_TESTS_CLASS__" : {
+        "message" : "$class$ - Proves d'avaluacio final",
+        "placeholders": {
+          "class": {
+            "content": "$1"
+          }
+        }
+    },
+    "__FINAL_TESTS_CLASS_TITLE__" : {
+        "message" : "$time$ $type$ a $seu$ $place$",
+        "placeholders": {
+          "type": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          },
+          "seu": {
+            "content": "$3"
+          },
+          "place": {
+            "content": "$4"
+          }
+        }
+    },
+    "__COMMITTED__" : {
+        "message" : "Entregat"
+    },
+    "__COMMITTED_VIEWED__" : {
+        "message" : "Entregat i vist pel consultor: $date$ a les $time$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          }
+        }
+    },
+    "__NOT_COMMITTED__" : {
+        "message" : "No entregat"
+    },
+    "__EQUIPMENT__" : {
+        "message" : "Materials"
+    },
+    "__LINK_TO_EQUIPMENT__" : {
+      "message" : "Enllaç als materials"
+    },
+    "__TEACHING_PLAN__" : {
+        "message" : "Pla Docent"
+    },
+    "__GOTO_CAMPUS__" : {
+        "message" : "Vés al campus"
+    },
+    "__GOTO_CLASS__" : {
+        "message" : "Vés a l'aula"
+    },
+    "__GOTO_RES__" : {
+        "message" : "Vés al recurs"
+    },
+    "__START__" : {
+        "message" : "Inici"
+    },
+    "__END__" : {
+        "message" : "Fi"
+    },
+    "__SOLUTION__" : {
+        "message" : "Solució"
+    },
+    "__GRADE__" : {
+        "message" : "Nota"
+    },
+    "__GRADES__" : {
+        "message" : "Notes"
+    },
+    "__NEWS__" : {
+        "message" : "Notícies"
+    },
+    "__AGENDA__" : {
+        "message" : "Agenda"
+    },
+    "__LINKS_TO_CAMPUS__" : {
+        "message" : "Enllaços del campus"
+    },
+    "__UOC__" : {
+        "message" : "UOC"
+    },
+    "__STUDY_GUIDE__" : {
+        "message" : "Guia d'estudi"
+    },
+    "__MODULE__" : {
+        "message" : "Mòdul"
+    },
+    "__ASSIGNMENT__" : {
+        "message" : "Tasca"
+    },
+    "__ASSIGNMENTS__" : {
+        "message" : "Tasques"
+    },
+    "__SHOW_MODULE_DATES__" : {
+        "message" : "Dates dels mòduls"
+    },
+    "__UPDATE__" : {
+        "message" : "Actualitzar"
+    },
+    "__TODAY__" : {
+        "message" : "Avui"
+    },
+    "__UPCOMMING_DAYS__" : {
+        "message" : "Dies per mostrar als esdeveniments propers"
+    },
+    "__SHOW_UPCOMMING__" : {
+        "message" : "Mostra esdeveniments propers"
+    },
+    "__ONLY_ASSIGNMENTS__" : {
+        "message" : "Mostra només tasques"
+    },
+    "__NOTHING_AHEAD_" : {
+      "message" : "No hi ha tasques a la vista"
+    },
+    "__DAYS__" : {
+        "message" : "dies"
+    },
+    "__TEACHER__" : {
+        "message" : "Consultor/a"
+    },
+    "__MAIL__" : {
+        "message" : "Correu"
+    },
+    "__UNREAD_MAIL__" : {
+        "message" : "Correus pendents: $messages$",
+        "placeholders": {
+          "messages": {
+            "content": "$1"
+          }
+        }
+    },
+    "__SUBJECT__" : {
+        "message" : "Assignatura"
+    },
+    "__VIEWED_LAST_TIME__" : {
+        "message" : "Vist per darrer cop: $date$ a les $time$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          }
+        }
+    },
+    "__NOTIFICATION_UNREAD__" : {
+        "message" : "Tens $messages$ missatges per llegir",
+        "placeholders": {
+          "messages": {
+            "content": "$1"
+          }
+        }
+    },
+    "__NOTIFICATION_MAIL__" : {
+        "message" : "Tens $messages$ correus per llegir",
+        "placeholders": {
+          "messages": {
+            "content": "$1"
+          }
+        }
+    },
+    "__UOC_WORKING__" : {
+        "message" : "La UOC ha tornat"
+    },
+    "__PRACT_START__" : {
+        "message" : "Avui comença la $pract$ de $class$",
+        "placeholders": {
+          "pract": {
+            "content": "$1"
+          },
+          "class": {
+            "content": "$2"
+          }
+        }
+    },
+    "__PRACT_END__" : {
+        "message" : "Avui acaba la $pract$ de $class$",
+        "placeholders": {
+          "pract": {
+            "content": "$1"
+          },
+          "class": {
+            "content": "$2"
+          }
+        }
+    },
+    "__PRACT_GRADE__" : {
+        "message" : "Has tret una $grade$ a la $pract$ de $class$",
+        "placeholders": {
+          "grade": {
+            "content": "$1"
+          },
+          "pract": {
+            "content": "$2"
+          },
+          "class": {
+            "content": "$3"
+          }
+        }
+    },
+    "__FINAL_GRADE__" : {
+        "message" : "Has tret una $grade$ a $final$ de $class$",
+        "placeholders": {
+          "grade": {
+            "content": "$1"
+          },
+          "final": {
+            "content": "$2"
+          },
+          "class": {
+            "content": "$3"
+          }
+        }
+    },
+    "__FINAL_GRADE_PROV__" : {
+        "message" : "Has tret una $grade$ a $final$ de $class$ (Nota provisional)",
+        "placeholders": {
+          "grade": {
+            "content": "$1"
+          },
+          "final": {
+            "content": "$2"
+          },
+          "class": {
+            "content": "$3"
+          }
+        }
+    },
+    "__SHOW_COMMENT__" : {
+        "message" : "Mostra el comentari"
+    },
+    "__COMMENT__" : {
+        "message" : "Comentari del dia $date$ a les $time$",
+        "placeholders": {
+          "date": {
+            "content": "$1"
+          },
+          "time": {
+            "content": "$2"
+          }
+        }
+    },
+    "__NOT_STATS__" : {
+        "message" : "Han sortit les estadístiques de $class$",
+        "placeholders": {
+          "class": {
+            "content": "$1"
+          }
+        }
+    },
+    "__INCORRECT_USER__" : {
+        "message" : "L'usuari/contrasenya no és correcte.<br>Si aquest error persisteix, fes login <a href=\"https://cv.uoc.edu/webapps/cas/login?renew=true\" target=\"_blank\">aquí</a>"
+    },
+
+    "__NO_USER_PASSWORD__" : {
+        "message" : "No hi ha usuari i password..."
+    },
+    "__WAITING_TO_LOGIN__" : {
+        "message" : "Esperant per entrar... Si el missatge no desapareix, pot ser que l'usuari i contrasenya no siguin correctes."
+    },
+    "__ATTENTION__" : {
+        "message" : "Atenció"
+    },
+    "__NO_CLASSROOMS__" : {
+        "message" : "No hi ha aules visibles. Confirma a la configuració les aules que vols veure"
+    },
+    "__FAQ_LINK__": {
+        "message" : "Tens problemes? Visita les"
+    },
+    "__C__": {
+        "message" : "Nota d'Avaluació Continuada"
+    },
+    "__P__": {
+        "message" : "Nota final d'activitats pràctiques"
+    },
+    "__FC__": {
+        "message" : "Nota final d'Avaluació Continuada"
+    },
+    "__PS__": {
+        "message" : "Prova de Síntesi"
+    },
+    "__PV__": {
+        "message" : "Prova de Validació"
+    },
+    "__EX__": {
+        "message" : "Exàmen"
+    },
+    "__PF__": {
+        "message" : "Prova Final"
+    },
+    "__FE__": {
+        "message" : "Nota final d'Exàmens (P+EX)"
+    },
+    "__FA__": {
+        "message" : "Nota final de l'assignatura"
+    }
+}

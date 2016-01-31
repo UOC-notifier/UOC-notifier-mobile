@@ -1,0 +1,45 @@
+<ion-view view-title="{{currentclass.title}} (Aula {{currentclass.aula}})">
+  <ion-content>
+    <div class="list list-inset">
+        <ion-list>
+          <div class="item item-divider">Recursos</div>
+          <ion-item ng-repeat="resource in currentclass.resources">
+            {{resource.title}}
+            <span class="badge badge-assertive" ng-if="resource.messages > critical">{{resource.messages}} / {{resource.all_messages}}</span>
+            <span class="badge badge-assertive" ng-if="resource.messages <= critical && resource.messages > 0">{{resource.messages}} / {{resource.all_messages}}</span>
+            <span class="badge badge-balanced" ng-if="resource.messages == 0">{{resource.messages}} / {{resource.all_messages}}</span>
+          </ion-item>
+          <div class="item item-divider" ng-if="currentclass.events.length">Activitats</div>
+          <ion-item ng-repeat="event in currentclass.events" class=" item event {{event.eventstate}}">
+          <div class="row">
+            <div class="col">{{event.name}}</div>
+            <div class="col text-center">
+              <span class="badge badge-balanced"  ng-if="event.starttext === true"><i class="icon ion-checkmark-round"></i></span>
+              <span ng-if="event.starttext !== true && event.starttext">{{event.starttext}}</span></div>
+            <div class="col text-center">
+              <span class="badge badge-balanced" ng-if="event.endtext === true"><i class="icon ion-checkmark-round"></i></span>
+              <span ng-if="event.endtext !== true && event.endtext">{{event.endtext}}</span></div>
+            <div class="col text-center">
+              <span class="badge badge-balanced" ng-if="event.soltext === true"><i class="icon ion-checkmark-round"></i></span>
+              <span ng-if="event.soltext !== true && event.soltext">{{event.soltext}}</span></div>
+            <div class="col text-center">
+              <span class="badge badge-balanced" ng-if="event.gradtext === true"><i class="icon ion-checkmark-round"></i></span>
+              <span ng-if="event.gradtext !== true && event.gradtext && !event.graded">{{event.gradtext}}</span>
+              <span class="badge badge-positive" ng-if="event.graded">{{event.graded}}</span>
+            </div>
+          </div>
+
+          </ion-item>
+          <ion-item ng-repeat="grade in currentclass.grades">
+            <div class="row">
+             <div class="col">{{grade.name | translate}}</div>
+             <div class="col">
+              <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
+              <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
+             </div>
+            </div>
+          </ion-item>
+        </ion-list>
+    </div>
+  </ion-content>
+</ion-view>
