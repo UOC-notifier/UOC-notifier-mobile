@@ -51,6 +51,13 @@ angular.module('uoc-notifier', ['pascalprecht.translate'])
     $state.transitionTo('app.main');
   };
 
+  $scope.save_classes = function(settings) {
+    Classes.save();
+    $scope.allclasses = Classes.get_all();
+    $scope.classes = Classes.get_notified();
+    $scope.$broadcast('scroll.refreshComplete');
+  };
+
 })
 
 .controller('ClassCtrl', function($scope, $stateParams, $translate) {
@@ -95,10 +102,14 @@ angular.module('uoc-notifier', ['pascalprecht.translate'])
       evnt.gradtext = dsplit[0]+'/'+dsplit[1];
     }
 
-    if(evnt.is_completed()) {
-      evnt.starttext = false;
-      evnt.endtext = false;
-      evnt.soltext = false;
+    if (evnt.is_completed()) {
+      if (evnt.is_assignment()) {
+        evnt.starttext = false;
+        evnt.endtext = false;
+        evnt.soltext = false;
+      } else {
+        unset(evnt);
+      }
     }
 
     evnt.eventstate = "";
