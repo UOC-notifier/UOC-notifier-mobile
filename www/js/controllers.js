@@ -5,32 +5,40 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
 
-  Classes.load();
-  $scope.allclasses = Classes.get_all();
-  $scope.classes = Classes.get_notified();
-  $scope.critical = get_critical();
-  $scope.messages = Classes.messages;
+  $scope.classes_obj = Classes;
+  $scope.classes_obj.load();
+  $scope.state = {};
+  $scope.settings = {};
+  $scope.reload = function() {
+    console.log('reload');
+    $scope.allclasses = $scope.classes_obj.get_all();
+    $scope.classes = $scope.classes_obj.get_notified();
+    $scope.state.critical = get_critical();
+    $scope.state.messages = $scope.classes_obj.messages;
+
+    /*if ($scope.state.messages > 0) {
+      $cordovaBadge.set($scope.messages);
+    } else {
+      $cordovaBadge.clear();
+    }*/
+    $scope.$broadcast('scroll.refreshComplete');
+  };
 
   $scope.doRefresh = function() {
-    $scope.loading = true;
+    console.log('Refresh');
+    $scope.state.loading = true;
     check_messages(function() {
-      $scope.allclasses = Classes.get_all();
-      $scope.classes = Classes.get_notified();
-      $scope.$broadcast('scroll.refreshComplete');
-      $scope.loading = false;
-      $scope.critical = get_critical();
-      $scope.messages = Classes.messages;
-      if ($scope.messages > 0) {
-        $cordovaBadge.set($scope.messages);
-      } else {
-        $cordovaBadge.clear();
-      }
+      $scope.reload();
+      $scope.state.loading = false;
     });
   };
-  $scope.doRefresh();
+
+  $scope.reload();
+  if (!$scope.loaded) {
+    //$scope.doRefresh();
+    $scope.loaded = true;
+  }
 })
 
 .controller('SettingsCtrl', function($scope, $state, $translate) {
@@ -53,22 +61,20 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     save_critical(settings.critical);
     save_notification(settings.notification);
     save_today(settings.today_tab);
-    Classes.save();
+    $scope.classes_obj.save();
     $scope.doRefresh();
     $state.go('app.main');
   };
 
   $scope.save_classes = function(settings) {
-    Classes.save();
-    $scope.allclasses = Classes.get_all();
-    $scope.classes = Classes.get_notified();
-    $scope.$broadcast('scroll.refreshComplete');
+    $scope.classes_obj.save();
+    $scope.reload();
   };
 
 })
 
 .controller('ClassCtrl', function($scope, $stateParams, $translate) {
-  $scope.currentclass = Classes.search_code($stateParams.code);
+  $scope.currentclass = $scope.classes_obj.search_code($stateParams.code);
   for (var x in $scope.currentclass.events) {
     var evnt = $scope.currentclass.events[x];
     if (isBeforeToday(evnt.start)) {

@@ -14,8 +14,19 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
     }
-    var userLang = navigator.language || navigator.userLanguage;
-    $translate.use(userLang);
+
+    if(typeof navigator.globalization !== "undefined") {
+        navigator.globalization.getPreferredLanguage(function(language) {
+            $translate.use((language.value).split("-")[0]).then(function(data) {
+                console.log("SUCCESS -> " + data);
+            }, function(error) {
+                console.log("ERROR -> " + error);
+            });
+        }, null);
+    } else {
+      var userLang = navigator.language || navigator.userLanguage;
+      $translate.use(userLang);
+    }
     $translate.refresh();
 
     if (window.StatusBar) {
@@ -28,8 +39,10 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
 .config(function($stateProvider, $urlRouterProvider, $translateProvider) {
 
   $translateProvider.useStaticFilesLoader({
-    prefix: 'locales/',
-    suffix: '/messages.json'
+    files: [{
+        prefix: 'locales/',
+        suffix: '/messages.json'
+    }]
   });
 
   // Set fallback language.

@@ -5,8 +5,8 @@
           <div class="item item-divider">Recursos</div>
           <ion-item ng-repeat="resource in currentclass.resources">
             {{resource.title}}
-            <span class="badge badge-assertive" ng-if="resource.messages > critical">{{resource.messages}} / {{resource.all_messages}}</span>
-            <span class="badge badge-assertive" ng-if="resource.messages <= critical && resource.messages > 0">{{resource.messages}} / {{resource.all_messages}}</span>
+            <span class="badge badge-assertive" ng-if="resource.messages > state.critical">{{resource.messages}} / {{resource.all_messages}}</span>
+            <span class="badge badge-energized" ng-if="resource.messages <= state.critical && resource.messages > 0">{{resource.messages}} / {{resource.all_messages}}</span>
             <span class="badge badge-balanced" ng-if="resource.messages == 0">{{resource.messages}} / {{resource.all_messages}}</span>
           </ion-item>
         </ion-list>
