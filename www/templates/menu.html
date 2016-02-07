@@ -17,24 +17,21 @@
   </ion-side-menu-content>
 
   <ion-side-menu side="left">
-    <ion-header-bar class="bar-stable">
-      <h1 class="title">Classes</h1>
-    </ion-header-bar>
     <ion-content>
       <ion-list>
         <ion-item menu-close href="#/app/main">
-          {{"TITLE" | translate}}
+          <i class="icon ion-home"></i> {{"TITLE" | translate}}
         </ion-item>
-        <div class="item item-divider"></div>
+        <div class="item item-divider">{{"__CLASSROOMS__" | translate}}</div>
         <ion-item menu-close ng-repeat="class in classes" href="#/app/class/{{class.code}}">
           <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
-          <span class="badge badge-assertive" ng-if="class.messages > settings.critical">{{class.messages}}</span>
-          <span class="badge badge-energized" ng-if="class.messages <= settings.critical && class.messages > 0">{{class.messages}}</span>
+          <span class="badge badge-assertive" ng-if="class.messages > state.critical">{{class.messages}}</span>
+          <span class="badge badge-energized" ng-if="class.messages <= state.critical && class.messages > 0">{{class.messages}}</span>
         </ion-item>
         <div class="item item-divider"></div>
         <ion-item menu-close href="#/app/options">
           <i class="icon ion-settings"></i>
-          Options
+          {{"__OPTIONS__" | translate}}
         </ion-item>
       </ion-list>
     </ion-content>

@@ -15,19 +15,21 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
       cordova.plugins.Keyboard.disableScroll(true);
     }
 
+    var userLang = false;
     if(typeof navigator.globalization !== "undefined") {
         navigator.globalization.getPreferredLanguage(function(language) {
-            $translate.use((language.value).split("-")[0]).then(function(data) {
-                console.log("SUCCESS -> " + data);
-            }, function(error) {
-                console.log("ERROR -> " + error);
-            });
+          userLang = (language.value).split("-")[0];
         }, null);
-    } else {
-      var userLang = navigator.language || navigator.userLanguage;
-      $translate.use(userLang);
     }
-    $translate.refresh();
+    if (!userLang) {
+      userLang = navigator.language || navigator.userLanguage;
+    }
+
+    $translate.use(userLang).then(function(data) {
+        console.log("Language loaded -> " + data);
+    }, function(error) {
+        console.log("ERROR loading language -> " + error);
+    });
 
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
@@ -58,6 +60,7 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
   })
   .state('app.main', {
     url: '/main',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/main.html'
@@ -66,6 +69,7 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
   })
   .state('app.options', {
     url: '/options',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/options.html',
@@ -75,6 +79,7 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
   })
   .state('app.class', {
     url: '/class/:code',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/class.html',

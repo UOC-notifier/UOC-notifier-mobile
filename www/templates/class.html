@@ -1,9 +1,9 @@
-<ion-view view-title="{{currentclass.title}} (Aula {{currentclass.aula}})">
+<ion-view view-title="{{currentclass.title}} ({{'__CLASSROOM__' |translate}} {{currentclass.aula}})">
   <ion-content>
     <div class="list list-inset">
         <ion-list>
-          <div class="item item-divider">Recursos</div>
-          <ion-item ng-repeat="resource in currentclass.resources">
+          <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
+          <ion-item ng-repeat="resource in currentclass.resources" on-tap="openInApp(resource.link || '/webapps/bustiaca/listMails.do', {l: resource.code}, true)">
             {{resource.title}}
             <span class="badge badge-assertive" ng-if="resource.messages > state.critical">{{resource.messages}} / {{resource.all_messages}}</span>
             <span class="badge badge-energized" ng-if="resource.messages <= state.critical && resource.messages > 0">{{resource.messages}} / {{resource.all_messages}}</span>
@@ -12,8 +12,8 @@
         </ion-list>
         <br>
         <ion-list>
-          <div class="item item-divider" ng-if="currentclass.events.length">Activitats</div>
-          <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}">
+          <div class="item item-divider" ng-if="currentclass.events.length">{{"__ACTIVITIES__" | translate}}</div>
+          <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}" on-tap="openInApp(event.link)">
           <div class="row">
             <div class="col">{{event.name}}</div>
             <div class="col text-center">
@@ -35,13 +35,23 @@
           </ion-item>
           <ion-item ng-repeat="grade in currentclass.grades">
             <div class="row">
-             <div class="col">{{grade.name | translate}}</div>
+             <div class="col">{{"__"+grade.name+"__" | translate}}</div>
              <div class="col">
               <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
               <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
              </div>
             </div>
           </ion-item>
+        </ion-list>
+
+        <br>
+        <ion-list>
+            <div class="item item-divider" ng-if="currentclass.events.length">{{"__TOOLS__" | translate}}</div>
+              <ion-item on-tap="openInBrowser('/webapps/classroom/'+currentclass.template+'/frameset.jsp', {domainCode: currentclass.code})"><i class="ion-link"></i> {{"__GOTO_CLASS__" | translate}}</ion-item>
+              <ion-item on-tap="openInApp('/webapps/rac/listEstudiant.action', {domainId: currentclass.domain})"><i class="ion-speedometer"></i> {{"__GRADES__" | translate}}</ion-item>
+              <ion-item on-tap="openInApp('/WebMail/writeMail.do', {to: currentclass.consultormail})"><i class="icon ion-email"></i> {{"__TEACHER__" | translate}} <strong>{{currentclass.consultor}}</strong>.
+                <span ng-if="currentclass.consultorlastviewed">{{"__VIEWED_LAST_TIME__" | translate: currentclass.consultorlastviewtranslate}}
+             </ion-item>
         </ion-list>
     </div>
   </ion-content>

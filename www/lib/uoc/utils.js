@@ -140,6 +140,13 @@ function get_url_attr(url, attr){
     return false;
 }
 
+function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
 function get_url_withoutattr(url, parameter) {
     //prefer to use l.search if you have a location/link object
     url = get_real_url(url);
@@ -313,7 +320,7 @@ var Queue = new function(){
                     executing = true;
                     var pet = queue.shift();
                     Debug.print('Run ' + pet.url);
-                    ajax_do(session, pet.url, pet.data, pet.type, pet.reset, pet.success);
+                    ajax_do(session, pet.url, pet.data, pet.type, pet.reset, pet.success, pet.fail);
                 } else {
                     Debug.print('End of queue');
                     if (after_function != 'nosave') {
@@ -334,14 +341,15 @@ var Queue = new function(){
         queue = [];
     };
 
-    this.request = function(url, data, type, reset_on_fail, handler) {
+    this.request = function(url, data, type, reset_on_fail, handler, fail_handler) {
         if (url) {
             var pet = {
                 url: url,
                 data: data,
                 type: type,
                 reset: reset_on_fail,
-                success: handler
+                success: handler,
+                fail: fail_handler
             };
             queue.push(pet);
             Debug.print('Queued ' + url);
@@ -353,7 +361,7 @@ var Queue = new function(){
         after_function = fnc;
     };
 
-    function ajax_do(session, url, data, type, reset_on_fail, handler){
+    function ajax_do(session, url, data, type, reset_on_fail, handler, fail_handler){
         if (!data) {
             data = {};
         }
@@ -393,6 +401,10 @@ var Queue = new function(){
                 if (reset_on_fail) {
                     reset_session();
                 }
+
+                if (fail_handler) {
+                    fail_handler();
+                }
             })
             .always(function() {
                 executing = false;
@@ -410,3 +422,22 @@ function _(str, params) {
     Debug.error('String not translated: '+str);
     return str;
 }
+
+$( document ).ready(function() {
+    $('.translate').each(function() {
+        var text = $(this).text();
+        $(this).text(_(text));
+    });
+    $('.translateph').each(function() {
+        var text = $(this).attr('placeholder');
+        $(this).attr('placeholder', _(text));
+    });
+    $('.translatetit').each(function() {
+        var text = $(this).attr('title');
+        $(this).attr('title', _(text));
+    });
+    $('.translateal').each(function() {
+        var text = $(this).attr('aria-label');
+        $(this).attr('aria-label', _(text));
+    });
+});

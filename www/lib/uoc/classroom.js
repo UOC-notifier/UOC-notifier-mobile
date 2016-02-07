@@ -35,6 +35,14 @@ var Classes = new function() {
 		return events;
 	};
 
+	this.reset = function() {
+		reset_classes();
+		classes = [];
+		this.messages = 0;
+		this.notified_messages = 0;
+		events = [];
+	}
+
 	this.save = function() {
 		this.count_messages();
 		set_messages();
@@ -84,7 +92,6 @@ var Classes = new function() {
 		}
 		return false;
 	};
-
 
 	this.get_class_by_event = function(eventid) {
 		for(var i in classes) {
@@ -180,13 +187,13 @@ var Classes = new function() {
 				classr.subject_code = classl.subject_code;
 				classr.exped = classl.exped;
 				classr.stats = classl.stats;
-				classr.final_grades = classl.final_grades;
 				classr.exams = classl.exams;
 				classr.consultor = classl.consultor;
 				classr.consultormail = classl.consultormail;
 				classr.consultorlastviewed = classl.consultorlastviewed;
 				classr.set_notify(classl.notify);
 				if (classl.notify) {
+					classr.final_grades = classl.final_grades;
 					for (var j in classl.resources) {
 						var resourcel = classl.resources[j];
 						var resource = new Resource(resourcel.title, resourcel.code, resourcel.type);
@@ -259,6 +266,17 @@ var Classes = new function() {
 			this.all_messages += classrooms[i].all_messages;
 		}
 	};
+
+	this.is_all_graded = function() {
+		for (var i in classes) {
+			if (classes[i].notify) {
+				if (!classes[i].has_all_grades()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 	this.load();
 };
@@ -461,6 +479,23 @@ function Classroom(title, code, domain, type, template) {
 
 	this.has_events = function() {
 		return this.events.length > 0;
+	};
+
+	this.has_all_grades = function() {
+		if (this.final_grades){
+			return true;
+		}
+		if (!this.has_events()) {
+			return true;
+		}
+		for (var i in this.events) {
+			if (this.events[i].is_assignment()) {
+				if (!this.events[i].is_completed() || !this.events[i].graded) {
+					return false;
+				}
+			}
+		}
+		return true;
 	};
 
 	this.all_events_completed = function(only_assignments) {

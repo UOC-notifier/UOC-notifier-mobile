@@ -1,7 +1,11 @@
 function check_messages(after_check_fnc) {
+	save_check_nexttime(false);
+
 	Queue.set_after_function(after_check_fnc);
 
 	retrieve_mail();
+
+	retrieve_announcements();
 
 	// Get the new aulas
 	var args = {
@@ -14,22 +18,26 @@ function check_messages(after_check_fnc) {
 		for (var x in data.classrooms) {
 			parse_classroom(data.classrooms[x]);
 		}
-		Classes.purge_old();
+		keep_checking();
+	}, keep_checking);
+}
 
-		retrieve_old_classrooms();
+function keep_checking() {
+	Classes.purge_old();
 
-		retrieve_gradeinfo();
+	retrieve_old_classrooms();
 
-		retrieve_agenda();
+	retrieve_gradeinfo();
 
-		var classrooms = Classes.get_notified();
-		for(var i in classrooms) {
-			retrieve_final_grades(classrooms[i]);
-			retrieve_stats(classrooms[i]);
-		}
+	retrieve_agenda();
 
-		retrieve_final_exams_event();
-	});
+	var classrooms = Classes.get_notified();
+	for(var i in classrooms) {
+		retrieve_final_grades(classrooms[i]);
+		retrieve_stats(classrooms[i]);
+	}
+
+	retrieve_final_exams_event();
 }
 
 function retrieve_final_grades(classroom) {
@@ -68,7 +76,8 @@ function retrieve_final_grades(classroom) {
 			if (!grades) {
 				grades = resp.O.shift().P;
 			}
-			console.log("Grades found!", grades);
+			Debug.print("Grades found!");
+			Debug.print(grades);
 
 			var prov = grades.numConvocatoriaActual <= numConvoc;
 			var types = ['C', 'P', 'FC', 'PS', 'PV', 'EX', 'PF',  'FE', 'FA'];
@@ -163,22 +172,49 @@ function retrieve_final_exams_event() {
 
 }
 
-function retrieve_mail() {
+function retrieve_announcements() {
 	var args = {
 		'app:mobile': true,
 		'app:cache': false,
-		'app:only' : 'bustia'
+		'app:only' : 'avisos'
 	};
 	Queue.request('/rb/inici/grid.rss', args, 'GET', false, function(resp) {
 		$(resp).find('item').each(function() {
+			var title = $(this).find('title').first().text();
     		var description = $(this).find('description').first().text();
-    		var matches = description.match(/:([0-9]+):([0-9]+)$/);
-			if (matches && matches[1]) {
-				save_mail(matches[1]);
-			}
-		});
+    		var link = $(this).find('link').first().text();
+    		var date = new Date($(this).find('pubDate').first().text());
 
+    		var y = date.getFullYear() - 2000;
+		    var m = date.getMonth() + 1;
+		    var d = date.getDate();
+		    var h = date.getHours();
+		    var mm = date.getMinutes();
+    		var date = addZero(d)+'/'+addZero(m)+'/'+addZero(y) + ' - '+h+':'+addZero(mm);
+
+    		save_announcements(title, description, link, date);
+		});
 	});
+}
+
+function retrieve_mail() {
+	if (get_check_mail()) {
+		var args = {
+			'app:mobile': true,
+			'app:cache': false,
+			'app:only' : 'bustia'
+		};
+		Queue.request('/rb/inici/grid.rss', args, 'GET', false, function(resp) {
+			$(resp).find('item').each(function() {
+	    		var description = $(this).find('description').first().text();
+	    		var matches = description.match(/:([0-9]+):([0-9]+)$/);
+				if (matches && matches[1]) {
+					save_mail(matches[1]);
+				}
+			});
+
+		});
+	}
 }
 
 function save_mail(mails) {
@@ -195,18 +231,26 @@ function set_messages() {
 	var messages = Classes.notified_messages;
 	save_icon(messages);
 
+	var color = undefined;
+
 	// Set icon
 	if (messages > 0) {
-		var color = messages >= get_critical() ? '#AA0000' : '#EB9316';
-		setBadge(messages, color);
-		if (old_messages < messages && messages >= get_critical()) {
+		if (messages > old_messages && messages >= get_critical()) {
 			notify(_('__NOTIFICATION_UNREAD__', [messages]));
 		}
-	} else {
-		setBadge("");
+		color = messages >= get_critical() ? '#AA0000' : '#EB9316';
 	}
 
 	Debug.print("Check messages: Old "+old_messages+" New "+messages);
+
+	var news = get_news();
+	if (news) {
+		color = '#9E5A9E';
+	} else if (messages <= 0) {
+		messages = "";
+	}
+
+	setBadge(messages, color);
 }
 
 function show_PAC_notifications() {
@@ -226,12 +270,13 @@ function show_PAC_notifications() {
 }
 
 function notify(str, time) {
+	save_news(true);
 	if (get_notification() && str.length > 0) {
 		if (time == undefined) {
 			time = 3000;
 		}
 		Debug.print(str);
-		popup_notification('UOC Notifier', "/img/logo128.png", str, time);
+		popup_notification("", "/img/logo128.png", str, time);
 	}
 }
 
@@ -392,6 +437,10 @@ function parse_classroom_old(classr) {
 }
 
 function retrieve_gradeinfo() {
+	if (Classes.is_all_graded()) {
+		return;
+	}
+
 	Queue.request('/rb/inici/api/enrollment/rac.xml', {}, 'GET', false, function(data) {
 		$(data).find('files>file').each(function() {
 			var exped = $(this).children('id').first().text().trim();
@@ -485,7 +534,7 @@ function retrieve_gradeinfo() {
 				if (classroom) {
 					var nota = $(this).find('notaFinal').text().trim();
 					if (nota.length > 0 && nota != '-') {
-						var grade = classroom.add_grade('FA', nota, false);
+						var grade = classroom.add_grade('FA', nota, true);
 						if (grade) {
 							grade.notify(classroom.get_acronym());
 						}
@@ -616,7 +665,7 @@ function retrieve_pac_stats(classroom, button) {
 
 	Queue.set_after_function('nosave');
 	Queue.request('/webapps/rac/getEstadisticasAsignaturaAjax.action', args, 'GET', false, function(data) {
-		console.log(data);
+		Debug.print(data);
 		//UI.fill_pac_stats(classroom, data);
 		$(button).removeClass('spin');
     });

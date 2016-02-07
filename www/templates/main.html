@@ -2,7 +2,7 @@
   <ion-content ng-controller="AppCtrl">
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()"></ion-refresher>
     <div class="padding">
-        <h1>UOC Notifier</h1>
+        <h1>{{"TITLE" | translate}}</h1>
         <ion-list>
             <ion-item ng-repeat="class in classes" href="#/app/class/{{class.code}}" class="item class">
                 <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
@@ -17,7 +17,7 @@
                 </ion-list>
                 <ion-list ng-if="class.grades.length > 0">
                     <ion-item ng-repeat="grade in class.grades">
-                        {{grade.name | translate}}
+                        {{"__"+grade.name+"__" | translate}}
                         <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
                         <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
                     </ion-item>

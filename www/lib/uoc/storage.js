@@ -97,7 +97,7 @@ function save_today(today){
 
 // OPTIONS - CHECK INTERVAL
 function get_interval(){
-	return Storage.get_option_int("check_interval", 5);
+	return Storage.get_option_int("check_interval", 20);
 }
 
 function save_interval(minutes){
@@ -128,15 +128,6 @@ function get_notification(){
 
 function save_notification(notify){
 	Storage.set_option("notification", notify);
-}
-
-//OPTIONS - SHOW NEWS
-function get_show_news(){
-	return Storage.get_option_bool("show_news", true);
-}
-
-function save_show_news(show){
-	Storage.set_option("show_news", show);
 }
 
 //OPTIONS - SHOW AGENDA
@@ -216,6 +207,35 @@ function save_icon(number){
 	Storage.set_option("messages_icon", number);
 }
 
+function get_news(){
+	return Storage.get_option_bool("news", false);
+}
+
+function save_news(news){
+	Storage.set_option("news", news);
+}
+
+function get_announcements(){
+	var announcements = Storage.get_option("announcements", false);
+	announcements = JSON.parse(announcements);
+	return announcements;
+}
+
+function save_announcements(title, description, link, date){
+	if (title != "" && description != "") {
+		var announcements = {
+			title : title,
+			description : description,
+			link: link,
+			date: date
+		};
+		announcements = JSON.stringify(announcements);
+		Storage.set_option("announcements", announcements);
+	} else {
+		Storage.unset_option("announcements");
+	}
+}
+
 // RUNNING - UNREAD MAILS
 function get_mails_unread() {
 	return Storage.get_option_int("mails_unread", 0);
@@ -223,6 +243,27 @@ function get_mails_unread() {
 
 function save_mails_unread(number){
 	Storage.set_option("mails_unread", number);
+}
+
+function get_check_mail() {
+	return get_mails_unread() >= 0;
+}
+
+function save_check_mail(save){
+	if (save) {
+		save_mails_unread(0);
+	} else {
+		save_mails_unread(-1);
+	}
+}
+
+function get_check_nexttime(){
+	return Storage.get_option_bool("check_nexttime", false);
+}
+
+function save_check_nexttime(check_nexttime){
+	Storage.set_option("check_nexttime", check_nexttime);
+	reset_alarm();
 }
 
 // RUNNING - LOG

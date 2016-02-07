@@ -36,7 +36,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
   $scope.reload();
   if (!$scope.loaded) {
-    //$scope.doRefresh();
+    $scope.doRefresh();
     $scope.loaded = true;
   }
 })
@@ -51,6 +51,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     critical: get_critical(),
     notification: get_notification(),
     today_tab: get_today(),
+    check_mail: get_check_mail()
   };
 
   $scope.save = function(settings) {
@@ -61,6 +62,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     save_critical(settings.critical);
     save_notification(settings.notification);
     save_today(settings.today_tab);
+    save_check_mail(settings.check_mail);
     $scope.classes_obj.save();
     $scope.doRefresh();
     $state.go('app.main');
@@ -74,13 +76,55 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 })
 
 .controller('ClassCtrl', function($scope, $stateParams, $translate) {
+  $scope.openInBrowser = function(url, data, nossl) {
+      session = Session.get();
+      if(session){
+        if (url.indexOf('?') == -1) {
+          if(!data) data = {};
+          data.s = session;
+          url += '?'+uri_data(data);
+        } else if (url[url.length-1] == '=') {
+          url += session;
+        }
+              if (url[0] == '/') {
+                  if (nossl) {
+                      url = root_url + url;
+                  } else {
+                      url = root_url_ssl + url;
+                  }
+              }
+        window.open(url, '_system');
+      }
+  };
+
+  $scope.openInApp = function(url, data, nossl) {
+      session = Session.get();
+      if(session){
+        if (url.indexOf('?') == -1) {
+          if(!data) data = {};
+          data.s = session;
+          url += '?'+uri_data(data);
+        } else if (url[url.length-1] == '=') {
+          url += session;
+        }
+              if (url[0] == '/') {
+                  if (nossl) {
+                      url = root_url + url;
+                  } else {
+                      url = root_url_ssl + url;
+                  }
+              }
+        window.open(url, '_system');
+      }
+  };
+
   $scope.currentclass = $scope.classes_obj.search_code($stateParams.code);
   for (var x in $scope.currentclass.events) {
     var evnt = $scope.currentclass.events[x];
     if (isBeforeToday(evnt.start)) {
       evnt.starttext = true;
     } else if (isToday(evnt.start)) {
-      evnt.starttext = 'Avui';
+      evnt.starttext = _('__TODAY__');
     } else {
       var dsplit = evnt.start.split('/');
       evnt.starttext = dsplit[0]+'/'+dsplit[1];
@@ -89,7 +133,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     if (isBeforeToday(evnt.end)) {
       evnt.endtext = true;
     } else if (isToday(evnt.end)) {
-      evnt.endtext = 'Avui';
+      evnt.endtext = _('__TODAY__');
     } else {
       var dsplit = evnt.end.split('/');
       evnt.endtext = dsplit[0]+'/'+dsplit[1];
@@ -98,7 +142,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     if (isBeforeToday(evnt.solution)) {
       evnt.soltext = true;
     } else if (isToday(evnt.solution)) {
-      evnt.soltext = 'Avui';
+      evnt.soltext = _('__TODAY__');
     } else {
       var dsplit = evnt.solution.split('/');
       evnt.soltext = dsplit[0]+'/'+dsplit[1];
@@ -109,7 +153,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     } else if (isBeforeToday(evnt.grading)) {
       evnt.gradtext = true;
     } else if (isToday(evnt.grading)) {
-      evnt.gradtext = 'Avui';
+      evnt.gradtext = _('__TODAY__');
     } else {
       var dsplit = evnt.grading.split('/');
       evnt.gradtext = dsplit[0]+'/'+dsplit[1];
@@ -135,8 +179,13 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             evnt.eventstate = 'danger running';
         }
     }
+  }
 
-
+  if ($scope.currentclass.consultorlastviewed) {
+    $scope.currentclass.consultorlastviewtranslate =  {
+      date: getDate($scope.currentclass.consultorlastviewed),
+      time: getTime($scope.currentclass.consultorlastviewed)
+    };
   }
   console.log($scope.currentclass);
 });
