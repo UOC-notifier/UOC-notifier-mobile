@@ -8,13 +8,22 @@
     border-radius: 4px;
     background: gray;
     margin-right: 5px;
+    background-color: #8a6d3b;
 }
 
 .item.class .list {
     margin-top: 10px;
 }
 
-.item .row {
+.item.event .item-content:not(.activated) {
+    background-color: transparent;
+}
+
+.item.event .badge {
+    top: 9px;
+}
+
+.item.event {
     padding: 0;
 }
 
@@ -44,4 +53,12 @@
 
 .event.danger .name a{
     color: #a94442;
+}
+
+.bar-colored, .bar-colored .button {
+    color: white;
+}
+
+.bar-colored {
+    background-color: #8a6d3b;
 }

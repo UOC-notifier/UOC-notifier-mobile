@@ -27,6 +27,7 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
 
     $translate.use(userLang).then(function(data) {
         console.log("Language loaded -> " + data);
+        $translate.refresh();
     }, function(error) {
         console.log("ERROR loading language -> " + error);
     });

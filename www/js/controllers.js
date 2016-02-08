@@ -1,191 +1,202 @@
 angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
 .controller('AppCtrl', function($scope, $translate, $cordovaBadge) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
+    // With the new view caching in Ionic, Controllers are only called
+    // when they are recreated or on app start, instead of every page change.
+    // To listen for when this page is active (for example, to refresh data),
+    // listen for the $ionicView.enter event:
 
-  $scope.classes_obj = Classes;
-  $scope.classes_obj.load();
-  $scope.state = {};
-  $scope.settings = {};
-  $scope.reload = function() {
-    console.log('reload');
-    $scope.allclasses = $scope.classes_obj.get_all();
-    $scope.classes = $scope.classes_obj.get_notified();
-    $scope.state.critical = get_critical();
-    $scope.state.messages = $scope.classes_obj.messages;
+    $scope.classes_obj = Classes;
+    $scope.classes_obj.load();
+    $scope.state = {};
+    $scope.settings = {};
+    $scope.reload = function() {
+        console.log('reload');
+        $scope.allclasses = $scope.classes_obj.get_all();
+        $scope.classes = $scope.classes_obj.get_notified();
+        $scope.load_classes();
+        $scope.state.critical = get_critical();
+        $scope.state.messages = $scope.classes_obj.notified_messages;
+        $scope.state.today = get_today();
 
-    /*if ($scope.state.messages > 0) {
-      $cordovaBadge.set($scope.messages);
-    } else {
-      $cordovaBadge.clear();
-    }*/
-    $scope.$broadcast('scroll.refreshComplete');
-  };
+        try {
+            if ($scope.state.messages > 0) {
+                $cordovaBadge.set($scope.state.messages);
+            } else {
+                $cordovaBadge.clear();
+            }
+        } catch(err) {
+            Debug.error(err);
+        }
+        $scope.$broadcast('scroll.refreshComplete');
+    };
 
-  $scope.doRefresh = function() {
-    console.log('Refresh');
-    $scope.state.loading = true;
-    check_messages(function() {
-      $scope.reload();
-      $scope.state.loading = false;
-    });
-  };
+    $scope.load_classes = function() {
+        for (var y in $scope.classes) {
+            var classroom = $scope.classes[y];
+            classroom.events_today = [];
+            for (var x in classroom.events) {
+                var evnt = classroom.events[x];
 
-  $scope.reload();
-  if (!$scope.loaded) {
-    $scope.doRefresh();
-    $scope.loaded = true;
-  }
+                if (evnt.is_completed()) {
+                    if (evnt.is_assignment()) {
+                        evnt.starttext = false;
+                        evnt.endtext = false;
+                        evnt.soltext = false;
+                    } else {
+                        evnt.hide = true;
+                    }
+                } else {
+                    evnt.starttext = get_event_text(evnt.start);
+                    evnt.endtext = get_event_text(evnt.end);
+                    evnt.soltext = get_event_text(evnt.solution);
+                }
+
+                if (evnt.graded) {
+                    evnt.gradtext = evnt.graded;
+                } else {
+                    evnt.gradtext = get_event_text(evnt.grading);
+                }
+
+                evnt.eventstate = get_event_state(evnt);
+                evnt.icon = get_event_icon(evnt);
+                evnt.iconcolor = get_event_icon_color(evnt);
+                if (evnt.is_near($scope.state.today)) {
+                    $scope.events_today.push(evnt);
+                }
+            }
+
+            // Final tests
+            if (classroom.exams && classroom.exams.date && isNearDate(classroom.exams.date, $scope.state.today)) {
+                var name = _('__FINAL_TESTS_CLASS__', [classroom.get_acronym()]);
+                var evnt = new CalEvent(name, '', 'UOC');
+                evnt.start = classroom.exams.date;
+                evnt.starttext = get_event_text(evnt.start);
+                evnt.icon = get_event_icon(evnt);
+                evnt.iconcolor = 'balanced';
+                evnt.eventstate = get_event_state(evnt);
+                evnt.link = '/tren/trenacc/webapp/GEPAF.FULLPERSONAL/index.jsp?s=';
+                $scope.events_today.push(evnt);
+            }
+        }
+
+        $scope.events_today = [];
+        var gnral_events = $scope.classes_obj.get_general_events();
+        for(var k in gnral_events){
+            var evnt = gnral_events[k];
+            if (evnt.is_near($scope.state.today)) {
+                evnt.eventstate = get_event_state(evnt);
+                evnt.icon = get_event_state(evnt);
+                evnt.icon = get_event_icon(evnt);
+                evnt.iconcolor = 'balanced';
+                $scope.events_today.push(evnt);
+            }
+        }
+    };
+
+    $scope.doRefresh = function() {
+        console.log('Refresh');
+        $scope.state.loading = true;
+        check_messages(function() {
+            $scope.reload();
+            $scope.state.loading = false;
+        });
+    };
+
+    $scope.reload();
+    if (!$scope.loaded) {
+        $scope.doRefresh();
+        $scope.loaded = true;
+    }
 })
 
 .controller('SettingsCtrl', function($scope, $state, $translate) {
-  var user = get_user();
-  $scope.settings = {
-    username: user.username,
-    password: user.password,
-    uni: get_uni(),
-    check_interval: get_interval(),
-    critical: get_critical(),
-    notification: get_notification(),
-    today_tab: get_today(),
-    check_mail: get_check_mail()
-  };
+    var user = get_user();
+    $scope.settings = {
+        username: user.username,
+        password: user.password,
+        uni: get_uni(),
+        check_interval: get_interval(),
+        critical: get_critical(),
+        notification: get_notification(),
+        today_tab: get_today(),
+        check_mail: get_check_mail()
+    };
 
-  $scope.save = function(settings) {
-    console.log('Settings', settings);
-    save_user(settings.username, settings.password);
-    save_uni(settings.uni);
-    save_interval(settings.check_interval);
-    save_critical(settings.critical);
-    save_notification(settings.notification);
-    save_today(settings.today_tab);
-    save_check_mail(settings.check_mail);
-    $scope.classes_obj.save();
-    $scope.doRefresh();
-    $state.go('app.main');
-  };
+    $scope.save = function(settings) {
+        console.log('Settings', settings);
+        save_user(settings.username, settings.password);
+        save_uni(settings.uni);
+        save_interval(settings.check_interval);
+        save_critical(settings.critical);
+        save_notification(settings.notification);
+        save_today(settings.today_tab);
+        save_check_mail(settings.check_mail);
+        $scope.classes_obj.save();
+        $scope.doRefresh();
+        $state.go('app.main');
+    };
 
-  $scope.save_classes = function(settings) {
-    $scope.classes_obj.save();
-    $scope.reload();
-  };
-
+    $scope.save_classes = function(settings) {
+        $scope.classes_obj.save();
+        $scope.reload();
+    };
 })
 
-.controller('ClassCtrl', function($scope, $stateParams, $translate) {
-  $scope.openInBrowser = function(url, data, nossl) {
-      session = Session.get();
-      if(session){
-        if (url.indexOf('?') == -1) {
-          if(!data) data = {};
-          data.s = session;
-          url += '?'+uri_data(data);
-        } else if (url[url.length-1] == '=') {
-          url += session;
-        }
-              if (url[0] == '/') {
-                  if (nossl) {
-                      url = root_url + url;
-                  } else {
-                      url = root_url_ssl + url;
-                  }
-              }
-        window.open(url, '_system');
-      }
-  };
+.controller('ClassCtrl', function($scope, $stateParams, $translate, $cordovaInAppBrowser) {
 
-  $scope.openInApp = function(url, data, nossl) {
-      session = Session.get();
-      if(session){
-        if (url.indexOf('?') == -1) {
-          if(!data) data = {};
-          data.s = session;
-          url += '?'+uri_data(data);
-        } else if (url[url.length-1] == '=') {
-          url += session;
-        }
-              if (url[0] == '/') {
-                  if (nossl) {
-                      url = root_url + url;
-                  } else {
-                      url = root_url_ssl + url;
-                  }
-              }
-        window.open(url, '_system');
-      }
-  };
-
-  $scope.currentclass = $scope.classes_obj.search_code($stateParams.code);
-  for (var x in $scope.currentclass.events) {
-    var evnt = $scope.currentclass.events[x];
-    if (isBeforeToday(evnt.start)) {
-      evnt.starttext = true;
-    } else if (isToday(evnt.start)) {
-      evnt.starttext = _('__TODAY__');
-    } else {
-      var dsplit = evnt.start.split('/');
-      evnt.starttext = dsplit[0]+'/'+dsplit[1];
-    }
-
-    if (isBeforeToday(evnt.end)) {
-      evnt.endtext = true;
-    } else if (isToday(evnt.end)) {
-      evnt.endtext = _('__TODAY__');
-    } else {
-      var dsplit = evnt.end.split('/');
-      evnt.endtext = dsplit[0]+'/'+dsplit[1];
-    }
-
-    if (isBeforeToday(evnt.solution)) {
-      evnt.soltext = true;
-    } else if (isToday(evnt.solution)) {
-      evnt.soltext = _('__TODAY__');
-    } else {
-      var dsplit = evnt.solution.split('/');
-      evnt.soltext = dsplit[0]+'/'+dsplit[1];
-    }
-
-    if (evnt.graded) {
-      evnt.gradtext = evnt.graded;
-    } else if (isBeforeToday(evnt.grading)) {
-      evnt.gradtext = true;
-    } else if (isToday(evnt.grading)) {
-      evnt.gradtext = _('__TODAY__');
-    } else {
-      var dsplit = evnt.grading.split('/');
-      evnt.gradtext = dsplit[0]+'/'+dsplit[1];
-    }
-
-    if (evnt.is_completed()) {
-      if (evnt.is_assignment()) {
-        evnt.starttext = false;
-        evnt.endtext = false;
-        evnt.soltext = false;
-      } else {
-        evnt.hide = true;
-      }
-    }
-
-    evnt.eventstate = "";
-    if (evnt.has_started()) {
-        if (evnt.has_ended()) {
-            evnt.eventstate = 'success';
-        } else if (evnt.committed || !evnt.is_assignment()) {
-            evnt.eventstate = 'warning running';
-        } else {
-            evnt.eventstate = 'danger running';
+    $scope.openUrl = function(url, where, data, nossl) {
+        session = Session.get();
+        if (session){
+            if (url.indexOf('?') == -1) {
+                if(!data) data = {};
+                data.s = session;
+                data.mobileApp = true;
+                data.ajax = true;
+                data.pib = true;
+                url += '?'+uri_data(data);
+            } else if (url[url.length-1] == '=') {
+                url += session;
+            }
+            if (url[0] == '/') {
+                if (nossl) {
+                    url = root_url + url;
+                } else {
+                    url = root_url_ssl + url;
+                }
+            }
+            console.log(url);
+            var options = {
+                location: 'no',
+                clearcache: 'no',
+                toolbar: 'yes'
+                };
+            $cordovaInAppBrowser.open(url, where, options);
         }
     }
-  }
-
-  if ($scope.currentclass.consultorlastviewed) {
-    $scope.currentclass.consultorlastviewtranslate =  {
-      date: getDate($scope.currentclass.consultorlastviewed),
-      time: getTime($scope.currentclass.consultorlastviewed)
+    $scope.openInBrowser = function(url, data, nossl) {
+        $scope.openUrl(url, '_system', data, nossl);
     };
-  }
-  console.log($scope.currentclass);
+    $scope.openInApp = function(url, data, nossl) {
+        $scope.openUrl(url, '_self', data, nossl);
+    };
+    $scope.openClassroom = function() {
+        var link = '/webapps/classroom/mobile.do';
+        var options = {};
+        if($scope.currentclass.domain) {
+            options.domainId = $scope.currentclass.domain;
+        } else {
+            options.domainCode = $scope.currentclass.code;
+        }
+        $scope.openInApp(link, options);
+    };
+
+    $scope.currentclass = $scope.classes_obj.search_code($stateParams.code);
+    if ($scope.currentclass.consultorlastviewed) {
+        $scope.currentclass.consultorlastviewtranslate =  {
+            date: getDate($scope.currentclass.consultorlastviewed),
+            time: getTime($scope.currentclass.consultorlastviewed)
+        };
+    }
+    console.log($scope.currentclass);
 });

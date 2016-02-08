@@ -1,5 +1,5 @@
 {
-  "name": "uoc-notifier",
+  "name": "UOC-notifier",
   "version": "1.1.1",
   "description": "UOC-notifier: An Ionic project",
   "dependencies": {
@@ -20,6 +20,8 @@
     "cordova-plugin-whitelist",
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
+    "cordova-plugin-badge",
+    "cordova-plugin-inappbrowser",
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
