@@ -1,5 +1,8 @@
 <ion-view view-title="{{currentclass.title}} ({{'__CLASSROOM__' |translate}} {{currentclass.aula}})">
   <ion-content>
+    <div class="card" ng-if="currentclass.final_grades && currentclass.stats">
+        <div class="item item-text-wrap">{{"__END_OF_CLASSROOMS__" | translate}}</div>
+    </div>
     <div class="list list-inset">
         <ion-list>
           <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
@@ -49,6 +52,12 @@
             <div class="item item-divider" ng-if="currentclass.events.length">{{"__TOOLS__" | translate}}</div>
               <ion-item on-tap="openInApp('/WebMail/writeMail.do', {to: currentclass.consultormail})" href="#"><i class="icon ion-email"></i> {{"__TEACHER__" | translate}} <strong>{{currentclass.consultor}}</strong><br>
                 <span ng-if="currentclass.consultorlastviewed">{{"__VIEWED_LAST_TIME__" | translate: currentclass.consultorlastviewtranslate}}
+             </ion-item>
+             <ion-item ng-if="currentclass.stats" on-tap="openInApp('/tren/trenacc', {modul: state.gat+'.ESTADNOTES/estadis.assignatures', assig: currentclass.subject_code, pAnyAcademic: currentclass.any})" href="#">
+              <i class="icon ion-stats-bars"></i> {{"__STATS__" | translate}}
+             </ion-item>
+             <ion-item ng-if="currentclass.type != 'TUTORIA'" on-tap="openInApp('/webapps/classroom/download.do', {nav: 'pladocent', domainId: currentclass.domain, format: 'html', app: 'aulaca', precarrega: false})" href="#">
+              <i class="icon ion-easel"></i> {{"__TEACHING_PLAN__" | translate}}
              </ion-item>
         </ion-list>
     </div>

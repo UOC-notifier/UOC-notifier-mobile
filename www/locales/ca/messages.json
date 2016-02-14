@@ -103,7 +103,7 @@
     "__PF__": "Prova Final",
     "__FE__": "Nota final d'Exàmens (P+EX)",
     "__FA__": "Nota final de l'assignatura",
-    "__END_OF_CLASSROOMS__": "Aquesta aula ja ha finalitzat la docència, si la desactives a les <a href=\"options.html\" target=\"_blank\">opcions</a> faràs l'extensió més lleugera",
+    "__END_OF_CLASSROOMS__": "Aquesta aula ja ha finalitzat la docència, si la desactives a les opcions faràs l'extensió més lleugera",
     "__DISABLE_UNUSED_CLASSROOMS__": "Desactiva les aules que no facis servir per fer l'extensió més lleugera",
     "__CHECK_MAIL__": "Comprova si hi ha correu (desactiva'l si tens una redirecció)",
     "__CLASSROOMS__": "Aules",

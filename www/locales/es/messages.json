@@ -103,7 +103,7 @@
     "__PF__": "Prueba Final",
     "__FE__": "Nota final de Exámenes (P+EX)",
     "__FA__": "Nota final de la Asignatura",
-    "__END_OF_CLASSROOMS__": "Esta aula ha finalizado su doncéncia, si la desactivas en las <a href=\"options.html\" target=\"_blank\">opciones</a> haràs la extensión más ligera",
+    "__END_OF_CLASSROOMS__": "Esta aula ha finalizado su doncéncia, si la desactivas en las opciones haràs la extensión más ligera",
     "__DISABLE_UNUSED_CLASSROOMS__": "Desactiva las aulas que no uses para hacer la extensión más ligera",
     "__CHECK_MAIL__": "Comprueba si hay correo (desactívalo si tienes una redirección)",
     "__CLASSROOMS__": "Aulas",

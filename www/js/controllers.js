@@ -18,6 +18,8 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.state.critical = get_critical();
         $scope.state.messages = $scope.classes_obj.notified_messages;
         $scope.state.today = get_today();
+        $scope.state.gat = get_gat();
+        $scope.announcements = get_announcements();
 
         try {
             if ($scope.state.messages > 0) {
@@ -105,7 +107,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
     $scope.reload();
     if (!$scope.loaded) {
-        $scope.doRefresh();
+        //$scope.doRefresh();
         $scope.loaded = true;
     }
 })
@@ -151,9 +153,6 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             if (url.indexOf('?') == -1) {
                 if(!data) data = {};
                 data.s = session;
-                data.mobileApp = true;
-                data.ajax = true;
-                data.pib = true;
                 url += '?'+uri_data(data);
             } else if (url[url.length-1] == '=') {
                 url += session;
@@ -182,13 +181,16 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     };
     $scope.openClassroom = function() {
         var link = '/webapps/classroom/mobile.do';
-        var options = {};
+        var data = {};
         if($scope.currentclass.domain) {
-            options.domainId = $scope.currentclass.domain;
+            data.domainId = $scope.currentclass.domain;
         } else {
-            options.domainCode = $scope.currentclass.code;
+            data.domainCode = $scope.currentclass.code;
         }
-        $scope.openInApp(link, options);
+        data.mobileApp = true;
+        data.ajax = true;
+        data.pib = true;
+        $scope.openInApp(link, data);
     };
 
     $scope.currentclass = $scope.classes_obj.search_code($stateParams.code);

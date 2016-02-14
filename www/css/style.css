@@ -62,3 +62,8 @@
 .bar-colored {
     background-color: #8a6d3b;
 }
+
+.bar .buttons-right .badge {
+    line-height: 24px;
+    margin-right: 6px;
+}
