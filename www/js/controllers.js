@@ -1,6 +1,6 @@
 angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
-.controller('AppCtrl', function($scope, $translate, $cordovaBadge) {
+.controller('AppCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -19,6 +19,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.state.messages = $scope.classes_obj.notified_messages;
         $scope.state.today = get_today();
         $scope.state.gat = get_gat();
+        $scope.state.unread_mail = get_mails_unread();
         $scope.announcements = get_announcements();
 
         try {
@@ -96,6 +97,49 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         }
     };
 
+    $scope.openUrl = function(url, where, data, nossl) {
+        session = Session.get();
+        if (session){
+            if (url.indexOf('?') == -1) {
+                if(!data) data = {};
+                data.s = session;
+                url += '?'+uri_data(data);
+            } else if (url[url.length-1] == '=') {
+                url += session;
+            }
+            if (url[0] == '/') {
+                if (nossl) {
+                    url = root_url + url;
+                } else {
+                    url = root_url_ssl + url;
+                }
+            }
+            console.log(url);
+            var options = {
+                location: 'no',
+                clearcache: 'no',
+                toolbar: 'yes'
+                };
+            $cordovaInAppBrowser.open(url, where, options);
+        }
+    }
+    $scope.openInBrowser = function(url, data, nossl) {
+        $scope.openUrl(url, '_system', data, nossl);
+    };
+    $scope.openInApp = function(url, data, nossl) {
+        $scope.openUrl(url, '_self', data, nossl);
+    };
+
+    $scope.openMail = function() {
+        var link = '/WebMail/attach.do';
+        var data = {};
+        data.mobile = 'yes';
+        data.android = 'yes';
+        data.phonegap = 'yes';
+        data.pib = false;
+        $scope.openInApp(link, data);
+    };
+
     $scope.doRefresh = function() {
         console.log('Refresh');
         $scope.state.loading = true;
@@ -107,7 +151,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
     $scope.reload();
     if (!$scope.loaded) {
-        //$scope.doRefresh();
+        $scope.doRefresh();
         $scope.loaded = true;
     }
 })
@@ -145,40 +189,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     };
 })
 
-.controller('ClassCtrl', function($scope, $stateParams, $translate, $cordovaInAppBrowser) {
-
-    $scope.openUrl = function(url, where, data, nossl) {
-        session = Session.get();
-        if (session){
-            if (url.indexOf('?') == -1) {
-                if(!data) data = {};
-                data.s = session;
-                url += '?'+uri_data(data);
-            } else if (url[url.length-1] == '=') {
-                url += session;
-            }
-            if (url[0] == '/') {
-                if (nossl) {
-                    url = root_url + url;
-                } else {
-                    url = root_url_ssl + url;
-                }
-            }
-            console.log(url);
-            var options = {
-                location: 'no',
-                clearcache: 'no',
-                toolbar: 'yes'
-                };
-            $cordovaInAppBrowser.open(url, where, options);
-        }
-    }
-    $scope.openInBrowser = function(url, data, nossl) {
-        $scope.openUrl(url, '_system', data, nossl);
-    };
-    $scope.openInApp = function(url, data, nossl) {
-        $scope.openUrl(url, '_self', data, nossl);
-    };
+.controller('ClassCtrl', function($scope, $stateParams, $translate) {
     $scope.openClassroom = function() {
         var link = '/webapps/classroom/mobile.do';
         var data = {};

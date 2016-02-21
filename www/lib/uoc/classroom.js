@@ -49,9 +49,6 @@ var Classes = new function() {
 		Debug.print(classes);
 		Debug.print(events);
 		classes.sort(function(a, b) {
-			if (a.notify != b.notify) {
-				return b.notify - a.notify;
-			}
 			if (a.type != b.type) {
 				if (a.type == 'TUTORIA') {
 					return 1;

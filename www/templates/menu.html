@@ -8,8 +8,9 @@
         </button>
       </ion-nav-buttons>
       <ion-nav-buttons side="right">
-        <span class="badge badge-assertive" ng-if="state.messages > state.critical">{{state.messages}}</span>
-        <span class="badge badge-energized" ng-if="state.messages <= state.critical && state.messages > 0">{{state.messages}}</span>
+        <span class="badge" ng-if="state.messages > 0" ng-class="{'badge-assertive': state.messages > state.critical, 'badge-energized': state.messages <= state.critical}">
+          {{state.messages}}
+        </span>
         <ion-spinner ng-if="state.loading"></ion-spinner>
       </ion-nav-buttons>
     </ion-nav-bar>
@@ -25,8 +26,9 @@
         <div class="item item-divider">{{"__CLASSROOMS__" | translate}}</div>
         <ion-item menu-close ng-repeat="class in classes" href="#/app/class/{{class.code}}">
           <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
-          <span class="badge badge-assertive" ng-if="class.messages > state.critical">{{class.messages}}</span>
-          <span class="badge badge-energized" ng-if="class.messages <= state.critical && class.messages > 0">{{class.messages}}</span>
+          <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.messages > state.critical, 'badge-energized': class.messages <= state.critical}">
+            {{class.messages}}
+          </span>
         </ion-item>
         <div class="item item-divider"></div>
         <ion-item menu-close href="#/app/options">

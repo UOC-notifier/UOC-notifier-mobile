@@ -16,15 +16,17 @@
         <ion-list>
             <ion-item ng-repeat="class in classes" href="#/app/class/{{class.code}}" class="item class">
                 <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
-                <span class="badge badge-assertive" ng-if="class.messages > state.critical">{{class.messages}}</span>
-                <span class="badge badge-energized" ng-if="class.messages <= state.critical && class.messages > 0">{{class.messages}}</span>
+                <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.messages > state.critical, 'badge-energized': class.messages <= state.critical}">
+                  {{class.messages}}
+                </span>
 
                 <ion-list ng-if="class.messages">
                     <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
                     <ion-item ng-repeat="resource in class.resources" ng-if="resource.messages > 0" on-tap="openInApp(resource.link || '/webapps/bustiaca/listMails.do', {l: resource.code}, true)" href="#">
                         {{resource.title}}
-                      <span class="badge badge-assertive" ng-if="resource.messages > state.critical">{{resource.messages}} / {{resource.all_messages}}</span>
-                      <span class="badge badge-energized" ng-if="resource.messages <= state.critical && resource.messages > 0">{{resource.messages}} / {{resource.all_messages}}</span>
+                      <span class="badge" ng-if="resource.messages > 0" ng-class="{'badge-assertive': resource.messages > state.critical, 'badge-energized': resource.messages <= state.critical}">
+                        {{resource.messages}} / {{resource.all_messages}}
+                      </span>
                     </ion-item>
                 </ion-list>
 
@@ -61,4 +63,10 @@
         </ion-list>
     </div>
   </ion-content>
+  <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #2e3a69;">
+    <div class="button-bar">
+      <button class="button button-clear icon ion-university" ng-click="openInApp('/cgi-bin/uocapp')"> {{'__GOTO_CAMPUS__' | translate}}</button>
+      <button class="button button-clear icon ion-email" ng-class="{'button-assertive': state.unread_mail}" ng-click="openMail()"> {{'__MAIL__' | translate}}</button>
+    </div>
+  </ion-footer-bar>
 </ion-view>

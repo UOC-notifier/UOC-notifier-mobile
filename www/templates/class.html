@@ -4,18 +4,18 @@
         <div class="item item-text-wrap">{{"__END_OF_CLASSROOMS__" | translate}}</div>
     </div>
     <div class="list list-inset">
-        <ion-list>
+        <ion-list ng-if="currentclass.resources.length">
           <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
           <ion-item ng-repeat="resource in currentclass.resources" on-tap="openInApp(resource.link || '/webapps/bustiaca/listMails.do', {l: resource.code}, true)" href="#">
             {{resource.title}}
-            <span class="badge badge-assertive" ng-if="resource.messages > state.critical">{{resource.messages}} / {{resource.all_messages}}</span>
-            <span class="badge badge-energized" ng-if="resource.messages <= state.critical && resource.messages > 0">{{resource.messages}} / {{resource.all_messages}}</span>
-            <span class="badge badge-balanced" ng-if="resource.messages == 0">{{resource.messages}} / {{resource.all_messages}}</span>
+            <span class="badge" ng-if="resource.messages >= 0" ng-class="{'badge-assertive': resource.messages > state.critical, 'badge-energized': resource.messages <= state.critical && resource.messages > 0, 'badge-balanced': resource.messages == 0}">
+              {{resource.messages}} / {{resource.all_messages}}
+            </span>
           </ion-item>
         </ion-list>
         <br>
-        <ion-list>
-          <div class="item item-divider" ng-if="currentclass.events.length">{{"__ACTIVITIES__" | translate}}</div>
+        <ion-list ng-if="currentclass.events.length">
+          <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
           <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}" on-tap="openInApp(event.link)" href="#">
           <div class="row">
             <div class="col"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
@@ -64,7 +64,7 @@
   </ion-content>
   <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #{{currentclass.color}};">
   <div class="button-bar">
-    <button class="button button-clear icon ion-university" ng-click="openClassroom()">{{'__GOTO_CLASS__' | translate}}</button>
+    <button class="button button-clear icon ion-university" ng-click="openClassroom()"> {{'__GOTO_CLASS__' | translate}}</button>
     <button ng-if="currentclass.has_events() && currentclass.subject_code" class="button button-clear icon ion-speedometer" ng-click="openInApp('/webapps/rac/listEstudiant.action', {domainId: currentclass.domain})">{{'__GRADES__' | translate}}</button>
   </div>
 </ion-footer-bar>
