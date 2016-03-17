@@ -18,18 +18,20 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
     var userLang = false;
     if(typeof navigator.globalization !== "undefined") {
         navigator.globalization.getPreferredLanguage(function(language) {
+          console.log('language', language);
           userLang = (language.value).split("-")[0];
         }, null);
     }
     if (!userLang) {
       userLang = navigator.language || navigator.userLanguage;
+      userLang = userLang.split("-")[0];
     }
 
     $translate.use(userLang).then(function(data) {
         console.log("Language loaded -> " + data);
         $translate.refresh();
     }, function(error) {
-        console.log("ERROR loading language -> " + error);
+        console.error("ERROR loading language -> " + error);
     });
 
     if (window.StatusBar) {

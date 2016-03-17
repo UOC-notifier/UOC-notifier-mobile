@@ -23,11 +23,14 @@ function reset_alarm() {
 }
 
 function get_event_text(date) {
+    if (!date) {
+        return false;
+    }
     if (isBeforeToday(date)) {
         return true;
     }
     if (isToday(date)) {
-        return _('__TODAY__');
+        return 'TODAY';
     }
     var dsplit = date.split('/');
     return dsplit[0]+'/'+dsplit[1];
@@ -53,7 +56,7 @@ function get_event_icon(evnt) {
 }
 
 function get_event_icon_color(evnt) {
-    if (evnt.is_assignment() && !evnt.committed && evnt.has_ended()) {
+    if (evnt.is_assignment() && !evnt.committed && evnt.has_started() && !evnt.has_ended()) {
         return 'assertive';
     }
     return 'balanced';

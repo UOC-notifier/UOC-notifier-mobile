@@ -324,6 +324,7 @@ function parse_classroom(classr) {
 
 	// Parse resources
 	if (classr.widget.eines.length > 0) {
+		classroom.delete_old_resources();
 		for(var j in classr.widget.eines) {
 			var resourcel = classr.widget.eines[j];
 			if (resourcel.nom) {
@@ -339,7 +340,9 @@ function parse_classroom(classr) {
 	if (classr.activitats.length > 0) {
 		for (var y in classr.activitats) {
 			var act = classr.activitats[y];
-			var evnt = new CalEvent(act.name, act.eventId, 'ASSIGNMENT');
+
+			var eventtype = act.eventTypeId == 31 ? 'MODULE' : 'ASSIGNMENT'
+			var evnt = new CalEvent(act.name, act.eventId, eventtype);
 
 			var args = {};
 			var urlbase;
@@ -411,20 +414,7 @@ function parse_classroom_old(classr) {
 				}
 				classroom.aula = classr.codi_tercers;
 
-				if (classroom.notify) {
-					retrieve_consultor(classroom);
-
-					for (var j in classr.resources) {
-						var resourcel = classr.resources[j];
-						if (resourcel.title) {
-							var resource = new Resource(resourcel.title, resourcel.code, "OLD");
-							resource.set_messages(resourcel.numMesPend, resourcel.numMesTot);
-							classroom.add_resource(resource);
-						}
-					}
-				}
-				Classes.add(classroom);
-
+				retrieve_consultor(classroom);
 				break;
 			case 'ASSIGNATURA':
 				// Override title
@@ -432,10 +422,45 @@ function parse_classroom_old(classr) {
 				if (classroom) {
 					classroom.title = title;
 				}
-				break;
+				return;
 			case 'AULA':
+				classroom = Classes.search_domainassig(classr.domainfatherid);
+				if (classroom && classroom.any) {
+					return;
+				}
+				var aul = title.lastIndexOf(" aula ");
+				var aulanum = false;
+				if (aul > 0) {
+					aulanum = title.substr(aul + 6);
+					title = title.substr(0, aul);
+				}
+				if (!classroom) {
+					classroom = new Classroom(title, classr.code, classr.domainid, classr.domaintypeid, classr.pt_template);
+				} else {
+					classroom.code = classr.code;
+					classroom.domain = classr.domainid;
+					classroom.type = classr.domaintypeid;
+					classroom.template = classr.pt_template;
+				}
+				if (aulanum) {
+					classroom.aula = aulanum;
+				}
+				classroom.domainassig = classr.domainfatherid;
+
 				break;
 		}
+
+		if (classroom.notify && !classroom.any) {
+			for (var j in classr.resources) {
+				var resourcel = classr.resources[j];
+				if (resourcel.title) {
+					var resource = new Resource(resourcel.title, resourcel.code, "OLD");
+					resource.set_messages(resourcel.numMesPend, resourcel.numMesTot);
+					classroom.add_resource(resource);
+				}
+			}
+		}
+		Classes.add(classroom);
 	}
 }
 
@@ -644,6 +669,8 @@ function retrieve_users(classroom, button) {
 	Queue.request('/webapps/aulaca/classroom/UsersList.action', args, 'GET', false, function(data) {
 		UI.fill_users(classroom, data);
 		$(button).removeClass('spin');
+    }, function(data) {
+    	$(button).removeClass('spin');
     });
 }
 
@@ -655,6 +682,8 @@ function retrieve_materials(classroom, button) {
 	Queue.request('/webapps/mymat/listMaterialsAjax.action', args, 'GET', false, function(data) {
 		UI.fill_materials(classroom, data);
 		$(button).removeClass('spin');
+    }, function(data) {
+    	$(button).removeClass('spin');
     });
 }
 
@@ -710,21 +739,25 @@ function retrieve_agenda() {
 				}
 
 				evnt = classroom.get_event(id[0]);
-				if (evnt && evnt.is_assignment()) {
+				if (evnt && evnt.is_assignment() && classroom.any) {
 					// The Assignments are processed in other parts
 					return;
 				}
 
-				title = json.title.split('[');
-				title = title[0].trim();
+				if (!classroom.any && json.EVENT_COLOR){
+					classroom.color = json.EVENT_COLOR;
+				}
+
 				if (!evnt) {
+					title = json.title.split('[');
+					title = get_html_realtext(title[0].trim());
+					title = title.replace("\\'", "'");
 					evnt = new CalEvent(title, id[0], 'MODULE');
 				}
 				var date =  getDate_hyphen(json.pubDate);
 				switch (parseInt(json.EVENT_TYPE)) {
 					case 22:
 					case 26:
-						evnt.type = 'MODULE';
 						evnt.start = date;
 						break;
 					case 23:
@@ -733,6 +766,10 @@ function retrieve_agenda() {
 						break;
 					case 27:
 						evnt.solution = date;
+						break;
+					case 19:
+						evnt.type = 'ASSIGNMENT';
+						evnt.grading = date;
 						break;
 					case 29:
 						evnt.end = date;

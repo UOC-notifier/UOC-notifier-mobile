@@ -8,7 +8,7 @@
     border-radius: 4px;
     background: gray;
     margin-right: 5px;
-    background-color: #8a6d3b;
+    background-color: #555;
 }
 
 .item.class .list {
@@ -19,12 +19,15 @@
     background-color: transparent;
 }
 
-.item.event .badge {
+.item.event .badge, .item.resource .badge {
     top: 9px;
 }
 
-.item.event {
+.item.event, .item.event a{
     padding: 0;
+}
+.item.resource a {
+    padding: 10px;
 }
 
 .event.success {
@@ -66,4 +69,16 @@
 .bar .buttons-right .badge {
     line-height: 24px;
     margin-right: 6px;
+}
+
+.badge.badge-static {
+    right: initial;
+    position: static;
+    display: inline;
+}
+
+.col.col-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

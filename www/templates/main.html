@@ -2,8 +2,6 @@
   <ion-content ng-controller="AppCtrl">
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()"></ion-refresher>
     <div class="padding">
-        <h1>{{"TITLE" | translate}}</h1>
-
         <div class="card" ng-if="announcements">
             <div class="item item-divider">
                 <i class="icon ion-speakerphone"></i>
@@ -14,7 +12,7 @@
             <div class="item item-divider">{{announcements.date}}</div>
         </div>
         <ion-list>
-            <ion-item ng-repeat="class in classes" href="#/app/class/{{class.code}}" class="item class">
+            <ion-item ng-repeat="class in classes" ng-click="gotoClass(class.code)" class="item class">
                 <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
                 <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.messages > state.critical, 'badge-energized': class.messages <= state.critical}">
                   {{class.messages}}
@@ -22,7 +20,7 @@
 
                 <ion-list ng-if="class.messages">
                     <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
-                    <ion-item ng-repeat="resource in class.resources" ng-if="resource.messages > 0" on-tap="openInApp(resource.link || '/webapps/bustiaca/listMails.do', {l: resource.code}, true)" href="#">
+                    <ion-item ng-repeat="resource in class.resources" ng-if="resource.messages > 0" class="item resource" on-tap="openInApp(resource.link || '/webapps/bustiaca/listMails.do', {l: resource.code}, true)" href="#">
                         {{resource.title}}
                       <span class="badge" ng-if="resource.messages > 0" ng-class="{'badge-assertive': resource.messages > state.critical, 'badge-energized': resource.messages <= state.critical}">
                         {{resource.messages}} / {{resource.all_messages}}
@@ -34,20 +32,24 @@
                     <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
                       <ion-item ng-repeat="event in class.events_today" ng-if="!event.hide" class="item event {{event.eventstate}}" on-tap="openInApp(event.link)" href="#">
                       <div class="row">
-                        <div class="col"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
+                        <div class="col col-40 col-title"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
                         <div class="col text-center">
-                          <span class="badge badge-balanced"  ng-if="event.starttext === true"><i class="icon ion-checkmark-round"></i></span>
-                          <span ng-if="event.starttext !== true && event.starttext">{{event.starttext}}</span></div>
+                          <span class="badge badge-static badge-balanced"  ng-if="event.starttext === true"><i class="icon ion-checkmark-round"></i></span>
+                          <span class="badge badge-static badge-energized"  ng-if="event.starttext == 'TODAY'"><i class="icon ion-clock"></i></span>
+                          <span ng-if="event.starttext !== true && event.starttext != 'TODAY' && event.starttext">{{event.starttext}}</span></div>
                         <div class="col text-center">
-                          <span class="badge badge-balanced" ng-if="event.endtext === true"><i class="icon ion-checkmark-round"></i></span>
-                          <span ng-if="event.endtext !== true && event.endtext">{{event.endtext}}</span></div>
+                          <span class="badge badge-static badge-balanced" ng-if="event.endtext === true"><i class="icon ion-checkmark-round"></i></span>
+                          <span class="badge badge-static badge-energized"  ng-if="event.endtext == 'TODAY'"><i class="icon ion-clock"></i></span>
+                          <span ng-if="event.endtext !== true && event.endtext != 'TODAY' && event.endtext">{{event.endtext}}</span></div>
                         <div class="col text-center">
-                          <span class="badge badge-balanced" ng-if="event.soltext === true"><i class="icon ion-checkmark-round"></i></span>
-                          <span ng-if="event.soltext !== true && event.soltext">{{event.soltext}}</span></div>
+                          <span class="badge badge-static badge-balanced" ng-if="event.soltext === true"><i class="icon ion-checkmark-round"></i></span>
+                          <span class="badge badge-static badge-energized"  ng-if="event.soltext == 'TODAY'"><i class="icon ion-clock"></i></span>
+                          <span ng-if="event.soltext !== true && event.soltext != 'TODAY' && event.soltext">{{event.soltext}}</span></div>
                         <div class="col text-center">
-                          <span class="badge badge-balanced" ng-if="event.gradtext === true"><i class="icon ion-checkmark-round"></i></span>
-                          <span ng-if="event.gradtext !== true && event.gradtext && !event.graded">{{event.gradtext}}</span>
-                          <span class="badge badge-positive" ng-if="event.graded">{{event.graded}}</span>
+                          <span class="badge badge-static badge-balanced" ng-if="event.gradtext === true"><i class="icon ion-checkmark-round"></i></span>
+                          <span class="badge badge-static badge-energized"  ng-if="event.gradtext == 'TODAY'"><i class="icon ion-clock"></i></span>
+                          <span ng-if="event.gradtext !== true && event.gradtext != 'TODAY' && event.gradtext && !event.graded">{{event.gradtext}}</span>
+                          <span class="badge badge-static badge-positive" ng-if="event.graded">{{event.graded}}</span>
                         </div>
                     </div>
                 </ion-list>
@@ -66,7 +68,7 @@
   <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #2e3a69;">
     <div class="button-bar">
       <button class="button button-clear icon ion-university" ng-click="openInApp('/cgi-bin/uocapp')"> {{'__GOTO_CAMPUS__' | translate}}</button>
-      <button class="button button-clear icon ion-email" ng-class="{'button-assertive': state.unread_mail}" ng-click="openMail()"> {{'__MAIL__' | translate}}</button>
+      <button class="button button-clear icon ion-email" ng-class="{'button-assertive': state.unread_mail > 0}" ng-click="openMail()"> {{'__MAIL__' | translate}}</button>
     </div>
   </ion-footer-bar>
 </ion-view>

@@ -1,6 +1,6 @@
 angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
-.controller('AppCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser) {
+.controller('AppCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser, $state) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -65,7 +65,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
                 evnt.icon = get_event_icon(evnt);
                 evnt.iconcolor = get_event_icon_color(evnt);
                 if (evnt.is_near($scope.state.today)) {
-                    $scope.events_today.push(evnt);
+                    classroom.events_today.push(evnt);
                 }
             }
 
@@ -79,7 +79,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
                 evnt.iconcolor = 'balanced';
                 evnt.eventstate = get_event_state(evnt);
                 evnt.link = '/tren/trenacc/webapp/GEPAF.FULLPERSONAL/index.jsp?s=';
-                $scope.events_today.push(evnt);
+                classroom.events_today.push(evnt);
             }
         }
 
@@ -96,6 +96,11 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             }
         }
     };
+
+    $scope.gotoClass = function(classcode) {
+        $state.go('app.class', {code: classcode});
+    }
+
 
     $scope.openUrl = function(url, where, data, nossl) {
         session = Session.get();
@@ -122,7 +127,8 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
                 };
             $cordovaInAppBrowser.open(url, where, options);
         }
-    }
+    };
+
     $scope.openInBrowser = function(url, data, nossl) {
         $scope.openUrl(url, '_system', data, nossl);
     };
@@ -156,7 +162,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     }
 })
 
-.controller('SettingsCtrl', function($scope, $state, $translate) {
+.controller('SettingsCtrl', function($scope, $state, $translate, $ionicHistory) {
     var user = get_user();
     $scope.settings = {
         username: user.username,
@@ -180,6 +186,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         save_check_mail(settings.check_mail);
         $scope.classes_obj.save();
         $scope.doRefresh();
+        $ionicHistory.nextViewOptions({disableBack: true});
         $state.go('app.main');
     };
 
@@ -190,6 +197,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 })
 
 .controller('ClassCtrl', function($scope, $stateParams, $translate) {
+
     $scope.openClassroom = function() {
         var link = '/webapps/classroom/mobile.do';
         var data = {};

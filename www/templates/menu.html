@@ -24,7 +24,7 @@
           <i class="icon ion-home"></i> {{"TITLE" | translate}}
         </ion-item>
         <div class="item item-divider">{{"__CLASSROOMS__" | translate}}</div>
-        <ion-item menu-close ng-repeat="class in classes" href="#/app/class/{{class.code}}">
+        <ion-item menu-close ng-repeat="class in classes" ng-click="gotoClass(class.code)">
           <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
           <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.messages > state.critical, 'badge-energized': class.messages <= state.critical}">
             {{class.messages}}
