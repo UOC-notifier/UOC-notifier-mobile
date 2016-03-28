@@ -1,7 +1,8 @@
-function check_messages(after_check_fnc) {
+function check_messages(after_check_fnc, after_check_fail) {
 	save_check_nexttime(false);
 
 	Queue.set_after_function(after_check_fnc);
+	Queue.set_after_fail(after_check_fail);
 
 	retrieve_mail();
 

@@ -2,13 +2,16 @@
   <ion-content ng-controller="AppCtrl">
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()"></ion-refresher>
     <div class="padding">
+        <div class="card" ng-if="!state.loading && !state.session" ng-click="openNoSessionInApp('https://cv.uoc.edu/webapps/cas/login?renew=true')">
+           <div class="item item-text-wrap" ng-bind-html=" '__INCORRECT_USER__' | translate " ></div>
+        </div>
         <div class="card" ng-if="announcements">
             <div class="item item-divider">
                 <i class="icon ion-speakerphone"></i>
                 <a target="_blank" href="{{announcements.link}}" ng-if="announcements.link">{{announcements.title}}</a>
                 <span ng-if="!announcements.link">{{announcements.title}}</span>
             </div>
-            <div class="item item-text-wrap">{{announcements.description}}</div>
+            <div class="item item-text-wrap" ng-bind-html="announcements.description">{{announcements.description}}</div>
             <div class="item item-divider">{{announcements.date}}</div>
         </div>
         <ion-list>
@@ -65,7 +68,7 @@
         </ion-list>
     </div>
   </ion-content>
-  <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #2e3a69;">
+  <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #2e3a69;" ng-if="state.session">
     <div class="button-bar">
       <button class="button button-clear icon ion-university" ng-click="openInApp('/cgi-bin/uocapp')"> {{'__GOTO_CAMPUS__' | translate}}</button>
       <button class="button button-clear icon ion-email" ng-class="{'button-assertive': state.unread_mail > 0}" ng-click="openMail()"> {{'__MAIL__' | translate}}</button>

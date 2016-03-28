@@ -361,6 +361,10 @@ var Queue = new function(){
         after_function = fnc;
     };
 
+    this.set_after_fail = function(fnc){
+        login_failed = fnc;
+    };
+
     function ajax_do(session, url, data, type, reset_on_fail, handler, fail_handler){
         if (!data) {
             data = {};

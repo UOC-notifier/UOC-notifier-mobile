@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.uocnotifier412045" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>UOC-notifier</name>
-  <description>
-        UOC notifier for Android
-    </description>
-  <author email="crazymerda+uoc@gmail.com" href="https://github.com/crazyserver/UOC-notifier-mobile/">
-      Pau Ferrer Ocaña
-    </author>
+<widget id="com.ionicframework.uocnotifier" version="0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>UOC Notifier</name>
+  <description>UOC notifier for Android</description>
+  <author email="crazymerda+uoc@gmail.com" href="https://github.com/crazyserver/UOC-notifier-mobile/">Pau Ferrer Ocaña</author>
   <content src="index.html"/>
   <access origin="*"/>
+
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="false"/>
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
-  <preference name="SplashScreen" value="true"/>
+  <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="3000"/>
   <preference name="AutoHideSplashScreen" value="true" />
   <preference name="FadeSplashScreen" value="true"/>
   <preference name="FadeSplashScreenDuration" value="1000"/>
+
+  <feature name="SplashScreen">
+    <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+  </feature>
+
   <preference name="permissions" value="none"/>
+
   <platform name="android">
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>
     <icon src="resources/android/icon/drawable-mdpi-icon.png" density="mdpi"/>
@@ -69,4 +72,16 @@
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
   </platform>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+
+  <plugin name="de.appplant.cordova.plugin.background-mode" source="pgb" />
+  <plugin name="de.appplant.cordova.plugin.badge" source="pgb" />
+  <plugin name="cordova-plugin-console" source="npm" />
+  <plugin name="cordova-plugin-splashscreen" source="npm" />
+  <plugin name="cordova-plugin-statusbar" source="npm" />
+  <plugin name="cordova-plugin-device" source="npm" />
+  <plugin name="cordova-plugin-inappbrowser" source="npm" />
+  <plugin name="cordova-plugin-globalization" source="npm" />
+  <plugin name="cordova-plugin-whitelist" source="npm" />
+  <plugin name="com.ionic.keyboard" source="pgb" />
+
 </widget>

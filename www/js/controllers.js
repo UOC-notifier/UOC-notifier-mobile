@@ -20,6 +20,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.state.today = get_today();
         $scope.state.gat = get_gat();
         $scope.state.unread_mail = get_mails_unread();
+        $scope.state.session = Session.get();
         $scope.announcements = get_announcements();
 
         try {
@@ -136,6 +137,10 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.openUrl(url, '_self', data, nossl);
     };
 
+    $scope.openNoSessionInApp = function(url, nossl) {
+        $cordovaInAppBrowser.open(url, '_self', {});
+    };
+
     $scope.openMail = function() {
         var link = '/WebMail/attach.do';
         var data = {};
@@ -147,9 +152,18 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     };
 
     $scope.doRefresh = function() {
+        $scope.state.session = true;
+        var user = get_user();
+        if (!user.username || !user.password) {
+            $state.go('app.options');
+            return;
+        }
         console.log('Refresh');
         $scope.state.loading = true;
         check_messages(function() {
+            $scope.reload();
+            $scope.state.loading = false;
+        }, function() {
             $scope.reload();
             $scope.state.loading = false;
         });
@@ -185,6 +199,10 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         save_today(settings.today_tab);
         save_check_mail(settings.check_mail);
         $scope.classes_obj.save();
+
+        if (!settings.username || !settings.password) {
+            return;
+        }
         $scope.doRefresh();
         $ionicHistory.nextViewOptions({disableBack: true});
         $state.go('app.main');

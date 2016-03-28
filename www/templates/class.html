@@ -66,7 +66,7 @@
         </ion-list>
     </div>
   </ion-content>
-  <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #{{currentclass.color}};">
+  <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #{{currentclass.color}};" ng-if="state.session">
   <div class="button-bar">
     <button class="button button-clear icon ion-university" ng-click="openClassroom()"> {{'__GOTO_CLASS__' | translate}}</button>
     <button ng-if="currentclass.has_events() && currentclass.subject_code" class="button button-clear icon ion-speedometer" ng-click="openInApp('/webapps/rac/listEstudiant.action', {domainId: currentclass.domain})">{{'__GRADES__' | translate}}</button>
