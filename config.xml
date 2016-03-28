@@ -14,8 +14,12 @@
   <preference name="DisallowOverscroll" value="false"/>
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
-  <preference name="SplashScreen" value="screen"/>
+  <preference name="SplashScreen" value="true"/>
   <preference name="SplashScreenDelay" value="3000"/>
+  <preference name="AutoHideSplashScreen" value="true" />
+  <preference name="FadeSplashScreen" value="true"/>
+  <preference name="FadeSplashScreenDuration" value="1000"/>
+  <preference name="permissions" value="none"/>
   <platform name="android">
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>
     <icon src="resources/android/icon/drawable-mdpi-icon.png" density="mdpi"/>
