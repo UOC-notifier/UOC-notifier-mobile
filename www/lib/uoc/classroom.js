@@ -662,9 +662,9 @@ function Grade(title, grade, prov) {
 
 	this.notify = function(acronym) {
 		if (this.prov) {
-			notify(_('__FINAL_GRADE_PROV__', [this.grade, this.get_title(), acronym]), 0);
+			notify(_('__FINAL_GRADE_PROV__', {grade: this.grade, final: this.get_title(), class: acronym}), 0);
 		} else {
-			notify(_('__FINAL_GRADE__', [this.grade, this.get_title(), acronym]), 0);
+			notify(_('__FINAL_GRADE__', {grade: this.grade, final: this.get_title(), class: acronym}), 0);
 		}
 	};
 
@@ -753,6 +753,6 @@ function CalEvent(name, id, type) {
 	};
 
 	this.notify = function(acronym) {
-		notify(_('__PRACT_GRADE__', [this.graded, this.name, acronym]), 0);
+		notify(_('__PRACT_GRADE__', {grade: this.graded, pract: this.name, class: acronym}), 0);
 	};
 }

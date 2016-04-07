@@ -226,7 +226,7 @@ function save_mail(mails) {
 	save_mails_unread(mails);
 	Debug.print("Check mails: "+mails);
 	if (mails > 0 && old_mails < mails && mails >= get_critical()) {
-		notify(_('__NOTIFICATION_MAIL__', [mails]));
+		notify(_('__NOTIFICATION_MAIL__', {messages: mails}));
 	}
 }
 
@@ -240,7 +240,7 @@ function set_messages() {
 	// Set icon
 	if (messages > 0) {
 		if (messages > old_messages && messages >= get_critical()) {
-			notify(_('__NOTIFICATION_UNREAD__', [messages]));
+			notify(_('__NOTIFICATION_UNREAD__', {messages: messages}));
 		}
 		color = messages >= get_critical() ? '#AA0000' : '#EB9316';
 	}
@@ -264,9 +264,9 @@ function show_PAC_notifications() {
 			var ev = classrooms[i].events[x];
 			if (ev.is_assignment()) {
 				if (ev.ends_today()) {
-					notify(_('__PRACT_END__', [ev.name, classrooms[i].get_acronym()]));
+					notify(_('__PRACT_END__', {pract: ev.name, class: classrooms[i].get_acronym()}));
 				} else if (ev.starts_today()) {
-					notify(_('__PRACT_START__', [ev.name, classrooms[i].get_acronym()]));
+					notify(_('__PRACT_START__', {pract: ev.name, class: classrooms[i].get_acronym()}));
 				}
 			}
 		}
@@ -600,7 +600,7 @@ function retrieve_stats(classroom) {
 	Queue.request('/tren/trenacc', args, 'GET', false, function(data) {
 		var index = data.indexOf("addRow");
 		if (index != -1) {
-			notify(_('__NOT_STATS__', [classroom.get_acronym()]));
+			notify(_('__NOT_STATS__', {class: classroom.get_acronym()}));
 			classroom.stats = true;
 		}
 	});

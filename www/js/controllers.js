@@ -1,10 +1,48 @@
 angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
-.controller('AppCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser, $state) {
+.controller('AppCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser, $state, $cordovaLocalNotification) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
     // listen for the $ionicView.enter event:
+
+    var notif_number;
+
+    notification_handler = function(title, icon, body, timeout) {
+        if (get_notification()) {
+            try {
+                console.log(title);
+                $cordovaLocalNotification.schedule({
+                    id: notif_number++,
+                    title: title,
+                    text: body
+                }).then(function (result) {
+                    console.log('Notification 1 triggered');
+                });
+            } catch(err) {
+                Debug.error(err);
+            }
+        }
+    };
+
+    badge_handler = function(number, color) {
+        try {
+            var oldnumber = $cordovaBadge.get();
+            if (oldnumber != number) {
+                if (number > 0) {
+                    $cordovaBadge.set(number);
+                } else {
+                    $cordovaBadge.clear();
+                }
+            }
+        } catch(err) {
+            Debug.error(err);
+        }
+    };
+
+    translate_handler = function(str, params) {
+        return $translate.instant(str, params);
+    };
 
     $scope.classes_obj = Classes;
     $scope.classes_obj.load();
@@ -23,15 +61,6 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.announcements = get_announcements();
         $scope.load_classes();
 
-        try {
-            if ($scope.state.messages > 0) {
-                $cordovaBadge.set($scope.state.messages);
-            } else {
-                $cordovaBadge.clear();
-            }
-        } catch(err) {
-            Debug.error(err);
-        }
         $scope.$broadcast('scroll.refreshComplete');
     };
 

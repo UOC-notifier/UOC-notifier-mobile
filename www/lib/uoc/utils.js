@@ -426,7 +426,7 @@ function _(str, params) {
     Debug.error('String not translated: '+str);
     return str;
 }
-
+/*
 $( document ).ready(function() {
     $('.translate').each(function() {
         var text = $(this).text();
@@ -444,4 +444,4 @@ $( document ).ready(function() {
         var text = $(this).attr('aria-label');
         $(this).attr('aria-label', _(text));
     });
-});
+});*/

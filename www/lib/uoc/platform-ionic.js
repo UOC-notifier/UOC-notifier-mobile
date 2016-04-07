@@ -1,9 +1,17 @@
-function setBadge(number, color) {
+var notification_handler;
+var badge_handler;
+var translate_handler;
 
+function setBadge(number, color) {
+    if (badge_handler) {
+        badge_handler(number, color);
+    }
 }
 
 function popup_notification(title, icon, body, timeout) {
-
+    if (notification_handler) {
+        notification_handler(title, icon, body, timeout);
+    }
 }
 
 function open_new_tab(url) {
@@ -11,7 +19,9 @@ function open_new_tab(url) {
 }
 
 function translate(str, params){
-
+    if (translate_handler) {
+        return translate_handler(str, params);
+    }
 }
 
 function get_version() {
