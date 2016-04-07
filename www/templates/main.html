@@ -1,6 +1,6 @@
 <ion-view view-title="UOC Notifier">
-  <ion-content ng-controller="AppCtrl">
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()"></ion-refresher>
+  <ion-content ng-controller="AppCtrl" class="has-footer">
+    <ion-refresher pulling-text="{{'__PTR__' | translate}}" on-refresh="doRefresh()"></ion-refresher>
     <div class="padding">
         <div class="card" ng-if="!state.loading && !state.session" ng-click="openNoSessionInApp('https://cv.uoc.edu/webapps/cas/login?renew=true')">
            <div class="item item-text-wrap" ng-bind-html=" '__INCORRECT_USER__' | translate " ></div>

@@ -4,12 +4,12 @@
         <div class="list">
           <div class="item item-divider">{{"__LOGIN__" | translate}}</div>
             <label class="item item-input" for="username">
-              <div class="input-label"><i class="icon ion-person"></i>  {{"__USER__" | translate}}</div>
+              <i class="icon ion-person placeholder-icon"></i>
               <input id="username" type="text" ng-model="settings.username" placeholder="username">
             </label>
 
             <label class="item item-input" for="password">
-              <div class="input-label"><i class="icon ion-locked"></i> {{"__PASSWORD__" | translate}}</div>
+              <i class="icon ion-locked placeholder-icon"></i>
               <input id="password" type="password" ng-model="settings.password" placeholder="password">
             </label>
 
@@ -25,14 +25,14 @@
               </select>
             </label>
 
-            <label class="item item-input" for="check_interval">
+            <label class="item item-input item-stacked-label" for="check_interval" ng-if="false">
               <div class="input-label">
                 <i class="icon ion-clock"></i> {{"__INTERVAL__" | translate}}
               </div>
               <input id="check_interval" disabled type="number" ng-model="settings.check_interval" min="20" step="10">
             </label>
 
-            <label class="item item-input" for="critical">
+            <label class="item item-input item-stacked-label" for="critical">
               <div class="input-label">
                 <i class="icon ion-alert-circled"></i> {{"__CRITICAL__" | translate}}
               </div>
@@ -41,11 +41,11 @@
 
             <ion-toggle ng-model="settings.check_mail"><i class="icon ion-email"></i> {{"__CHECK_MAIL__" |translate}}</ion-toggle>
 
-            <ion-toggle ng-model="settings.notification"><i class="icon ion-speakerphone"></i> {{"__PUSH_NOTIFICATIONS__" |translate}}</ion-toggle>
+            <ion-toggle ng-if="false" ng-model="settings.notification"><i class="icon ion-speakerphone"></i> {{"__PUSH_NOTIFICATIONS__" |translate}}</ion-toggle>
 
           <div class="item item-divider">{{"__SHOW__" | translate}}</div>
 
-            <label class="item item-input" for="today_tab">
+            <label class="item item-input item-stacked-label" for="today_tab">
               <div class="input-label">
                 <i class="icon ion-flag"></i> {{"__UPCOMMING_DAYS__" | translate}}
               </div>

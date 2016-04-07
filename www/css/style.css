@@ -82,3 +82,13 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.placeholder-icon {
+    color: #444;
+}
+
+.item.item-toggle div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

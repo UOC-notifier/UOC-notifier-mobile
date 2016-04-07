@@ -110,5 +110,6 @@
     "__RESOURCES__": "Recursos",
     "__ACTIVITIES__": "Actividades",
     "__TOOLS__": "Herramientas",
-    "__PUSH_NOTIFICATIONS__" : "Notificaciones Push"
+    "__PUSH_NOTIFICATIONS__" : "Notificaciones Push",
+    "__PTR__" : "Estira para actualizar..."
 }

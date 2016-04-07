@@ -14,7 +14,6 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         console.log('reload');
         $scope.allclasses = $scope.classes_obj.get_all();
         $scope.classes = $scope.classes_obj.get_notified();
-        $scope.load_classes();
         $scope.state.critical = get_critical();
         $scope.state.messages = $scope.classes_obj.notified_messages;
         $scope.state.today = get_today();
@@ -22,6 +21,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.state.unread_mail = get_mails_unread();
         $scope.state.session = Session.get();
         $scope.announcements = get_announcements();
+        $scope.load_classes();
 
         try {
             if ($scope.state.messages > 0) {
@@ -36,6 +36,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     };
 
     $scope.load_classes = function() {
+        var today_limit = get_today_limit();
         for (var y in $scope.classes) {
             var classroom = $scope.classes[y];
             classroom.events_today = [];
@@ -65,7 +66,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
                 evnt.eventstate = get_event_state(evnt);
                 evnt.icon = get_event_icon(evnt);
                 evnt.iconcolor = get_event_icon_color(evnt);
-                if (evnt.is_near($scope.state.today)) {
+                if (evnt.is_near(today_limit)) {
                     classroom.events_today.push(evnt);
                 }
             }
@@ -88,7 +89,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         var gnral_events = $scope.classes_obj.get_general_events();
         for(var k in gnral_events){
             var evnt = gnral_events[k];
-            if (evnt.is_near($scope.state.today)) {
+            if (evnt.is_near(today_limit)) {
                 evnt.eventstate = get_event_state(evnt);
                 evnt.icon = get_event_state(evnt);
                 evnt.icon = get_event_icon(evnt);

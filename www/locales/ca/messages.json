@@ -110,5 +110,6 @@
     "__RESOURCES__": "Recursos",
     "__ACTIVITIES__": "Activitats",
     "__TOOLS__": "Eines",
-    "__PUSH_NOTIFICATIONS__" : "Notifications Push"
+    "__PUSH_NOTIFICATIONS__" : "Notifications Push",
+    "__PTR__" : "Estira per actualitzar..."
 }
