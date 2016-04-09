@@ -56,7 +56,7 @@
           <i class="icon ion-alert-circled"></i> {{"__DISABLE_UNUSED_CLASSROOMS__" | translate}}
           </div>
 
-          <ion-toggle ng-repeat="classroom in allclasses" ng-model="classroom.notify" ng-change="save_classes()"><span class="class-color" style="background-color: #{{classroom.color}};"></span> <span ng-if="classroom.subject_code">{{classroom.subject_code}}</span> {{classroom.title}}</ion-toggle>
+          <ion-toggle ng-repeat="classroom in allclasses" ng-model="classroom.notify" ng-change="save_classes()"><span class="class-color" style="background-color: #{{classroom.color}};"></span> {{classroom.title}}</ion-toggle>
         </div>
         <div class="padding">
           <button type="submit" class="button button-block button-positive">{{"__SAVE__" | translate}}</button>

@@ -48,7 +48,8 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     $scope.classes_obj.load();
     $scope.state = {};
     $scope.settings = {};
-    $scope.reload = function() {
+
+    self.reload = function() {
         console.log('reload');
         $scope.allclasses = $scope.classes_obj.get_all();
         $scope.classes = $scope.classes_obj.get_notified();
@@ -130,7 +131,11 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
     $scope.gotoClass = function(classcode) {
         $state.go('app.class', {code: classcode});
-    }
+    };
+
+    $scope.gotoOptions = function() {
+        $state.go('app.options');
+    };
 
 
     $scope.openUrl = function(url, where, data, nossl) {
@@ -168,7 +173,12 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     };
 
     $scope.openNoSessionInApp = function(url, nossl) {
-        $cordovaInAppBrowser.open(url, '_self', {});
+        var options = {
+            location: 'no',
+            clearcache: 'no',
+            toolbar: 'yes'
+        };
+        $cordovaInAppBrowser.open(url, '_self', options);
     };
 
     $scope.openMail = function() {
@@ -185,21 +195,21 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.state.session = true;
         var user = get_user();
         if (!user.username || !user.password) {
-            $state.go('app.options');
+            $scope.gotoOptions();
             return;
         }
         console.log('Refresh');
         $scope.state.loading = true;
         check_messages(function() {
-            $scope.reload();
+            reload();
             $scope.state.loading = false;
         }, function() {
-            $scope.reload();
+            reload();
             $scope.state.loading = false;
         });
     };
 
-    $scope.reload();
+    reload();
     if (!$scope.loaded) {
         $scope.doRefresh();
         $scope.loaded = true;
@@ -240,7 +250,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
     $scope.save_classes = function(settings) {
         $scope.classes_obj.save();
-        $scope.reload();
+        AppCtrl.reload();
     };
 })
 

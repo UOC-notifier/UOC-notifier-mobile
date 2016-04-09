@@ -1,8 +1,7 @@
 <ion-side-menus enable-menu-with-back-views="false">
   <ion-side-menu-content>
     <ion-nav-bar class="bar-stable">
-      <ion-nav-back-button>
-      </ion-nav-back-button>
+      <ion-nav-back-button></ion-nav-back-button>
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
         </button>
@@ -26,7 +25,7 @@
         <ion-item menu-close href="#/app/main">
           <i class="icon ion-home"></i> {{"TITLE" | translate}}
         </ion-item>
-        <div class="item item-divider">{{"__CLASSROOMS__" | translate}}</div>
+        <div class="item item-divider" ng-if="classes">{{"__CLASSROOMS__" | translate}}</div>
         <ion-item menu-close ng-repeat="class in classes" ng-click="gotoClass(class.code)">
           <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
           <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.messages > state.critical, 'badge-energized': class.messages <= state.critical}">
@@ -34,9 +33,8 @@
           </span>
         </ion-item>
         <div class="item item-divider"></div>
-        <ion-item menu-close href="#/app/options">
-          <i class="icon ion-settings"></i>
-          {{"__OPTIONS__" | translate}}
+        <ion-item menu-close ng-click="gotoOptions()">
+          <i class="icon ion-settings"></i> {{"__OPTIONS__" | translate}}
         </ion-item>
       </ion-list>
     </ion-content>

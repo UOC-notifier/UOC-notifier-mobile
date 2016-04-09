@@ -59,6 +59,7 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
   .state('app', {
     url: '/app',
     abstract: true,
+    cache: false,
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
@@ -90,7 +91,7 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
         controller: 'ClassCtrl'
       }
     }
-  })
+  });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/main');
