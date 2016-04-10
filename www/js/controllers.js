@@ -16,11 +16,9 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
                     id: notif_number++,
                     title: title,
                     text: body
-                }).then(function (result) {
-                    console.log('Notification 1 triggered');
                 });
             } catch(err) {
-                Debug.error(err);
+
             }
         }
     };
@@ -136,7 +134,6 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     $scope.gotoOptions = function() {
         $state.go('app.options');
     };
-
 
     $scope.openUrl = function(url, where, data, nossl) {
         session = Session.get();
@@ -254,7 +251,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     };
 })
 
-.controller('ClassCtrl', function($scope, $stateParams, $translate) {
+.controller('ClassCtrl', function($scope, $stateParams, $translate, $ionicPopup) {
 
     $scope.openClassroom = function() {
         var link = '/webapps/classroom/mobile.do';
@@ -268,6 +265,24 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         data.ajax = true;
         data.pib = true;
         $scope.openInApp(link, data);
+    };
+
+    $scope.popUpEvent = function(event) {
+        if (!event.commenttext) {
+            return $scope.openInApp(event.link);
+        }
+
+        $scope.popuptext = event.commenttext;
+        var myPopup = $ionicPopup.alert({
+            template: '<div ng-bind-html="popuptext"></div>',
+            title: $scope.currentclass.get_acronym() +': '+ event.name,
+            subTitle: $translate.instant('__COMMENT__', {
+                date: getDate(event.commentdate),
+                time: getTime(event.commentdate)
+            }),
+            scope: $scope
+          });
+        return false;
     };
 
     $scope.currentclass = $scope.classes_obj.search_code($stateParams.code);

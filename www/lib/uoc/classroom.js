@@ -428,6 +428,13 @@ function Classroom(title, code, domain, type, template) {
 			}
 			return comp;
 		});
+
+		this.messages = 0;
+		for (var i in this.resources) {
+			if(this.resources[i].messages != '-') {
+				this.messages += this.resources[i].messages;
+			}
+		}
 	};
 
 	this.get_index = function(code) {

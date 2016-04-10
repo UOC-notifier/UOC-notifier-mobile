@@ -6,7 +6,7 @@
     <div class="list list-inset">
         <ion-list ng-if="currentclass.resources.length">
           <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
-          <ion-item ng-repeat="resource in currentclass.resources" class="item resource" on-tap="openInApp(resource.link || '/webapps/bustiaca/listMails.do', {l: resource.code}, true)" href="#">
+          <ion-item ng-repeat="resource in currentclass.resources" class="item resource" ng-click="openInApp(resource.link || '/webapps/bustiaca/listMails.do', {l: resource.code}, true)">
             {{resource.title}}
             <span class="badge" ng-if="resource.messages >= 0" ng-class="{'badge-assertive': resource.messages > state.critical, 'badge-energized': resource.messages <= state.critical && resource.messages > 0, 'badge-balanced': resource.messages == 0}">
               {{resource.messages}} / {{resource.all_messages}}
@@ -16,7 +16,7 @@
         <br>
         <ion-list ng-if="currentclass.events.length">
           <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
-          <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}" on-tap="openInApp(event.link)" href="#">
+          <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}" ng-click="popUpEvent(event)">
           <div class="row">
             <div class="col col-40 col-title"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
             <div class="col text-center">
@@ -36,6 +36,7 @@
               <span class="badge badge-static badge-energized"  ng-if="event.gradtext == 'TODAY'"><i class="icon ion-clock"></i></span>
               <span ng-if="event.gradtext !== true && event.gradtext != 'TODAY' && event.gradtext && !event.graded">{{event.gradtext}}</span>
               <span class="badge badge-static badge-positive" ng-if="event.graded">{{event.graded}}</span>
+              <span class="badge badge-static badge-balanced" ng-if="event.commenttext"><i class="icon ion-chatbubble"></i></span>
             </div>
           </div>
 
@@ -54,13 +55,13 @@
         <br>
         <ion-list>
             <div class="item item-divider">{{"__TOOLS__" | translate}}</div>
-              <ion-item on-tap="openInApp('/WebMail/writeMail.do', {to: currentclass.consultormail})" href="#"><i class="icon ion-email"></i> {{"__TEACHER__" | translate}} <strong>{{currentclass.consultor}}</strong><br>
+              <ion-item ng-click="openInApp('/WebMail/writeMail.do', {to: currentclass.consultormail})"><i class="icon ion-email"></i> {{"__TEACHER__" | translate}} <strong>{{currentclass.consultor}}</strong><br>
                 <span ng-if="currentclass.consultorlastviewed">{{"__VIEWED_LAST_TIME__" | translate: currentclass.consultorlastviewtranslate}}
              </ion-item>
-             <ion-item ng-if="currentclass.stats" on-tap="openInApp('/tren/trenacc', {modul: state.gat+'.ESTADNOTES/estadis.assignatures', assig: currentclass.subject_code, pAnyAcademic: currentclass.any})" href="#">
+             <ion-item ng-if="currentclass.stats" ng-click="openInApp('/tren/trenacc', {modul: state.gat+'.ESTADNOTES/estadis.assignatures', assig: currentclass.subject_code, pAnyAcademic: currentclass.any})">
               <i class="icon ion-stats-bars"></i> {{"__STATS__" | translate}}
              </ion-item>
-             <ion-item ng-if="currentclass.type != 'TUTORIA'" on-tap="openInApp('/webapps/classroom/download.do', {nav: 'pladocent', domainId: currentclass.domain, format: 'html', app: 'aulaca', precarrega: false})" href="#">
+             <ion-item ng-if="currentclass.type != 'TUTORIA'" ng-click="openInApp('/webapps/classroom/download.do', {nav: 'pladocent', domainId: currentclass.domain, format: 'html', app: 'aulaca', precarrega: false})">
               <i class="icon ion-easel"></i> {{"__TEACHING_PLAN__" | translate}}<br>
               <span ng-if="currentclass.aula"><strong>{{'__CLASSROOM__' |translate}}</strong> {{currentclass.aula}}</span>
               <span ng-if="currentclass.subject_code"> ({{currentclass.subject_code}})</span>

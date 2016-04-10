@@ -97,4 +97,3 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
   $urlRouterProvider.otherwise('/app/main');
 });
 
-
