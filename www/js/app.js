@@ -42,7 +42,9 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider, $translateProvider) {
+.config(function($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
+
+  $ionicConfigProvider.views.maxCache(0);
 
   $translateProvider.useStaticFilesLoader({
     files: [{
@@ -58,14 +60,15 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
   $stateProvider
   .state('app', {
     url: '/app',
+    params: {
+      refresh: true
+    },
     abstract: true,
-    cache: false,
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
   .state('app.main', {
     url: '/main',
-    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/main.html'
@@ -74,7 +77,6 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
   })
   .state('app.options', {
     url: '/options',
-    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/options.html',
@@ -84,16 +86,24 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
   })
   .state('app.class', {
     url: '/class/:code',
-    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/class.html',
         controller: 'ClassCtrl'
       }
     }
+  })
+  .state('app.event', {
+    url: '/event/:eventid',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/event.html',
+        controller: 'EventCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/main');
+  $urlRouterProvider.otherwise('/app/main', {refresh: true});
 });
 

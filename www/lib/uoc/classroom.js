@@ -265,11 +265,11 @@ var Classes = new function() {
 		this.notified_messages = 0;
 		this.messages = 0;
 		for (var i in classrooms) {
+			var messages = classrooms[i].count_messages();
 			if (classrooms[i].notify) {
-				this.notified_messages += classrooms[i].messages;
+				this.notified_messages += messages;
 			}
-			this.messages += classrooms[i].messages;
-			this.all_messages += classrooms[i].all_messages;
+			this.messages += messages;
 		}
 	};
 
@@ -428,13 +428,16 @@ function Classroom(title, code, domain, type, template) {
 			}
 			return comp;
 		});
+	};
 
+	this.count_messages = function() {
 		this.messages = 0;
 		for (var i in this.resources) {
 			if(this.resources[i].messages != '-') {
 				this.messages += this.resources[i].messages;
 			}
 		}
+		return this.messages;
 	};
 
 	this.get_index = function(code) {
@@ -447,18 +450,12 @@ function Classroom(title, code, domain, type, template) {
 	};
 
 	this.resource_merge = function(idx, resource) {
-		if (this.resources[idx].messages != '-') {
-			this.messages -= this.resources[idx].messages;
-		}
 		this.resources[idx].set_messages(resource.messages, resource.all_messages);
 		this.resources[idx].set_pos(resource.pos);
 		this.resources[idx].link = resource.link;
 		this.resources[idx].code = resource.code;
 		this.resources[idx].title = resource.title;
 		this.resources[idx].type = resource.type;
-		if (this.resources[idx].messages != '-') {
-			this.messages += this.resources[idx].messages;
-		}
 	};
 
 	this.delete_old_resources = function() {

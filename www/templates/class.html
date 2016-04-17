@@ -16,7 +16,7 @@
         <br>
         <ion-list ng-if="currentclass.events.length">
           <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
-          <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}" ng-click="popUpEvent(event)">
+          <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}" ng-click="gotoEvent(event.eventId)">
           <div class="row">
             <div class="col col-40 col-title"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
             <div class="col text-center">
@@ -56,7 +56,14 @@
         <ion-list>
             <div class="item item-divider">{{"__TOOLS__" | translate}}</div>
               <ion-item ng-click="openInApp('/WebMail/writeMail.do', {to: currentclass.consultormail})"><i class="icon ion-email"></i> {{"__TEACHER__" | translate}} <strong>{{currentclass.consultor}}</strong><br>
-                <span ng-if="currentclass.consultorlastviewed">{{"__VIEWED_LAST_TIME__" | translate: currentclass.consultorlastviewtranslate}}
+                <span ng-if="currentclass.consultorlastviewed">
+                  <span ng-if="currentclass.consultorlastviewtranslate.time == '00:00'">
+                    {{"__VIEWED_LAST_DATE__" | translate: currentclass.consultorlastviewtranslate}}
+                  </span>
+                  <span ng-if="currentclass.consultorlastviewtranslate.time != '00:00'">
+                    {{"__VIEWED_LAST_TIME__" | translate: currentclass.consultorlastviewtranslate}}
+                  </span>
+                </span>
              </ion-item>
              <ion-item ng-if="currentclass.stats" ng-click="openInApp('/tren/trenacc', {modul: state.gat+'.ESTADNOTES/estadis.assignatures', assig: currentclass.subject_code, pAnyAcademic: currentclass.any})">
               <i class="icon ion-stats-bars"></i> {{"__STATS__" | translate}}

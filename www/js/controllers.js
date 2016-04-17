@@ -1,6 +1,7 @@
 angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
-.controller('AppCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser, $state, $cordovaLocalNotification) {
+.controller('AppCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser, $state, $stateParams,
+        $cordovaLocalNotification, $ionicHistory, $ionicBody) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -42,12 +43,16 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         return $translate.instant(str, params);
     };
 
+    $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
+
     $scope.classes_obj = Classes;
     $scope.classes_obj.load();
-    $scope.state = {};
+    $scope.state = {
+        loading: false
+    };
     $scope.settings = {};
 
-    self.reload = function() {
+    $scope.reload = function() {
         console.log('reload');
         $scope.allclasses = $scope.classes_obj.get_all();
         $scope.classes = $scope.classes_obj.get_notified();
@@ -63,6 +68,32 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.$broadcast('scroll.refreshComplete');
     };
 
+    $scope.load_event = function(evnt) {
+        if (evnt.is_completed()) {
+            if (evnt.is_assignment()) {
+                evnt.starttext = false;
+                evnt.endtext = false;
+                evnt.soltext = false;
+            } else {
+                evnt.hide = true;
+            }
+        } else {
+            evnt.starttext = get_event_text(evnt.start);
+            evnt.endtext = get_event_text(evnt.end);
+            evnt.soltext = get_event_text(evnt.solution);
+        }
+
+        if (evnt.graded) {
+            evnt.gradtext = evnt.graded;
+        } else {
+            evnt.gradtext = get_event_text(evnt.grading);
+        }
+
+        evnt.eventstate = get_event_state(evnt);
+        evnt.icon = get_event_icon(evnt);
+        evnt.iconcolor = get_event_icon_color(evnt);
+    };
+
     $scope.load_classes = function() {
         var today_limit = get_today_limit();
         for (var y in $scope.classes) {
@@ -70,30 +101,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             classroom.events_today = [];
             for (var x in classroom.events) {
                 var evnt = classroom.events[x];
-
-                if (evnt.is_completed()) {
-                    if (evnt.is_assignment()) {
-                        evnt.starttext = false;
-                        evnt.endtext = false;
-                        evnt.soltext = false;
-                    } else {
-                        evnt.hide = true;
-                    }
-                } else {
-                    evnt.starttext = get_event_text(evnt.start);
-                    evnt.endtext = get_event_text(evnt.end);
-                    evnt.soltext = get_event_text(evnt.solution);
-                }
-
-                if (evnt.graded) {
-                    evnt.gradtext = evnt.graded;
-                } else {
-                    evnt.gradtext = get_event_text(evnt.grading);
-                }
-
-                evnt.eventstate = get_event_state(evnt);
-                evnt.icon = get_event_icon(evnt);
-                evnt.iconcolor = get_event_icon_color(evnt);
+                $scope.load_event(evnt);
                 if (evnt.is_near(today_limit)) {
                     classroom.events_today.push(evnt);
                 }
@@ -127,13 +135,41 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         }
     };
 
+    $scope.gotoBack = function() {
+        var backView = $ionicHistory.backView();
+        if (!backView || backView.stateName == 'app.main') {
+            $scope.gotoMain();
+        } else {
+            $ionicHistory.goBack();
+        }
+    };
+
+    $scope.gotoMain = function(refresh) {
+        if (typeof refresh == 'undefined') {
+            refresh = false;
+        }
+        $ionicHistory.nextViewOptions({disableAnimate: !refresh, disableBack: true, historyRoot: true});
+        $state.go('app.main', {refresh: refresh});
+    };
+
     $scope.gotoClass = function(classcode) {
+        //$ionicHistory.nextViewOptions({disableAnimate: false, disableBack: false});
         $state.go('app.class', {code: classcode});
     };
 
     $scope.gotoOptions = function() {
+        //$ionicHistory.nextViewOptions({disableAnimate: false, disableBack: false});
         $state.go('app.options');
     };
+
+    $scope.gotoCurrent = function() {
+        if ($state.current.name == 'app.main') {
+            $ionicHistory.nextViewOptions({disableAnimate: true, disableBack: true});
+            $state.go($state.current, {refresh: false});
+        } else {
+            $state.go($state.current);
+        }
+    }
 
     $scope.openUrl = function(url, where, data, nossl) {
         session = Session.get();
@@ -155,7 +191,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             console.log(url);
             var options = {
                 location: 'no',
-                clearcache: 'no',
+                clearcache: 'yes',
                 toolbar: 'yes'
                 };
             $cordovaInAppBrowser.open(url, where, options);
@@ -172,7 +208,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     $scope.openNoSessionInApp = function(url, nossl) {
         var options = {
             location: 'no',
-            clearcache: 'no',
+            clearcache: 'yes',
             toolbar: 'yes'
         };
         $cordovaInAppBrowser.open(url, '_self', options);
@@ -198,22 +234,28 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         console.log('Refresh');
         $scope.state.loading = true;
         check_messages(function() {
-            reload();
+            console.log('End Refresh ok');
             $scope.state.loading = false;
+            $scope.gotoCurrent();
         }, function() {
-            reload();
+            console.log('End Refresh fail');
             $scope.state.loading = false;
+            $scope.gotoCurrent();
         });
     };
 
-    reload();
-    if (!$scope.loaded) {
+    $scope.reload();
+    $scope.loaded = !$stateParams.refresh;
+    if (!$scope.loaded && !Queue.is_running()) {
         $scope.doRefresh();
         $scope.loaded = true;
     }
 })
 
-.controller('SettingsCtrl', function($scope, $state, $translate, $ionicHistory) {
+.controller('SettingsCtrl', function($scope, $state, $translate, $ionicHistory, $ionicBody) {
+
+    $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
+
     var user = get_user();
     $scope.settings = {
         username: user.username,
@@ -240,18 +282,22 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         if (!settings.username || !settings.password) {
             return;
         }
-        $scope.doRefresh();
-        $ionicHistory.nextViewOptions({disableBack: true});
-        $state.go('app.main');
+        $scope.gotoMain(true);
     };
 
     $scope.save_classes = function(settings) {
         $scope.classes_obj.save();
-        AppCtrl.reload();
+        $scope.reload();
+    };
+
+    $scope.gotoBack = function() {
+        $scope.gotoMain();
     };
 })
 
-.controller('ClassCtrl', function($scope, $stateParams, $translate, $ionicPopup) {
+.controller('ClassCtrl', function($scope, $stateParams, $translate, $state, $ionicBody) {
+
+    $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
 
     $scope.openClassroom = function() {
         var link = '/webapps/classroom/mobile.do';
@@ -267,11 +313,32 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.openInApp(link, data);
     };
 
-    $scope.popUpEvent = function(event) {
-        if (!event.commenttext) {
-            return $scope.openInApp(event.link);
-        }
+    $scope.gotoEvent = function(eventid) {
+        $state.go('app.event', {eventid: eventid});
+    };
 
+    $scope.gotoBack = function() {
+        $scope.gotoMain();
+    };
+
+    $scope.currentclass = $scope.classes_obj.search_code($stateParams.code);
+    if ($scope.currentclass.consultorlastviewed) {
+        $scope.currentclass.consultorlastviewtranslate =  {
+            date: getDate($scope.currentclass.consultorlastviewed),
+            time: getTime($scope.currentclass.consultorlastviewed)
+        };
+    }
+    console.log($scope.currentclass);
+
+}).controller('EventCtrl', function($scope, $stateParams, $translate, $ionicPopup, $state, $ionicBody) {
+
+    $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
+
+    $scope.openEvent = function() {
+        $scope.openInApp($scope.currentevent.link);
+    };
+
+    /*$scope.popUpEvent = function(event) {
         $scope.popuptext = event.commenttext;
         var myPopup = $ionicPopup.alert({
             template: '<div ng-bind-html="popuptext"></div>',
@@ -283,14 +350,38 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             scope: $scope
           });
         return false;
-    };
+    };*/
 
-    $scope.currentclass = $scope.classes_obj.search_code($stateParams.code);
-    if ($scope.currentclass.consultorlastviewed) {
-        $scope.currentclass.consultorlastviewtranslate =  {
-            date: getDate($scope.currentclass.consultorlastviewed),
-            time: getTime($scope.currentclass.consultorlastviewed)
+    $scope.currentclass = $scope.classes_obj.get_class_by_event($stateParams.eventid);
+    $scope.currentclass.get_acronym();
+    $scope.currentevent = $scope.currentclass.get_event($stateParams.eventid);
+    $scope.currentevent.commenttext_parsed = get_html_realtext($scope.currentevent.commenttext);
+    $scope.eventtext = {};
+    $scope.eventtext.starttext = $scope.currentevent.start ? get_event_text($scope.currentevent.start) : false;
+    $scope.eventtext.endtext = $scope.currentevent.end ? get_event_text($scope.currentevent.end) : false;
+    $scope.eventtext.soltext = $scope.currentevent.solution ? get_event_text($scope.currentevent.solution) : false;
+    $scope.eventtext.gradtext = $scope.currentevent.grading ? get_event_text($scope.currentevent.grading) : false;
+    if ($scope.currentevent.commentdate) {
+        $scope.eventtext.commentdate =  {
+            date: getDate($scope.currentevent.commentdate),
+            time: getTime($scope.currentevent.commentdate)
         };
     }
-    console.log($scope.currentclass);
+
+    if ($scope.currentevent.is_assignment()) {
+        if ($scope.currentevent.committed) {
+            if ($scope.currentevent.viewed) {
+                $scope.currentevent.status = '__COMMITTED_VIEWED__';
+                $scope.currentevent.statusparams =  {
+                    date: getDate($scope.currentevent.viewed),
+                    time: getTime($scope.currentevent.viewed)
+                };
+            } else {
+                $scope.currentevent.status = '__COMMITTED__';
+            }
+        } else if($scope.currentevent.has_ended()) {
+            $scope.currentevent.status = '__NOT_COMMITTED__';
+        }
+    }
+    $scope.currentevent.typetext = $translate.instant('__'+$scope.currentevent.type+'__');
 });

@@ -337,6 +337,10 @@ var Queue = new function(){
         }
     };
 
+    this.is_running = function() {
+        return executing;
+    };
+
     this.clear = function() {
         queue = [];
     };
@@ -426,22 +430,3 @@ function _(str, params) {
     Debug.error('String not translated: '+str);
     return str;
 }
-/*
-$( document ).ready(function() {
-    $('.translate').each(function() {
-        var text = $(this).text();
-        $(this).text(_(text));
-    });
-    $('.translateph').each(function() {
-        var text = $(this).attr('placeholder');
-        $(this).attr('placeholder', _(text));
-    });
-    $('.translatetit').each(function() {
-        var text = $(this).attr('title');
-        $(this).attr('title', _(text));
-    });
-    $('.translateal').each(function() {
-        var text = $(this).attr('aria-label');
-        $(this).attr('aria-label', _(text));
-    });
-});*/

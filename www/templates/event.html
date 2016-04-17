@@ -1,0 +1,45 @@
+<ion-view view-title="{{currentclass.acronym}} - {{currentevent.name}}">
+  <ion-content class="has-footer">
+
+    <div class="list card">
+      <ion-item class="item item-icon-left">
+          <i class="icon {{currentevent.icon}} {{currentevent.iconcolor}}"></i>
+          <strong>{{currentevent.typetext | translate}}</strong><span ng-if="currentevent.status">: <br/>{{currentevent.status | translate: currentevent.statusparams}}</span>
+      </ion-item>
+      <ion-item class="item item-icon-left" ng-if="currentevent.start">
+          <i class="icon ion-checkmark-round balanced" ng-if="eventtext.starttext === true"></i>
+          <i class="icon ion-clock energized" ng-if="eventtext.starttext == 'TODAY'"></i>
+          <i class="icon ion-arrow-right-b" ng-if="eventtext.starttext !== true && eventtext.starttext != 'TODAY' && eventtext.starttext"></i>
+          <strong>{{"__START__" |translate}}</strong>: {{currentevent.start}}
+      </ion-item>
+      <ion-item class="item item-icon-left" ng-if="currentevent.end">
+          <i class="icon ion-checkmark-round balanced" ng-if="eventtext.endtext === true"></i>
+          <i class="icon ion-clock energized" ng-if="eventtext.endtext == 'TODAY'"></i>
+          <i class="icon ion-arrow-right-b" ng-if="eventtext.endtext !== true && eventtext.endtext != 'TODAY' && eventtext.endtext"></i>
+          <strong>{{"__END__" |translate}}</strong>: {{currentevent.end}}
+      </ion-item>
+      <ion-item class="item item-icon-left" ng-if="currentevent.solution">
+          <i class="icon ion-checkmark-round balanced" ng-if="eventtext.soltext === true"></i>
+          <i class="icon ion-clock energized" ng-if="eventtext.soltext == 'TODAY'"></i>
+          <i class="icon ion-arrow-right-b" ng-if="eventtext.soltext !== true && eventtext.soltext != 'TODAY' && eventtext.soltext"></i>
+          <strong>{{"__SOLUTION__" |translate}}</strong>: {{currentevent.solution}}
+      </ion-item>
+      <ion-item class="item item-icon-left" ng-if="currentevent.grading">
+          <i class="icon ion-checkmark-round balanced" ng-if="eventtext.gradtext === true"></i>
+          <i class="icon ion-clock energized" ng-if="eventtext.gradtext == 'TODAY'"></i>
+          <i class="icon ion-arrow-right-b" ng-if="eventtext.gradtext !== true && eventtext.gradtext != 'TODAY' && eventtext.gradtext"></i>
+          <strong>{{"__GRADE__" |translate}}</strong>: {{currentevent.grading}}
+          <span ng-if="currentevent.graded"> - <span class="badge badge-static badge-positive">{{currentevent.graded}}</span></span>
+      </ion-item>
+      <ion-item class="item item-icon-left" ng-if="currentevent.commenttext">
+          <i class="icon ion-chatbubble"></i><strong>{{"__COMMENT__" |translate: eventtext.commentdate}}</strong>
+      </ion-item>
+      <div class="item item-body" ng-if="currentevent.commenttext" ng-bind-html="currentevent.commenttext_parsed"></div>
+  </div>
+  </ion-content>
+  <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #{{currentclass.color}};" ng-if="state.session">
+  <div class="button-bar">
+    <button class="button button-clear icon ion-university" ng-click="openEvent()"> {{'__GOTO_EVENT__' | translate}}</button>
+  </div>
+</ion-footer-bar>
+</ion-view>
