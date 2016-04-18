@@ -5,12 +5,12 @@
           <div class="item item-divider">{{"__LOGIN__" | translate}}</div>
             <label class="item item-input" for="username">
               <i class="icon ion-person placeholder-icon"></i>
-              <input id="username" type="text" ng-model="settings.username" placeholder="username">
+              <input id="username" type="text" ng-model="settings.username" placeholder="{{ '__USER__' |translate }}">
             </label>
 
             <label class="item item-input" for="password">
               <i class="icon ion-locked placeholder-icon"></i>
-              <input id="password" type="password" ng-model="settings.password" placeholder="password">
+              <input id="password" type="password" ng-model="settings.password" placeholder="{{ '__PASSWORD__' |translate }}">
             </label>
 
           <div class="item item-divider">{{"__OPTIONS__" | translate}}</div>

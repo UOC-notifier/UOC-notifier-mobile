@@ -1,21 +1,20 @@
 angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
-.controller('AppCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser, $state, $stateParams,
+.controller('UOCCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser, $state, $stateParams,
         $cordovaLocalNotification, $ionicHistory, $ionicBody) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
     // listen for the $ionicView.enter event:
 
-    var notif_number;
+    var notif_number = 0;
 
     notification_handler = function(title, icon, body, timeout) {
         if (get_notification()) {
             try {
-                console.log(title);
                 $cordovaLocalNotification.schedule({
                     id: notif_number++,
-                    title: title,
+                    title: 'UOC notifier',
                     text: body
                 });
             } catch(err) {
@@ -52,8 +51,8 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     };
     $scope.settings = {};
 
-    $scope.reload = function() {
-        console.log('reload');
+    $scope.refresh_view = function() {
+        console.log('refresh_view');
         $scope.allclasses = $scope.classes_obj.get_all();
         $scope.classes = $scope.classes_obj.get_notified();
         $scope.state.critical = get_critical();
@@ -149,7 +148,15 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             refresh = false;
         }
         $ionicHistory.nextViewOptions({disableAnimate: !refresh, disableBack: true, historyRoot: true});
-        $state.go('app.main', {refresh: refresh});
+        $state.go('app.main', {refresh: refresh}).finally(function(){
+            $ionicHistory.clearHistory();
+            $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
+            if (refresh && !Queue.is_running()) {
+                $scope.doRefresh();
+                $scope.loaded = true;
+            }
+        });
+        $ionicHistory.clearHistory();
     };
 
     $scope.gotoClass = function(classcode) {
@@ -234,17 +241,19 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         console.log('Refresh');
         $scope.state.loading = true;
         check_messages(function() {
+            $scope.$broadcast('scroll.refreshComplete');
             console.log('End Refresh ok');
             $scope.state.loading = false;
             $scope.gotoCurrent();
         }, function() {
+            $scope.$broadcast('scroll.refreshComplete');
             console.log('End Refresh fail');
             $scope.state.loading = false;
             $scope.gotoCurrent();
         });
     };
 
-    $scope.reload();
+    $scope.refresh_view();
     $scope.loaded = !$stateParams.refresh;
     if (!$scope.loaded && !Queue.is_running()) {
         $scope.doRefresh();
@@ -287,7 +296,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
     $scope.save_classes = function(settings) {
         $scope.classes_obj.save();
-        $scope.reload();
+        $scope.refresh_view();
     };
 
     $scope.gotoBack = function() {

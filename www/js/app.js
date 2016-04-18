@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
+angular.module('UOCStarter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
 
-.run(function($ionicPlatform, $translate) {
+.run(function($ionicPlatform, $translate, $ionicHistory) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -39,6 +39,28 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    $ionicPlatform.registerBackButtonAction(function(e) {
+        var backView = $ionicHistory.backView();
+        if (!backView) {
+            // there is no back view, so close the app instead
+            ionic.Platform.exitApp();
+            e.preventDefault();
+            return false;
+        }
+
+        var currentView = $ionicHistory.currentView();
+        if (currentView.stateName == 'app.main') {
+            // we're in main, exit!
+            ionic.Platform.exitApp();
+        } else {
+            // there is a back view, go to it
+            backView.go();
+        }
+        e.preventDefault();
+        return false;
+    }, 101);
+
   });
 })
 
@@ -65,7 +87,7 @@ angular.module('starter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
     },
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+    controller: 'UOCCtrl'
   })
   .state('app.main', {
     url: '/main',
