@@ -83,6 +83,9 @@ function isNearDate(date, limit) {
     var m = q.getMonth() + 1;
     var d = q.getDate();
     var dsplit = date.split("/");
+    if (typeof dsplit[2] == 'undefined') {
+        dsplit[2] = 16;
+    }
     if (dsplit[2] == y) {
         if (dsplit[1] == m) {
             return dsplit[0] <= d;

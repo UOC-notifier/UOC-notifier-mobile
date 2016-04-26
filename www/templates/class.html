@@ -6,7 +6,7 @@
     <div class="list list-inset">
         <ion-list ng-if="currentclass.resources.length">
           <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
-          <ion-item ng-repeat="resource in currentclass.resources" class="item resource" ng-click="openInApp(resource.link || '/webapps/bustiaca/listMails.do', {l: resource.code}, true)">
+          <ion-item ng-repeat="resource in currentclass.resources" class="item resource" ng-click="openResource(resource)">
             {{resource.title}}
             <span class="badge" ng-if="resource.messages >= 0" ng-class="{'badge-assertive': resource.messages > state.critical, 'badge-energized': resource.messages <= state.critical && resource.messages > 0, 'badge-balanced': resource.messages == 0}">
               {{resource.messages}} / {{resource.all_messages}}
@@ -18,25 +18,24 @@
           <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
           <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}" ng-click="gotoEvent(event.eventId)">
           <div class="row">
-            <div class="col col-40 col-title"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
-            <div class="col text-center">
+            <div class="col col-title" ng-class="{'col-40': !event.graded || event.starttext || event.endtext || event.soltext ,'col-85': event.graded && !event.starttext && !event.endtext && !event.soltext}"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
+            <div class="col text-center" ng-if="event.starttext || !event.graded">
               <span class="badge badge-static badge-balanced"  ng-if="event.starttext === true"><i class="icon ion-checkmark-round"></i></span>
               <span class="badge badge-static badge-energized"  ng-if="event.starttext == 'TODAY'"><i class="icon ion-clock"></i></span>
-              <span ng-if="event.starttext !== true && event.starttext != 'TODAY' && event.starttext">{{event.starttext}}</span></div>
-            <div class="col text-center">
+              <span ng-class="{'near':event.startnear}" ng-if="event.starttext !== true && event.starttext != 'TODAY' && event.starttext">{{event.starttext}}</span></div>
+            <div class="col text-center" ng-if="event.endtext || !event.graded">
               <span class="badge badge-static badge-balanced" ng-if="event.endtext === true"><i class="icon ion-checkmark-round"></i></span>
               <span class="badge badge-static badge-energized"  ng-if="event.endtext == 'TODAY'"><i class="icon ion-clock"></i></span>
-              <span ng-if="event.endtext !== true && event.endtext != 'TODAY' && event.endtext">{{event.endtext}}</span></div>
-            <div class="col text-center">
+              <span ng-class="{'near':event.endnear}" ng-if="event.endtext !== true && event.endtext != 'TODAY' && event.endtext">{{event.endtext}}</span></div>
+            <div class="col text-center" ng-if="event.soltext || !event.graded">
               <span class="badge badge-static badge-balanced" ng-if="event.soltext === true"><i class="icon ion-checkmark-round"></i></span>
               <span class="badge badge-static badge-energized"  ng-if="event.soltext == 'TODAY'"><i class="icon ion-clock"></i></span>
-              <span ng-if="event.soltext !== true && event.soltext != 'TODAY' && event.soltext">{{event.soltext}}</span></div>
+              <span ng-class="{'near':event.solnear}" ng-if="event.soltext !== true && event.soltext != 'TODAY' && event.soltext">{{event.soltext}}</span></div>
             <div class="col text-center">
               <span class="badge badge-static badge-balanced" ng-if="event.gradtext === true"><i class="icon ion-checkmark-round"></i></span>
               <span class="badge badge-static badge-energized"  ng-if="event.gradtext == 'TODAY'"><i class="icon ion-clock"></i></span>
-              <span ng-if="event.gradtext !== true && event.gradtext != 'TODAY' && event.gradtext && !event.graded">{{event.gradtext}}</span>
-              <span class="badge badge-static badge-positive" ng-if="event.graded">{{event.graded}}</span>
-              <span class="badge badge-static badge-balanced" ng-if="event.commenttext"><i class="icon ion-chatbubble"></i></span>
+              <span ng-class="{'near':event.gradnear}" ng-if="event.gradtext !== true && event.gradtext != 'TODAY' && event.gradtext && !event.graded">{{event.gradtext}}</span>
+              <span class="badge badge-static badge-positive" ng-if="event.graded"><i ng-if="event.commenttext" class="icon ion-chatbubble"></i> {{event.graded}}</span>
             </div>
           </div>
 

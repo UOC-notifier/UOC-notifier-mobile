@@ -32,7 +32,7 @@ function reset_alarm() {
 
 }
 
-function get_event_text(date) {
+function get_event_text(date, limit) {
     if (!date) {
         return false;
     }
