@@ -106,8 +106,6 @@ angular.module('UOCStarter', ['ionic', 'uoc-notifier', 'pascalprecht.translate']
       StatusBar.styleDefault();
     }
 
-    reset_alarm();
-
     $ionicPlatform.registerBackButtonAction(function(e) {
         var backView = $ionicHistory.backView();
         if (!backView) {
@@ -128,6 +126,8 @@ angular.module('UOCStarter', ['ionic', 'uoc-notifier', 'pascalprecht.translate']
         e.preventDefault();
         return false;
     }, 101);
+
+    reset_alarm();
 
   });
 });

@@ -2,6 +2,7 @@ var notification_handler;
 var badge_handler;
 var translate_handler;
 var interval_run = false;
+var bgService = false;
 
 function setBadge(number, color) {
     if (badge_handler) {
@@ -29,38 +30,77 @@ function get_version() {
 
 }
 
+function notif(message) {
+    popup_notification(false, false, message);
+}
+
 function reset_alarm() {
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.backgroundMode) {
+    if (!bgService && window.cordova && window.cordova.plugins && window.cordova.plugins.bgService) {
+        bgService = window.cordova.plugins.bgService;
+    }
+
+    if (bgService) {
         var interval = get_interval();
         if (interval > 0) {
-            cordova.plugins.backgroundMode.enable();
-            //cordova.plugins.backgroundMode.configure({silent: true});
+            bgService.getStatus(enable_background);
+
+            /*cordova.plugins.backgroundMode.configure({silent: true});
             cordova.plugins.backgroundMode.onactivate = function() {
                 popup_notification(false, false, 'ENABLED');
                 var interval = get_interval();
-                interval_run = setTimeout(onAlarm, interval * 3000);
+                interval_run = setTimeout(onAlarm);
             };
 
             cordova.plugins.backgroundMode.ondeactivate = function() {
                 popup_notification(false, false, 'STOP WORKING');
                 clearTimeout(interval_run);
-            };
+            };*/
         } else {
-            popup_notification(false, false, 'INTERVAL DISABLED ' + interval);
-            cordova.plugins.backgroundMode.disable();
-            clearTimeout(interval_run);
+            disable_background();
         }
     }
 }
 
-function onAlarm() {
-    popup_notification(false, false, 'WORKING');
-    if (!Queue.is_running()) {
+function enable_background(data) {
+    try {
+        if (data.ServiceRunning) {
+            enableTimer(data);
+        } else {
+            bgService.startService(enableTimer);
+        }
+    } catch(err) {
+        Debug.error(err);
+    }
+}
+
+function enableTimer(data) {
+    if (data.TimerEnabled) {
+        registerForUpdates(data);
+    } else {
+        var interval = get_interval();
+        bgService.enableTimer(interval * 60000, registerForUpdates);
+    }
+}
+
+function registerForUpdates(data) {
+    if (!data.RegisteredForUpdates) {
+        bgService.registerForUpdates(onAlarm);
+    }
+}
+
+function disable_background() {
+    bgService.disableTimer();
+    bgService.stopService();
+    bgService.deregisterForUpdates();
+}
+
+
+function onAlarm(data) {
+    if (data.ServiceRunning && data.TimerEnabled && data.RegisteredForUpdates && !Queue.is_running()) {
         var user = get_user();
         if (!user.username || !user.password) {
             return;
         }
-        popup_notification(false, false, 'Refresh');
         check_messages();
     }
 }

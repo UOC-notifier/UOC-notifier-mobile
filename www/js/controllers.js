@@ -1,7 +1,7 @@
 angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
 .controller('UOCCtrl', function($scope, $translate, $cordovaBadge, $cordovaInAppBrowser, $state, $stateParams,
-        $cordovaLocalNotification, $ionicHistory, $ionicBody, $timeout) {
+        $cordovaLocalNotification, $ionicHistory, $ionicBody, $timeout, $cordovaNetwork) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -237,26 +237,40 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     };
 
     $scope.doRefresh = function() {
-        if (!Queue.is_running()) {
-            $scope.state.session = true;
-            var user = get_user();
-            if (!user.username || !user.password) {
-                $scope.gotoOptions();
-                return;
+        var isonline;
+        try {
+            isonline = $cordovaNetwork.isOnline();
+        } catch(err) {
+            popup_notification(false, false, err);
+            isonline = true;
+        }
+
+        if (isonline) {
+            if (!Queue.is_running()) {
+                $scope.state.session = true;
+                var user = get_user();
+                if (!user.username || !user.password) {
+                    $scope.gotoOptions();
+                    return;
+                }
+                console.log('Refresh');
+                $scope.state.loading = true;
+                check_messages(function() {
+                    $scope.$broadcast('scroll.refreshComplete');
+                    console.log('End Refresh ok');
+                    $scope.state.loading = false;
+                    $scope.gotoCurrent();
+                }, function() {
+                    $scope.$broadcast('scroll.refreshComplete');
+                    console.log('End Refresh fail');
+                    $scope.state.loading = false;
+                    $scope.gotoCurrent();
+                });
+                $scope.loaded = true;
             }
-            console.log('Refresh');
-            $scope.state.loading = true;
-            check_messages(function() {
-                $scope.$broadcast('scroll.refreshComplete');
-                console.log('End Refresh ok');
-                $scope.state.loading = false;
-                $scope.gotoCurrent();
-            }, function() {
-                $scope.$broadcast('scroll.refreshComplete');
-                console.log('End Refresh fail');
-                $scope.state.loading = false;
-                $scope.gotoCurrent();
-            });
+        } else {
+            $scope.$broadcast('scroll.refreshComplete');
+            console.log('Offline');
             $scope.loaded = true;
         }
     };
@@ -277,7 +291,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         username: user.username,
         password: user.password,
         uni: get_uni(),
-        check_interval: get_interval(),
+        check_interval: get_interval() <= 0 ? 20 : get_interval(),
         bg_check: get_interval() > 0,
         critical: get_critical(),
         notification: get_notification(),

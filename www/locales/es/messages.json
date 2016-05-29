@@ -7,6 +7,7 @@
     "__PASSWORD__": "Contraseña",
     "__UNI__": "Universidad",
     "__INTERVAL__": "Intervalo de comprobación",
+    "__BG_CHECK__": "Auto check (with the app open)",
     "__CRITICAL__": "Mínimo de mensajes para considerar crítico y notificar",
     "__NOTIFICATION__": "Mensajes emergentes",
     "__MESSAGES__": "Mensajes",

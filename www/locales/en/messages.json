@@ -7,6 +7,7 @@
     "__PASSWORD__": "Password",
     "__UNI__": "University",
     "__INTERVAL__": "Checking interval",
+    "__BG_CHECK__": "Comprovación automática (aplicación abierta)",
     "__CRITICAL__": "Mínimum messages to consider it critical and notify",
     "__NOTIFICATION__": "Popup notifications",
     "__MESSAGES__": "Messages",

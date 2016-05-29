@@ -7,6 +7,7 @@
     "__PASSWORD__": "Contrasenya",
     "__UNI__": "Universitat",
     "__INTERVAL__": "Interval de comprovació",
+    "__BG_CHECK__": "Comprovació automàtica (aplicació oberta)",
     "__CRITICAL__": "Mínim de missatges per considerar crític i notificar",
     "__NOTIFICATION__": "Missatges emergents",
     "__MESSAGES__": "Missatges",

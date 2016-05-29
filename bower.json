@@ -5,6 +5,7 @@
     "ionic": "driftyco/ionic-bower#1.2.4",
     "angular-translate": ">=2.7.0",
     "angular-translate-loader-static-files": "^2.9.0",
-    "ngCordova": "^0.1.24-alpha"
+    "ngCordova": "^0.1.24-alpha",
+    "plugin": "^3.1.0"
   }
 }
