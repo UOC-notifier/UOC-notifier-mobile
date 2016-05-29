@@ -25,11 +25,13 @@
               </select>
             </label>
 
-            <label class="item item-input item-stacked-label" for="check_interval" ng-if="false">
+            <ion-toggle ng-model="settings.bg_check"><i class="icon ion-clock"></i> {{"__BG_CHECK__" |translate}}</ion-toggle>
+
+            <label class="item item-input item-stacked-label" for="check_interval" ng-if="settings.bg_check">
               <div class="input-label">
                 <i class="icon ion-clock"></i> {{"__INTERVAL__" | translate}}
               </div>
-              <input id="check_interval" disabled type="number" ng-model="settings.check_interval" min="20" step="10">
+              <input id="check_interval" type="number" ng-model="settings.check_interval" min="20" step="10">
             </label>
 
             <label class="item item-input item-stacked-label" for="critical">

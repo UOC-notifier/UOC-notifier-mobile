@@ -9,13 +9,14 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
     var notif_number = 0;
 
-    notification_handler = function(title, icon, body, timeout) {
+    notification_handler = function(body, timeout) {
         if (get_notification()) {
             try {
                 $cordovaLocalNotification.schedule({
                     id: notif_number++,
                     title: 'UOC notifier',
-                    text: body
+                    text: body,
+                    icon: 'res://icon'
                 });
             } catch(err) {
 
@@ -80,18 +81,14 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             }
         } else {
             evnt.starttext = get_event_text(evnt.start);
-            evnt.startnear = isNearDate(evnt.start, today_limit);
             evnt.endtext = get_event_text(evnt.end);
-            evnt.endnear = isNearDate(evnt.end, today_limit);
             evnt.soltext = get_event_text(evnt.solution);
-            evnt.solnear = isNearDate(evnt.solution, today_limit);
         }
 
         if (evnt.graded) {
             evnt.gradtext = evnt.graded;
         } else {
             evnt.gradtext = get_event_text(evnt.grading);
-            evnt.gradnear = isNearDate(evnt.grading, today_limit);
         }
 
         evnt.eventstate = get_event_state(evnt);
@@ -114,7 +111,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
 
             // Final tests
             if (classroom.exams && classroom.exams.date && isNearDate(classroom.exams.date, today_limit)) {
-                var name = _('__FINAL_TESTS_CLASS__', [classroom.get_acronym()]);
+                var name = _('__FINAL_TESTS_NOCLASS__');
                 var evnt = new CalEvent(name, '', 'UOC');
                 evnt.start = classroom.exams.date;
                 evnt.starttext = get_event_text(evnt.start);
@@ -281,6 +278,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         password: user.password,
         uni: get_uni(),
         check_interval: get_interval(),
+        bg_check: get_interval() > 0,
         critical: get_critical(),
         notification: get_notification(),
         today_tab: get_today(),
@@ -291,7 +289,13 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         console.log('Settings', settings);
         save_user(settings.username, settings.password);
         save_uni(settings.uni);
-        save_interval(settings.check_interval);
+        if (settings.bg_check) {
+            save_interval(settings.check_interval);
+            reset_alarm();
+        } else {
+            save_interval(0);
+            reset_alarm();
+        }
         save_critical(settings.critical);
         save_notification(settings.notification);
         save_today(settings.today_tab);
@@ -355,6 +359,15 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             time: getTime($scope.currentclass.consultorlastviewed)
         };
     }
+
+    // Final tests
+    var today_limit = get_today_limit();
+    if ($scope.currentclass.exams && $scope.currentclass.exams.date && isNearDate($scope.currentclass.exams.date, today_limit)) {
+        $scope.exams = $scope.currentclass.exams;
+        $scope.exams.link = '/tren/trenacc/webapp/GEPAF.FULLPERSONAL/index.jsp?s=';
+        $scope.exams.typeEX = _('__EX__');
+        $scope.exams.typePS = _('__PS__');
+    }
     console.log($scope.currentclass);
 
 }).controller('EventCtrl', function($scope, $stateParams, $translate, $ionicPopup, $state, $ionicBody) {
@@ -364,20 +377,6 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     $scope.openEvent = function() {
         $scope.openInApp($scope.currentevent.link);
     };
-
-    /*$scope.popUpEvent = function(event) {
-        $scope.popuptext = event.commenttext;
-        var myPopup = $ionicPopup.alert({
-            template: '<div ng-bind-html="popuptext"></div>',
-            title: $scope.currentclass.get_acronym() +': '+ event.name,
-            subTitle: $translate.instant('__COMMENT__', {
-                date: getDate(event.commentdate),
-                time: getTime(event.commentdate)
-            }),
-            scope: $scope
-          });
-        return false;
-    };*/
 
     $scope.currentclass = Classes.get_class_by_event($stateParams.eventid);
     $scope.currentclass.get_acronym();

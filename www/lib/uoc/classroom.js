@@ -16,7 +16,7 @@ var Classes = new function() {
 
 	this.add_event = function(evnt) {
 		// Do not add past events
-		if (isBeforeToday(evnt.start) || evnt.eventId == undefined) {
+		if (evnt.has_ended() || evnt.eventId == undefined) {
 			return;
 		}
 		for (var idx in events) {

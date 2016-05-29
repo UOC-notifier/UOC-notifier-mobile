@@ -3,6 +3,15 @@
     <div class="card" ng-if="currentclass.final_grades && currentclass.stats">
         <div class="item item-text-wrap">{{"__END_OF_CLASSROOMS__" | translate}}</div>
     </div>
+
+    <div class="card" ng-if="exams">
+        <div class="item item-divider">
+            <i class="icon ion-university"></i>
+            <a target="_blank" ng-click="openInApp(exams.link)">{{"__FINAL_TESTS__" | translate: {seu: exams.seu, date: exams.date} }}</a>
+        </div>
+        <div class="item item-text-wrap" ng-if="exams.timeEX"> {{"__FINAL_TESTS_CLASS_TITLE__" | translate: { type: exams.typeEX, time: exams.timeEX, place: exams.placeEX } }}</div>
+        <div class="item item-text-wrap" ng-if="exams.timeEX"> {{"__FINAL_TESTS_CLASS_TITLE__" | translate: { type: exams.typePS, time: exams.timePS, place: exams.placePS } }}</div>
+    </div>
     <div class="list list-inset">
         <ion-list ng-if="currentclass.resources.length">
           <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
@@ -17,33 +26,20 @@
         <ion-list ng-if="currentclass.events.length">
           <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
           <ion-item ng-repeat="event in currentclass.events" ng-if="!event.hide" class="item event {{event.eventstate}}" ng-click="gotoEvent(event.eventId)">
-          <div class="row">
-            <div class="col col-title" ng-class="{'col-40': !event.graded || event.starttext || event.endtext || event.soltext ,'col-85': event.graded && !event.starttext && !event.endtext && !event.soltext}"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
-            <div class="col text-center" ng-if="event.starttext || !event.graded">
-              <span class="badge badge-static badge-balanced"  ng-if="event.starttext === true"><i class="icon ion-checkmark-round"></i></span>
-              <span class="badge badge-static badge-energized"  ng-if="event.starttext == 'TODAY'"><i class="icon ion-clock"></i></span>
-              <span ng-class="{'near':event.startnear}" ng-if="event.starttext !== true && event.starttext != 'TODAY' && event.starttext">{{event.starttext}}</span></div>
-            <div class="col text-center" ng-if="event.endtext || !event.graded">
-              <span class="badge badge-static badge-balanced" ng-if="event.endtext === true"><i class="icon ion-checkmark-round"></i></span>
-              <span class="badge badge-static badge-energized"  ng-if="event.endtext == 'TODAY'"><i class="icon ion-clock"></i></span>
-              <span ng-class="{'near':event.endnear}" ng-if="event.endtext !== true && event.endtext != 'TODAY' && event.endtext">{{event.endtext}}</span></div>
-            <div class="col text-center" ng-if="event.soltext || !event.graded">
-              <span class="badge badge-static badge-balanced" ng-if="event.soltext === true"><i class="icon ion-checkmark-round"></i></span>
-              <span class="badge badge-static badge-energized"  ng-if="event.soltext == 'TODAY'"><i class="icon ion-clock"></i></span>
-              <span ng-class="{'near':event.solnear}" ng-if="event.soltext !== true && event.soltext != 'TODAY' && event.soltext">{{event.soltext}}</span></div>
-            <div class="col text-center">
-              <span class="badge badge-static badge-balanced" ng-if="event.gradtext === true"><i class="icon ion-checkmark-round"></i></span>
-              <span class="badge badge-static badge-energized"  ng-if="event.gradtext == 'TODAY'"><i class="icon ion-clock"></i></span>
-              <span ng-class="{'near':event.gradnear}" ng-if="event.gradtext !== true && event.gradtext != 'TODAY' && event.gradtext && !event.graded">{{event.gradtext}}</span>
-              <span class="badge badge-static badge-positive" ng-if="event.graded"><i ng-if="event.commenttext" class="icon ion-chatbubble"></i> {{event.graded}}</span>
+            <div class="row">
+              <div class="col col-title" ng-class="{'col-40': !event.graded || event.starttext || event.endtext || event.soltext ,'col-85': event.graded && !event.starttext && !event.endtext && !event.soltext}"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
+              <eventdate ng-if="!event.graded" class="col col-15" date="event.starttext" graded="event.graded"></eventdate>
+              <eventdate ng-if="!event.graded" class="col col-15" date="event.endtext" graded="event.graded"></eventdate>
+              <eventdate ng-if="!event.graded" class="col col-15" date="event.soltext" graded="event.graded"></eventdate>
+              <eventgrade class="col col-15" date="event.gradtext" graded="event.graded" comment="event.commenttext"></eventdate>
             </div>
-          </div>
-
           </ion-item>
+
+          <div class="item item-divider" ng-if="currentclass.grades.length > 0">{{"__FINAL_GRADES__" | translate}}</div>
           <ion-item ng-repeat="grade in currentclass.grades" class="item event">
             <div class="row">
-             <div class="col">{{"__"+grade.name+"__" | translate}}</div>
-             <div class="col">
+             <div class="col col-85">{{"__"+grade.name+"__" | translate}}</div>
+             <div class="col col-15">
               <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
               <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
              </div>

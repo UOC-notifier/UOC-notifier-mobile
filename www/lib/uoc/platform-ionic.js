@@ -1,6 +1,7 @@
 var notification_handler;
 var badge_handler;
 var translate_handler;
+var interval_run = false;
 
 function setBadge(number, color) {
     if (badge_handler) {
@@ -10,7 +11,7 @@ function setBadge(number, color) {
 
 function popup_notification(title, icon, body, timeout) {
     if (notification_handler) {
-        notification_handler(title, icon, body, timeout);
+        notification_handler(body, timeout);
     }
 }
 
@@ -29,7 +30,39 @@ function get_version() {
 }
 
 function reset_alarm() {
+    if (window.cordova && window.cordova.plugins && window.cordova.plugins.backgroundMode) {
+        var interval = get_interval();
+        if (interval > 0) {
+            cordova.plugins.backgroundMode.enable();
+            //cordova.plugins.backgroundMode.configure({silent: true});
+            cordova.plugins.backgroundMode.onactivate = function() {
+                popup_notification(false, false, 'ENABLED');
+                var interval = get_interval();
+                interval_run = setTimeout(onAlarm, interval * 3000);
+            };
 
+            cordova.plugins.backgroundMode.ondeactivate = function() {
+                popup_notification(false, false, 'STOP WORKING');
+                clearTimeout(interval_run);
+            };
+        } else {
+            popup_notification(false, false, 'INTERVAL DISABLED ' + interval);
+            cordova.plugins.backgroundMode.disable();
+            clearTimeout(interval_run);
+        }
+    }
+}
+
+function onAlarm() {
+    popup_notification(false, false, 'WORKING');
+    if (!Queue.is_running()) {
+        var user = get_user();
+        if (!user.username || !user.password) {
+            return;
+        }
+        popup_notification(false, false, 'Refresh');
+        check_messages();
+    }
 }
 
 function get_event_text(date, limit) {
@@ -60,7 +93,7 @@ function get_event_icon(evnt) {
         return 'ion-ribbon-b';
     }
     if (evnt.is_uoc()) {
-        return'ion-university';
+        return 'ion-university';
     }
     return 'ion-arrow-right-b';
 }

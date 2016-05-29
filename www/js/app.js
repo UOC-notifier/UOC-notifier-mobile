@@ -7,63 +7,6 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('UOCStarter', ['ionic', 'uoc-notifier', 'pascalprecht.translate'])
 
-.run(function($ionicPlatform, $translate, $ionicHistory) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
-    }
-
-    var userLang = false;
-    if(typeof navigator.globalization !== "undefined") {
-        navigator.globalization.getPreferredLanguage(function(language) {
-          console.log('language', language);
-          userLang = (language.value).split("-")[0];
-        }, null);
-    }
-    if (!userLang) {
-      userLang = navigator.language || navigator.userLanguage;
-      userLang = userLang.split("-")[0];
-    }
-
-    $translate.use(userLang).then(function(data) {
-        console.log("Language loaded -> " + data);
-        $translate.refresh();
-    }, function(error) {
-        console.error("ERROR loading language -> " + error);
-    });
-
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-
-    $ionicPlatform.registerBackButtonAction(function(e) {
-        var backView = $ionicHistory.backView();
-        if (!backView) {
-            // there is no back view, so close the app instead
-            ionic.Platform.exitApp();
-            e.preventDefault();
-            return false;
-        }
-
-        var currentView = $ionicHistory.currentView();
-        if (currentView.stateName == 'app.main') {
-            // we're in main, exit!
-            ionic.Platform.exitApp();
-        } else {
-            // there is a back view, go to it
-            backView.go();
-        }
-        e.preventDefault();
-        return false;
-    }, 101);
-
-  });
-})
-
 .config(function($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
 
   $ionicConfigProvider.views.maxCache(0);
@@ -127,5 +70,65 @@ angular.module('UOCStarter', ['ionic', 'uoc-notifier', 'pascalprecht.translate']
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/main', {refresh: true});
+})
+
+.run(function($ionicPlatform, $translate, $ionicHistory) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+      console.log('HERES');
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.disableScroll(true);
+    }
+
+    var userLang = false;
+    if(typeof navigator.globalization !== "undefined") {
+        navigator.globalization.getPreferredLanguage(function(language) {
+          console.log('language', language);
+          userLang = (language.value).split("-")[0];
+        }, null);
+    }
+    if (!userLang) {
+      userLang = navigator.language || navigator.userLanguage;
+      userLang = userLang.split("-")[0];
+    }
+
+    $translate.use(userLang).then(function(data) {
+        console.log("Language loaded -> " + data);
+        $translate.refresh();
+    }, function(error) {
+        console.error("ERROR loading language -> " + error);
+    });
+
+    if (window.StatusBar) {
+      // org.apache.cordova.statusbar required
+      StatusBar.styleDefault();
+    }
+
+    reset_alarm();
+
+    $ionicPlatform.registerBackButtonAction(function(e) {
+        var backView = $ionicHistory.backView();
+        if (!backView) {
+            // there is no back view, so close the app instead
+            ionic.Platform.exitApp();
+            e.preventDefault();
+            return false;
+        }
+
+        var currentView = $ionicHistory.currentView();
+        if (currentView.stateName == 'app.main') {
+            // we're in main, exit!
+            ionic.Platform.exitApp();
+        } else {
+            // there is a back view, go to it
+            backView.go();
+        }
+        e.preventDefault();
+        return false;
+    }, 101);
+
+  });
 });
 

@@ -14,6 +14,9 @@ function b64_to_utf8(str) {
 }
 
 function getDate_hyphen(date) {
+    if (!date) {
+        return false;
+    }
     var sp = date.split('T');
     if (sp.length == 2) {
         date = sp[0];
@@ -26,6 +29,9 @@ function getDate_hyphen(date) {
 }
 
 function getDate_slash(date) {
+    if (!date) {
+        return false;
+    }
     var sp = date.split('/');
     if (sp.length <= 2) {
         return "";
@@ -34,6 +40,9 @@ function getDate_slash(date) {
 }
 
 function getDate(date) {
+    if (!date) {
+        return false;
+    }
     var sp = date.split('T');
     sp = sp[0].split('-');
     if (sp.length <= 2) {
@@ -43,6 +52,9 @@ function getDate(date) {
 }
 
 function getTime(date) {
+    if (!date) {
+        return false;
+    }
     var sp = date.split('T');
     if (sp.length <= 1) {
         return "";
@@ -96,7 +108,7 @@ function isNearDate(date, limit) {
 }
 
 function isBeforeToday(date) {
-    if (!date) {
+    if (!date || date === true) {
         return true;
     }
 
