@@ -1,0 +1,15 @@
+<ion-view view-title="{{'__ASSIGNMENTS__' | translate}}">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-if="assignments.length > 0" ng-repeat="event in assignments" class="item event {{event.eventstate}}" ng-click="gotoEvent(event.eventId, event.classcode)">
+        <div class="row">
+          <div class="col col-70 col-title">
+            <span class="class-color" style="background-color: #{{event.classcolor}};"></span> {{event.classacronym}} <i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}
+          </div>
+          <eventdate ng-if="!event.graded" class="col col-15" date="event.starttext" graded="event.graded"></eventdate>
+          <eventdate ng-if="!event.graded" class="col col-15" date="event.endtext" graded="event.graded"></eventdate>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

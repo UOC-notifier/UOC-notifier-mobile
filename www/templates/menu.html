@@ -33,6 +33,9 @@
           </span>
         </ion-item>
         <div class="item item-divider"></div>
+        <ion-item menu-close ng-click="gotoPage('tasks')" ng-if="assignments.length > 0">
+            <i class="icon ion-flag"></i> {{"__ASSIGNMENTS__" | translate}}
+        </ion-item>
         <ion-item menu-close ng-click="gotoPage('links')">
             <i class="icon ion-bookmark"></i> {{"__LINKS_TO_CAMPUS__" | translate}}
           </ion-item>

@@ -50,6 +50,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         loading: false
     };
     $scope.settings = {};
+    $scope.assignments = [];
 
     $scope.refresh_view = function() {
         $timeout(function () {
@@ -69,7 +70,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.$broadcast('scroll.refreshComplete');
     };
 
-    $scope.load_event = function(evnt) {
+    $scope.load_event = function(evnt, classr) {
         var today_limit = get_today_limit();
         if (evnt.is_completed()) {
             if (evnt.is_assignment()) {
@@ -94,18 +95,28 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         evnt.eventstate = get_event_state(evnt);
         evnt.icon = get_event_icon(evnt);
         evnt.iconcolor = get_event_icon_color(evnt);
+        if (evnt.is_assignment() && !evnt.has_ended()) {
+            evnt.classcolor = classr.color;
+            evnt.classcode = classr.code;
+            evnt.classacronym = classr.get_acronym();
+        }
     };
 
     $scope.load_classes = function() {
         var today_limit = get_today_limit();
+        $scope.assignments = [];
+
         for (var y in $scope.classes) {
             var classroom = $scope.classes[y];
             classroom.events_today = [];
             for (var x in classroom.events) {
                 var evnt = classroom.events[x];
-                $scope.load_event(evnt);
+                $scope.load_event(evnt, classroom);
                 if (evnt.is_near(today_limit)) {
                     classroom.events_today.push(evnt);
+                }
+                if (evnt.is_assignment() && !evnt.has_ended()) {
+                    $scope.assignments.push(evnt);
                 }
             }
 
@@ -122,6 +133,13 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
                 classroom.events_today.push(evnt);
             }
         }
+
+        $scope.assignments.sort(function(a, b) {
+            if (a.has_started() && b.has_started()) {
+                return compareDates(a.end, b.end);
+            }
+            return compareDates(a.start, b.start);
+        });
 
         $scope.events_today = [];
         var gnral_events = Classes.get_general_events();
@@ -181,6 +199,16 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             $state.go($state.current);
         }
     }
+
+    $scope.gotoEvent = function(eventid, classcode) {
+        if (classcode) {
+            $state.go('app.class', {code: classcode}).then(function() {
+                $state.go('app.event', {eventid: eventid});
+            });
+        } else {
+            $state.go('app.event', {eventid: eventid});
+        }
+    };
 
     $scope.openUrl = function(url, where, data, nossl) {
         session = Session.get();
@@ -360,10 +388,6 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         }
     };
 
-    $scope.gotoEvent = function(eventid) {
-        $state.go('app.event', {eventid: eventid});
-    };
-
     $scope.gotoBack = function() {
         $scope.gotoMain();
     };
@@ -462,4 +486,10 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         var url = '/webapps/filearea/servlet/iuoc.fileserver.servlets.FAGateway?opId=getMainFS&company=/UOC&idLang=/'+get_lang_code()+'&sessionId=';
         $scope.openInApp(url);
     };
+})
+
+.controller('TasksCtrl', function($scope, $state, $ionicBody) {
+    $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
+
+    console.log($scope.assignments);
 });
