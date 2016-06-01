@@ -135,6 +135,8 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
                 $scope.events_today.push(evnt);
             }
         }
+
+        $scope.$digest();
     };
 
     $scope.gotoBack = function() {
@@ -166,9 +168,9 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $state.go('app.class', {code: classcode});
     };
 
-    $scope.gotoOptions = function() {
+    $scope.gotoPage = function(page) {
         //$ionicHistory.nextViewOptions({disableAnimate: false, disableBack: false});
-        $state.go('app.options');
+        $state.go('app.'+page);
     };
 
     $scope.gotoCurrent = function() {
@@ -250,7 +252,7 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
                 $scope.state.session = true;
                 var user = get_user();
                 if (!user.username || !user.password) {
-                    $scope.gotoOptions();
+                    $scope.gotoPage('options');
                     return;
                 }
                 console.log('Refresh');
@@ -384,7 +386,9 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     }
     console.log($scope.currentclass);
 
-}).controller('EventCtrl', function($scope, $stateParams, $translate, $ionicPopup, $state, $ionicBody) {
+})
+
+.controller('EventCtrl', function($scope, $stateParams, $translate, $ionicPopup, $state, $ionicBody) {
 
     $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
 
@@ -424,4 +428,38 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         }
     }
     $scope.currentevent.typetext = $translate.instant('__'+$scope.currentevent.type+'__');
+})
+
+.controller('LinksCtrl', function($scope, $state, $ionicBody) {
+    $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
+
+    $scope.gotoTool = function(link, nossl) {
+        var url;
+        if (link[0] == '/') {
+            url = link;
+        } else {
+            var gat =  get_gat();
+            url = '/tren/trenacc?modul='+gat+link;
+            nossl = false;
+        }
+        $scope.openInApp(url, null, nossl);
+    };
+
+    $scope.gotoOldAgenda = function() {
+        var domainId = "";
+        var classrooms = Classes.get_notified();
+        for(var i in classrooms){
+            if (classrooms[i].domain) {
+            domainId = "&domainId=" + classrooms[i].domain;
+            break;
+            }
+        }
+        var url = '/webapps/classroom/081_common/jsp/calendari_semestral.jsp?appId=UOC&idLang=a&assignment=ESTUDIANT&domainPontCode=sem_pont'+domainId+'&s=';
+        $scope.openInApp(url);
+    };
+
+    $scope.gotoFiles = function() {
+        var url = '/webapps/filearea/servlet/iuoc.fileserver.servlets.FAGateway?opId=getMainFS&company=/UOC&idLang=/'+get_lang_code()+'&sessionId=';
+        $scope.openInApp(url);
+    };
 });

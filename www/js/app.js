@@ -66,6 +66,15 @@ angular.module('UOCStarter', ['ionic', 'uoc-notifier', 'pascalprecht.translate']
         controller: 'EventCtrl'
       }
     }
+  })
+  .state('app.links', {
+    url: '/links',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/links.html',
+        controller: 'LinksCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
