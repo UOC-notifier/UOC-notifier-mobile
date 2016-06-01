@@ -10,7 +10,7 @@
             <a target="_blank" ng-click="openInApp(exams.link)">{{"__FINAL_TESTS__" | translate: {seu: exams.seu, date: exams.date} }}</a>
         </div>
         <div class="item item-text-wrap" ng-if="exams.timeEX"> {{"__FINAL_TESTS_CLASS_TITLE__" | translate: { type: exams.typeEX, time: exams.timeEX, place: exams.placeEX } }}</div>
-        <div class="item item-text-wrap" ng-if="exams.timeEX"> {{"__FINAL_TESTS_CLASS_TITLE__" | translate: { type: exams.typePS, time: exams.timePS, place: exams.placePS } }}</div>
+        <div class="item item-text-wrap" ng-if="exams.timePS"> {{"__FINAL_TESTS_CLASS_TITLE__" | translate: { type: exams.typePS, time: exams.timePS, place: exams.placePS } }}</div>
     </div>
     <div class="list list-inset">
         <ion-list ng-if="currentclass.resources.length">
