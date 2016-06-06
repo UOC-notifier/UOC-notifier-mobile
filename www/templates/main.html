@@ -33,14 +33,15 @@
 
                 <ion-list ng-if="class.events_today.length > 0">
                     <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
-                      <ion-item ng-repeat="event in class.events_today" ng-if="!event.hide" class="item event {{event.eventstate}}">
+                    <ion-item ng-repeat="event in class.events_today" ng-if="!event.hide" class="item event {{event.eventstate}}">
                       <div class="row">
                         <div class="col col-40 col-title"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
                         <eventdate ng-if="!event.graded" class="col col-15" date="event.starttext" graded="event.graded"></eventdate>
                         <eventdate ng-if="!event.graded" class="col col-15" date="event.endtext" graded="event.graded"></eventdate>
                         <eventdate ng-if="!event.graded" class="col col-15" date="event.soltext" graded="event.graded"></eventdate>
-                        <eventgrade class="col col-15" date="event.gradtext" graded="event.graded" comment="event.commenttext"></eventdate>
-                    </div>
+                        <eventgrade class="col col-15" date="event.gradtext" graded="event.graded" comment="event.commenttext"></eventgrade>
+                      </div>
+                    </ion-item>
 
                     <div class="item item-divider" ng-if="class.grades.length > 0">{{"__FINAL_GRADES__" | translate}}</div>
                     <ion-item ng-repeat="grade in class.grades" class="item event">
@@ -51,6 +52,7 @@
                         <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
                        </div>
                       </div>
+                    </ion-item>
                 </ion-list>
             </ion-item>
         </ion-list>

@@ -207,6 +207,14 @@ function save_icon(number){
 	Storage.set_option("messages_icon", number);
 }
 
+function has_news(){
+	return Storage.get_option_bool("hasnews", false);
+}
+
+function save_has_news(news){
+	Storage.set_option("hasnews", news);
+}
+
 function get_news(){
 	return Storage.get_option("news", false);
 }

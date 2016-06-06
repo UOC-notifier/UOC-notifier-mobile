@@ -21,7 +21,7 @@ function getDate_hyphen(date) {
     if (sp.length == 2) {
         date = sp[0];
     }
-    var sp = date.split('-');
+    sp = date.split('-');
     if (sp.length <= 2) {
         return "";
     }
