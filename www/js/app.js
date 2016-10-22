@@ -84,15 +84,6 @@ angular.module('UOCStarter', ['ionic', 'uoc-notifier', 'pascalprecht.translate']
         controller: 'TasksCtrl'
       }
     }
-  })
-  .state('app.news', {
-    url: '/news',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/news.html',
-        controller: 'NewsCtrl'
-      }
-    }
   });
 
   // if none of the above states are matched, use this as the fallback

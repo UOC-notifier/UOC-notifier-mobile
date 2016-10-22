@@ -5,14 +5,15 @@
         <div class="card" ng-if="!state.loading && !state.session" ng-click="openNoSessionInApp('https://cv.uoc.edu/webapps/cas/login?renew=true')">
            <div class="item item-text-wrap" ng-bind-html=" '__INCORRECT_USER__' | translate " ></div>
         </div>
-        <div class="card" ng-if="announcements">
-            <div class="item item-divider">
-                <i class="icon ion-speakerphone"></i>
-                <a target="_blank" ng-click="openInApp(announcements.link)" ng-if="announcements.link">{{announcements.title}}</a>
-                <span ng-if="!announcements.link">{{announcements.title}}</span>
+        <div class="card" ng-repeat="announcement in announcements">
+            <div href="#" class="item item-icon-left" ng-click="toggleAnnouncement(announcement)">
+              <i class="icon ion-speakerphone"></i>
+              <h2><a target="_blank" ng-click="openInApp(announcement.link)" ng-if="announcement.link">{{announcement.title}}</a>
+                <span ng-if="!announcement.link">{{announcement.title}}</span></h2>
+              <p ng-if="announcement.date">{{announcement.date}}</p>
             </div>
-            <div class="item item-text-wrap" ng-bind-html="announcements.description">{{announcements.description}}</div>
-            <div class="item item-divider" ng-if="announcements.date">{{announcements.date}}</div>
+            <div class="item item-body item-text-wrap" ng-bind-html="announcement.description" ng-show="announcement.show">{{announcement.description}}</div>
+
         </div>
         <ion-list>
             <ion-item ng-repeat="class in classes" ng-click="gotoClass(class.code)" class="item class">
@@ -23,12 +24,10 @@
 
                 <ion-list ng-if="class.messages">
                     <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
-                    <ion-item ng-repeat="resource in class.resources" ng-if="resource.messages > 0" class="item resource">
-                        {{resource.title}}
-                      <span class="badge" ng-if="resource.messages > 0" ng-class="{'badge-assertive': resource.messages > state.critical, 'badge-energized': resource.messages <= state.critical}">
-                        {{resource.messages}} / {{resource.all_messages}}
-                      </span>
-                    </ion-item>
+                    <resource ng-repeat="resource in class.resources" ng-if="resource.messages > 0 || resource.has_news()" title="resource.title"
+                    messages="resource.messages" allmessages="resource.all_messages" hasmessagecount="resource.has_message_count()"
+                    hasnews="resource.has_news()">
+                    </resource>
                 </ion-list>
 
                 <ion-list ng-if="class.events_today.length > 0">

@@ -29,4 +29,24 @@ angular.module('uoc-notifier')
             scope.near = isNearDate(scope.date, today_limit);
         }
     };
+})
+
+.directive('resource', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            title: '=',
+            messages: '=?',
+            allmessages: '=?',
+            hasmessagecount: '=?',
+            hasnews: '=?',
+            action: '&?'
+        },
+        templateUrl: 'templates/resource.html',
+        link: function(scope, elem, attr) {
+            if (scope.hasmessagecount) {
+                scope.critical = get_critical();
+            }
+        }
+    };
 });

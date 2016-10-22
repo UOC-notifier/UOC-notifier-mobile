@@ -15,12 +15,9 @@
     <div class="list list-inset">
         <ion-list ng-if="currentclass.resources.length">
           <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
-          <ion-item ng-repeat="resource in currentclass.resources" class="item resource" ng-click="openResource(resource)">
-            {{resource.title}}
-            <span class="badge" ng-if="resource.messages >= 0" ng-class="{'badge-assertive': resource.messages > state.critical, 'badge-energized': resource.messages <= state.critical && resource.messages > 0, 'badge-balanced': resource.messages == 0}">
-              {{resource.messages}} / {{resource.all_messages}}
-            </span>
-          </ion-item>
+          <resource ng-repeat="resource in currentclass.resources" title="resource.title" action="openResource(resource)"
+          messages="resource.messages" allmessages="resource.all_messages" hasmessagecount="resource.has_message_count()"
+          hasnews="resource.has_news()">
         </ion-list>
         <br>
         <ion-list ng-if="currentclass.events.length">
@@ -59,6 +56,9 @@
                     {{"__VIEWED_LAST_TIME__" | translate: currentclass.consultorlastviewtranslate}}
                   </span>
                 </span>
+             </ion-item>
+             <ion-item ng-click="openInApp('/webapps/aulaca/classroom/Materials.action', {classroomId: currentclass.domain, subjectId: currentclass.domainassig})">
+             <i class="icon ion-briefcase"></i> {{"__EQUIPMENT__" | translate}}
              </ion-item>
              <ion-item ng-if="currentclass.stats" ng-click="openInApp('/tren/trenacc', {modul: state.gat+'.ESTADNOTES/estadis.assignatures', assig: currentclass.subject_code, pAnyAcademic: currentclass.any})">
               <i class="icon ion-stats-bars"></i> {{"__STATS__" | translate}}

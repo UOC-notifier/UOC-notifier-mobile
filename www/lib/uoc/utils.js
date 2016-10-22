@@ -272,7 +272,7 @@ function rssitem_to_json(item) {
     $(item).children().each(function() {
         var tagname = $(this).prop("tagName");
         var element = $(this).text();
-        if (tagname == 'category') {
+        if (tagname == 'category' && $(this).attr('domain')) {
             tagname = $(this).attr('domain');
         } else {
             /*
@@ -406,6 +406,9 @@ var Queue = new function(){
             ajax_request.contentType = 'application/json; charset=UTF-8';
             ajax_request.processData = false;
             ajax_request.data = JSON.stringify(data);
+        } else if (type == 'POST') {
+            data.s = session;
+            ajax_request.data = data;
         } else {
             ajax_request.data = data;
         }

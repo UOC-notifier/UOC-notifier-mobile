@@ -127,6 +127,9 @@ function get_event_icon(evnt) {
             }
             return 'ion-android-done';
         }
+        if (evnt.completed) {
+            return 'ion-android-checkbox-outline';
+        }
         if (evnt.has_ended()) {
             return 'ion-close-round';
         }
@@ -135,25 +138,31 @@ function get_event_icon(evnt) {
     if (evnt.is_uoc()) {
         return 'ion-university';
     }
+    if (evnt.is_committed()) {
+        return 'ion-android-checkbox-outline';
+    }
     return 'ion-arrow-right-b';
 }
 
 function get_event_icon_color(evnt) {
-    if (evnt.is_assignment() && !evnt.committed && evnt.has_started() && !evnt.has_ended()) {
-        return 'assertive';
+    if (evnt.has_started()) {
+        if (evnt.is_committed()) {
+            return evnt.has_ended() ? 'balanced' : 'energized';
+        } else {
+            return 'assertive';
+        }
     }
-    return 'balanced';
 }
 
 function get_event_state(evnt) {
+    var state = "";
     if (evnt.has_started()) {
-        if (evnt.has_ended()) {
-            return 'success';
+        state = evnt.has_ended() ? '' : 'running';
+        if (evnt.is_committed()) {
+            state += evnt.has_ended() ? ' success' : ' warning';
+        } else {
+            state += ' danger';
         }
-        if (evnt.committed || !evnt.is_assignment()) {
-            return'warning running';
-        }
-        return 'danger running';
     }
-    return "";
+    return state;
 }

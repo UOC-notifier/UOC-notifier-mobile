@@ -180,24 +180,32 @@ function retrieve_announcements() {
 		'app:only' : 'avisos'
 	};
 	Queue.request('/rb/inici/grid.rss', args, 'GET', false, function(resp) {
-		var title = "";
-		var description = "";
-		var link = "";
-		var date = "";
-		$(resp).find('item').each(function() {
-			title = $(this).find('title').first().text();
-    		description = $(this).find('description').first().text();
-    		link = $(this).find('link').first().text();
-    		date = new Date($(this).find('pubDate').first().text());
+		var announcements = [];
+		var items = $(resp).find('item category:contains(\'ANNOUNCEMENT\')').parents('item');
+		if (items.length > 0) {
+			items.each(function() {
+				var json = rssitem_to_json(this);
+				if (json.title != "" && json.description != "") {
+					var announcement = {
+						title: json.title,
+			    		description: json.description,
+			    		link: json.link
+			    	};
 
-    		var y = date.getFullYear() - 2000;
-		    var m = date.getMonth() + 1;
-		    var d = date.getDate();
-		    var h = date.getHours();
-		    var mm = date.getMinutes();
-    		var date = addZero(d)+'/'+addZero(m)+'/'+addZero(y) + ' - '+h+':'+addZero(mm);
-		});
-		save_announcements(title, description, link, date);
+			    	var date = new Date(json.pubDate);
+		    		var y = date.getFullYear() - 2000;
+				    var m = date.getMonth() + 1;
+				    var d = date.getDate();
+				    var h = date.getHours();
+				    var mm = date.getMinutes();
+
+		    		announcement.date = addZero(d)+'/'+addZero(m)+'/'+addZero(y) + ' - '+h+':'+addZero(mm);
+
+		    		announcements.push(announcement);
+		    	}
+			});
+		}
+		save_announcements(announcements);
 	});
 }
 
@@ -247,7 +255,7 @@ function set_messages() {
 
 	Debug.print("Check messages: Old "+old_messages+" New "+messages);
 
-	var news = get_news();
+	var news = has_news();
 	if (news) {
 		color = '#9E5A9E';
 	} else if (messages <= 0) {
@@ -293,22 +301,23 @@ function parse_classroom(classr) {
 			title = title.substr(0, aul);
 		}
 
-		classroom = new Classroom(title, classr.domainCode, classr.domainId, classr.domainTypeId, classr.ptTemplate);
+		classroom = new Classroom(title, classr.domainCode, classr.domainId, classr.domainTypeId);
 		classroom.domainassig = classr.domainFatherId;
 	} else {
 		classroom.code = classr.domainCode;
 		classroom.domain = classr.domainId;
 		classroom.type = classr.domainTypeId;
-		classroom.template = classr.ptTemplate;
 	}
 	classroom.set_color(classr.color);
 	classroom.any = classr.anyAcademic;
 	classroom.aula = classr.numeralAula;
+	classroom.subject_code = classr.planCode;
 
 	var consultor = false;
 	if (classr.widget.consultor != undefined && classr.widget.consultor.nomComplert != undefined) {
 		consultor = classr.widget.consultor.nomComplert;
 	}
+
 	for (var x in classr.widget.referenceUsers) {
 		if (!consultor || classr.widget.referenceUsers[x].fullName == consultor) {
 			classroom.consultor = classr.widget.referenceUsers[x].fullName;
@@ -329,9 +338,10 @@ function parse_classroom(classr) {
 		for(var j in classr.widget.eines) {
 			var resourcel = classr.widget.eines[j];
 			if (resourcel.nom) {
-				var resource = new Resource(resourcel.nom, resourcel.resourceId, resourcel.idTipoLink);
+				var resource = new Resource(resourcel.nom, resourcel.resourceId);
 				resource.set_link(resourcel.viewItemsUrl);
-				classroom.add_resource(resource);
+				resource.set_pos(j);
+				resource = classroom.add_resource(resource);
 				retrieve_resource(classroom, resource);
 			}
 		}
@@ -397,6 +407,9 @@ function parse_classroom(classr) {
 			evnt.grading = getDate_hyphen(act.qualificationDate);
 			classroom.add_event(evnt);
 		}
+		if (!classroom.final_grades && !classroom.stats) {
+			retrieve_timeline(classroom);
+		}
 	}
 }
 
@@ -429,14 +442,13 @@ function parse_classroom_old(classr) {
 				var sp = title.split(classr.codi_tercers);
 				title = sp[0].trim();
 				if (!classroom) {
-					classroom = new Classroom(title, classr.code, classr.domainid, classr.domaintypeid, classr.pt_template);
+					classroom = new Classroom(title, classr.code, classr.domainid, classr.domaintypeid);
 				} else {
 					classroom.title = title;
 					classroom.code = classr.code;
 					classroom.domain = classr.domainid;
 					classroom.domainassig = classr.domainid;
 					classroom.type = classr.domaintypeid;
-					classroom.template = classr.pt_template;
 				}
 				classroom.aula = classr.codi_tercers;
 
@@ -461,12 +473,11 @@ function parse_classroom_old(classr) {
 					title = title.substr(0, aul);
 				}
 				if (!classroom) {
-					classroom = new Classroom(title, classr.code, classr.domainid, classr.domaintypeid, classr.pt_template);
+					classroom = new Classroom(title, classr.code, classr.domainid, classr.domaintypeid);
 				} else {
 					classroom.code = classr.code;
 					classroom.domain = classr.domainid;
 					classroom.type = classr.domaintypeid;
-					classroom.template = classr.pt_template;
 				}
 				if (aulanum) {
 					classroom.aula = aulanum;
@@ -480,7 +491,8 @@ function parse_classroom_old(classr) {
 			for (var j in classr.resources) {
 				var resourcel = classr.resources[j];
 				if (resourcel.title) {
-					var resource = new Resource(resourcel.title, resourcel.code, "OLD");
+					var resource = new Resource(resourcel.title, resourcel.code);
+					resource.type = "old";
 					resource.set_messages(resourcel.numMesPend, resourcel.numMesTot);
 					classroom.add_resource(resource);
 				}
@@ -489,6 +501,24 @@ function parse_classroom_old(classr) {
 		Classes.add(classroom);
 	}
 }
+
+function retrieve_timeline(classroom) {
+	var args = {
+		classroomId: classroom.domain,
+		subjectId: classroom.domainassig,
+		javascriptDisabled: false
+	};
+	Queue.request('/webapps/aulaca/classroom/timeline/timeline', args, 'POST', false, function(data) {
+		for (var i in data.events) {
+			var event = data.events[i];
+			var class_event = classroom.get_event(event.id);
+			if (class_event) {
+				class_event.completed = event.completed
+			}
+		}
+	});
+}
+
 
 function retrieve_gradeinfo() {
 	if (Classes.is_all_graded()) {
@@ -526,9 +556,7 @@ function retrieve_gradeinfo() {
 							}
 
 							// Save the real subject code
-							if (subject_code.length > 0) {
-								classroom.subject_code = subject_code;
-							}
+							classroom.subject_code = subject_code;
 						}
 
 						if (!classroom.notify) {
@@ -586,6 +614,7 @@ function retrieve_gradeinfo() {
 				});
 
 				if (classroom) {
+					classroom.has_grades = true;
 					var nota = $(this).find('notaFinal').text().trim();
 					if (nota.length > 0 && nota != '-') {
 						var grade = classroom.add_grade('FA', nota, true);
@@ -608,7 +637,7 @@ function retrieve_gradeinfo() {
 }
 
 function retrieve_stats(classroom) {
-	if (!classroom.subject_code || classroom.stats || !classroom.all_events_completed(true)) {
+	if (!classroom.has_grades || !classroom.subject_code || classroom.stats || !classroom.all_events_completed(true)) {
 		return;
 	}
 
@@ -632,9 +661,10 @@ function retrieve_stats(classroom) {
 }
 
 function retrieve_resource(classroom, resource) {
-	if (resource.type == "URL") {
+	if (resource.type == "externallink") {
 		return;
 	}
+
 	var args = {
 		sectionId : '-1',
 		pageSize : 0,
@@ -645,13 +675,13 @@ function retrieve_resource(classroom, resource) {
 	};
 	Queue.request('/webapps/aulaca/classroom/LoadResource.action', args, 'GET', false, function(data) {
 		try {
-			var num_msg_pendents = data.resource.newItems;
-	        var num_msg_totals = data.resource.totalItems;
-	        /*if (num_msg_pendents == 0 && num_msg_totals == 0 && data.resource.missatgesNousBlog) {
-				num_msg_pendents = num_msg_totals = 1;
-	        }*/
-			resource.set_messages(num_msg_pendents, num_msg_totals);
-			resource.set_pos(data.resource.pos);
+			resource.type = data.resource.widgetType;
+
+	        if (resource.type == "messagelist") {
+	        	resource.set_messages(data.resource.newItems, data.resource.totalItems);
+	        } else if (resource.type == "blog") {
+				resource.news = !!data.resource.missatgesNousBlog;
+	        }
 		} catch(err) {
     		Debug.error(err);
 		}
@@ -742,114 +772,20 @@ function retrieve_agenda() {
 			items.each(function() {
 				var json = rssitem_to_json(this);
 
-				var title, evnt;
 				// General events
 				if (parseInt(json.EVENT_TYPE) == 16) {
-					title = json.title + ' ' + json.description;
-					evnt = new CalEvent(title, json.guid, 'UOC');
+					var title = json.title + ' ' + json.description;
+					var evnt = new CalEvent(title, json.guid, 'UOC');
 					evnt.start =  getDate_hyphen(json.pubDate);
 					Classes.add_event(evnt);
-					return;
 				}
-
 				// Classroom events now are parsed in other places.
-				// Legacy code ahead.
-				var id = json.guid.split('_');
-				var classroom = Classes.get_class_by_event(id[0]);
-				if (classroom) {
-					// Already parsed
-					return;
-				}
-
-				Debug.error('Unknown event ' + json.title);
-				var acronym = get_acronym(json.description);
-				classroom = Classes.get_class_by_acronym(acronym);
-				if (!classroom) {
-					Debug.error('Classroom not found');
-					Debug.print(json);
-					return;
-				}
-
-				evnt = classroom.get_event(id[0]);
-				if (evnt && evnt.is_assignment() && classroom.any) {
-					// The Assignments are processed in other parts
-					return;
-				}
-
-				if (!classroom.any && json.EVENT_COLOR){
-					classroom.color = json.EVENT_COLOR;
-				}
-
-				if (!evnt) {
-					title = json.title.split('[');
-					title = get_html_realtext(title[0].trim());
-					title = title.replace("\\'", "'");
-					evnt = new CalEvent(title, id[0], 'MODULE');
-				}
-				var date =  getDate_hyphen(json.pubDate);
-				switch (parseInt(json.EVENT_TYPE)) {
-					case 22:
-					case 26:
-						evnt.start = date;
-						break;
-					case 23:
-						evnt.type = 'STUDY_GUIDE';
-						evnt.start = date;
-						break;
-					case 27:
-						evnt.solution = date;
-						break;
-					case 19:
-						evnt.type = 'ASSIGNMENT';
-						evnt.grading = date;
-						break;
-					case 29:
-						evnt.end = date;
-						break;
-					default:
-						Debug.print('Unknown event type ' + json.EVENT_TYPE);
-						Debug.print(json);
-						return;
-				}
-				evnt.link = json.link+'&s=';
-				classroom.add_event(evnt);
+				//parse_agenda_event(json);
 			});
 		}
 	});
 }
 
-
-function retrieve_news() {
-	var args = {
-		up_isNoticiesInstitucionals : false,
-		up_maxDestacades : 2,
-		up_showImages : 0,
-		up_sortable : true,
-		up_maxAltres: 5,
-		up_rssUrlServiceProvider : '%252Festudiant%252F_resources%252Fjs%252Fopencms_estudiant.js',
-		up_target : 'noticies.jsp',
-		fromCampus : true
-		//up_title : 'Novetats%2520i%2520noticies',
-		//up_maximized: true,
-		//up_ck : 'nee',
-		//libs : '/rb/inici/javascripts/prototype.js,/rb/inici/javascripts/effects.js,/rb/inici/javascripts/application.js,/rb/inici/javascripts/prefs.js,%2Frb%2Finici%2Fuser_modul%2Flibrary%2F944751.js%3Ffeatures%3Dlibrary%3Asetprefs%3Adynamic-height',
-		//lang: get_lang(),
-		//country: 'ES',
-		//color: '',
-		//userType: 'UOC-ESTUDIANT-gr06-a',
-		//hp_theme: 'false'
-	};
-	Queue.set_after_function('nosave');
-	Queue.request('/webapps/widgetsUOC/widgetsNovetatsExternesWithProviderServlet', args, 'GET', false, function(resp) {
-		resp = resp.replace(/<img/gi, '<noload');
-		resp = resp.replace(/\[\+\]/gi, '');
-		var news = $('<div />').append(resp).find('#divMaximizedPart>ul').html();
-		if (news != undefined) {
-			$('#detail_news').html(news);
-			$('#button_news').removeClass('spin');
-		}
-	});
-}
 
 var Session = new function() {
 	var retrieving = false;

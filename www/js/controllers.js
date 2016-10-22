@@ -77,8 +77,12 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
                 evnt.starttext = false;
                 evnt.endtext = false;
                 evnt.soltext = false;
+            } else if (!evnt.is_committed()) {
+                evnt.starttext = get_event_text(evnt.start);
+                evnt.endtext = get_event_text(evnt.end);
+                evnt.soltext = get_event_text(evnt.solution);
             } else {
-                evnt.hide = true;
+                evnt.hide = evnt.is_committed();
             }
         } else {
             evnt.starttext = get_event_text(evnt.start);
@@ -266,6 +270,10 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
         $scope.openInApp(link, data);
     };
 
+    $scope.toggleAnnouncement = function(announcement) {
+        announcement.show = !announcement.show;
+    };
+
     $scope.doRefresh = function() {
         var isonline;
         try {
@@ -368,16 +376,9 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
 
     $scope.openClassroom = function() {
-        var link = '/webapps/classroom/mobile.do';
-        var data = {};
-        if($scope.currentclass.domain) {
-            data.domainId = $scope.currentclass.domain;
-        } else {
-            data.domainCode = $scope.currentclass.code;
-        }
-        data.mobileApp = true;
-        data.ajax = true;
-        data.pib = true;
+        var link = '/webapps/aulaca/classroom/Classroom.action';
+        var data = {classroomId: $scope.currentclass.domain,
+                                subjectId: $scope.currentclass.domainassig};
         $scope.openInApp(link, data);
     };
 
@@ -448,9 +449,13 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
             } else {
                 $scope.currentevent.status = '__COMMITTED__';
             }
+        } else if ($scope.currentevent.completed) {
+            $scope.currentevent.status = '__COMPLETED__';
         } else if($scope.currentevent.has_ended()) {
             $scope.currentevent.status = '__NOT_COMMITTED__';
         }
+    } else if ($scope.currentevent.is_committed()) {
+        $scope.currentevent.status = '__COMPLETED__';
     }
     $scope.currentevent.typetext = $translate.instant('__'+$scope.currentevent.type+'__');
 })
@@ -493,37 +498,4 @@ angular.module('uoc-notifier', ['pascalprecht.translate', 'ngCordova'])
     $ionicBody.enableClass($state.current.name == 'app.main', 'show_menu');
 
     console.log($scope.assignments);
-})
-
-.controller('NewsCtrl', function ($scope, $state, $ionicBody, $http) {
-    var news = get_news();
-    if (!news) {
-        retrieve_news();
-    } else {
-        $scope.news = news;
-    }
-    function retrieve_news() {
-        var session = Session.get();
-        if (session){
-            var args = {
-                up_isNoticiesInstitucionals : false,
-                up_maxDestacades : 2,
-                up_showImages : 0,
-                up_sortable : true,
-                up_maxAltres: 5,
-                up_rssUrlServiceProvider : '%252Festudiant%252F_resources%252Fjs%252Fopencms_estudiant.js',
-                up_target : 'noticies.jsp',
-                fromCampus : true,
-                s: session
-            };
-            $http.get(root_url_ssl+'/webapps/widgetsUOC/widgetsNovetatsExternesWithProviderServlet?'+ uri_data(args)).then(function(resp) {
-                resp = resp.data;
-                resp = resp.replace(/<img/gi, '<noload');
-                resp = resp.replace(/\[\+\]/gi, '');
-                var news = $('<div />').append(resp).find('#divMaximizedPart>ul').html();
-                save_news(news);
-                $scope.news = news;
-            });
-        }
-    }
 });

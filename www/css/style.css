@@ -11,7 +11,6 @@
     background-color: #555;
 }
 
-
 .item.class {
     padding: 16px;
 }
@@ -142,4 +141,18 @@ body.show_menu .ion-navicon  {
     -ms-flex: 0 0 15%;
     flex: 0 0 15%;
     max-width: 15%;
+}
+
+.item-body ol {
+    list-style-type: decimal;
+}
+
+.item-body ul {
+    list-style-type: disc;
+}
+
+.item-body ol,
+.item-body ul {
+    padding-left: 40px;
+    margin: 16px 0;
 }
