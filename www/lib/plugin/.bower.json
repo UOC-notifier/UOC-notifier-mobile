@@ -29,6 +29,5 @@
   },
   "_source": "https://github.com/mobify/plugin.git",
   "_target": "^3.1.0",
-  "_originalSource": "plugin",
-  "_direct": true
+  "_originalSource": "plugin"
 }

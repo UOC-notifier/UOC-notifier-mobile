@@ -1,11 +1,15 @@
 {
-  "name": "UOC-notifier",
+  "name": "uoc-notifier",
   "private": "true",
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.2.4",
+    "ionic": "driftyco/ionic-bower#1.3.1",
     "angular-translate": ">=2.7.0",
     "angular-translate-loader-static-files": "^2.9.0",
     "ngCordova": "^0.1.24-alpha",
     "plugin": "^3.1.0"
+  },
+  "resolutions": {
+    "angular-translate": ">=2.7.0",
+    "angular": ">= 1.0.8"
   }
 }

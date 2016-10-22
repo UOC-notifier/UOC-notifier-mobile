@@ -1,5 +1,5 @@
 /*!
- * angular-translate - v2.9.0 - 2016-01-24
+ * angular-translate - v2.12.1 - 2016-09-15
  * 
  * Copyright (c) 2016 The angular-translate team, Pascal Precht; Licensed MIT
  */
@@ -19,6 +19,7 @@
   }
 }(this, function () {
 
+$translateStaticFilesLoader.$inject = ['$q', '$http'];
 angular.module('pascalprecht.translate')
 /**
  * @ngdoc object
@@ -99,7 +100,6 @@ function $translateStaticFilesLoader($q, $http) {
       });
   };
 }
-$translateStaticFilesLoader.$inject = ['$q', '$http'];
 
 $translateStaticFilesLoader.displayName = '$translateStaticFilesLoader';
 return 'pascalprecht.translate';
