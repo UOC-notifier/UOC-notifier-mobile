@@ -1,0 +1,76 @@
+<ion-view view-title="{{title}}">
+  <ion-content class="has-footer">
+    <div class="card" ng-if="classroom.final_grades && classroom.stats">
+        <div class="item item-text-wrap">{{"__END_OF_CLASSROOMS__" | translate}}</div>
+    </div>
+
+    <div class="card" ng-if="exams">
+        <div class="item item-divider item-text-wrap">
+            <i class="icon ion-university"></i>
+            <a target="_blank" ng-click="openExams()">{{"__FINAL_TESTS__" | translate: {seu: exams.seu, date: exams.date} }}</a>
+        </div>
+        <div class="item item-text-wrap" ng-if="exams.timeEX">
+          <span ng-if="exams.placeEX">{{"__FINAL_TESTS_CLASS_TITLE__" | translate: { type: exams.typeEX, time: exams.timeEX, place: exams.placeEX } }}</span>
+          <span ng-if="!exams.placeEX">{{"__FINAL_TESTS_CLASS_TITLE_NOPLACE__" | translate: { type: exams.typeEX, time: exams.timeEX } }}</span>
+        </div>
+        <div class="item item-text-wrap" ng-if="exams.timePS">
+          <span ng-if="exams.placePS">{{"__FINAL_TESTS_CLASS_TITLE__" | translate: { type: exams.typePS, time: exams.timePS, place: exams.placePS } }}</span>
+          <span ng-if="!exams.placePS">{{"__FINAL_TESTS_CLASS_TITLE_NOPLACE__" | translate: { type: exams.typePS, time: exams.timePS } }}</span>
+        </div>
+    </div>
+        <ion-list ng-if="resources.length">
+          <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
+          <resource ng-repeat="resource in classroom.resources" title="resource.title" action="openResource(resource)"
+          messages="resource.messages" allmessages="resource.all_messages" hasmessagecount="resource.has_message_count()"
+          hasnews="resource.has_news()">
+        </ion-list>
+        <br>
+        <ion-list ng-if="events.length">
+          <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
+          <event-row ng-repeat="event in events" event="event"></event-row>
+
+          <div class="item item-divider" ng-if="grades.length > 0">{{"__FINAL_GRADES__" | translate}}</div>
+          <ion-item ng-repeat="grade in grades" class="item event">
+            <div class="row">
+             <div class="col col-85">{{"__"+grade.name+"__" | translate}}</div>
+             <div class="col col-15">
+              <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
+              <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
+             </div>
+            </div>
+          </ion-item>
+        </ion-list>
+
+        <br>
+        <ion-list>
+            <div class="item item-divider">{{"__TOOLS__" | translate}}</div>
+              <ion-item ng-click="openMail()" class="item-text-wrap"><i class="icon ion-email"></i> {{"__TEACHER__" | translate}} <strong>{{classroom.consultor}}</strong><br>
+                <span ng-if="classroom.consultorlastviewed">
+                  <span ng-if="consultorlastviewtranslate.time == '00:00'">
+                    {{"__VIEWED_LAST_DATE__" | translate: consultorlastviewtranslate}}
+                  </span>
+                  <span ng-if="consultorlastviewtranslate.time != '00:00'">
+                    {{"__VIEWED_LAST_TIME__" | translate: consultorlastviewtranslate}}
+                  </span>
+                </span>
+             </ion-item>
+             <ion-item ng-click="openMaterials()" class="item-text-wrap">
+             <i class="icon ion-briefcase"></i> {{"__EQUIPMENT__" | translate}}
+             </ion-item>
+             <ion-item ng-if="classroom.stats" ng-click="openStats()" class="item-text-wrap">
+              <i class="icon ion-stats-bars"></i> {{"__STATS__" | translate}}
+             </ion-item>
+             <ion-item ng-if="classroom.type != 'TUTORIA'" ng-click="openTeachingPlan()" class="item-text-wrap">
+              <i class="icon ion-easel"></i> {{"__TEACHING_PLAN__" | translate}}<br>
+              <span ng-if="classroom.aula"><strong>{{'__CLASSROOM__' |translate}}</strong> {{classroom.aula}}</span>
+              <span ng-if="classroom.subject_code"> ({{classroom.subject_code}})</span>
+             </ion-item>
+        </ion-list>
+  </ion-content>
+  <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #{{classroom.color}};" ng-if="state.session">
+  <div class="button-bar">
+    <button class="button button-clear icon ion-university" ng-click="openClassroom()"> {{'__GOTO_CLASS__' | translate}}</button>
+    <button ng-if="classroom.has_events() && classroom.subject_code" class="button button-clear icon ion-speedometer" ng-click="openGrades()">{{'__GRADES__' | translate}}</button>
+  </div>
+</ion-footer-bar>
+</ion-view>

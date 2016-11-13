@@ -1,0 +1,7 @@
+<span ng-if="show">
+    <span class="badge badge-inline badge-balanced" ng-if="hasPassed && (!isGrades || !graded)"><i class="icon ion-checkmark-round"></i></span>
+    <span class="badge badge-inline badge-energized" ng-if="isToday && (!isGrades || !graded)"><i class="icon ion-clock"></i></span>
+    <span ng-class="{'near':isNear}" ng-if="!hasPassed && !isToday && (!isGrades || !graded)">{{dateFormatted}}</span>
+    <span class="badge badge-inline badge-positive" ng-if="isGrades && graded"><i ng-if="comment" class="icon ion-chatbubble"></i> {{graded}}</span>
+</span>
+

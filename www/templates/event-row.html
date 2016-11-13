@@ -1,0 +1,13 @@
+<ion-item ng-if="show" class="item event {{status}}" ng-click="gotoEvent()">
+    <div class="row">
+      <div class="col col-title col-{{titleColumnWidth}}">
+        <span ng-if="task" class="class-color" style="{{style}}"></span>
+        <span ng-if="task">{{acronym}}</span>
+        <i class="icon {{icon}} {{iconcolor}}"></i> {{name}}
+      </div>
+      <event-date ng-if="!event.graded" date="event.start" graded="event.graded"></event-date>
+      <event-date ng-if="!event.graded" date="event.end" graded="event.graded"></event-date>
+      <event-date ng-if="!event.graded && !task" date="event.solution" graded="event.graded"></event-date>
+      <event-date ng-if="!task" date="event.grading" graded="event.graded" comment="event.commenttext" is-grades="true"></event-date>
+    </div>
+</ion-item>

@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title>UOC notifier</title>
+    <title>UOC Notifier</title>
 
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="lib/ionic/release/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
@@ -13,29 +13,51 @@
     -->
 
     <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic/release/js/ionic.bundle.js"></script>
 
     <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
-    <script src="lib/uoc/platform-ionic.js"></script>
     <script src="lib/jquery.min.js"></script>
-    <script src="lib/uoc/storage.js"></script>
-    <script src="lib/uoc/utils.js"></script>
-    <script src="lib/uoc/uoc.js"></script>
-    <script src="lib/uoc/classroom.js"></script>
 
     <script src="lib/angular-translate/angular-translate.min.js"></script>
     <script src="lib/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
 
     <!-- your app's js -->
-    <script src="js/app.js"></script>
-    <script src="js/controllers.js"></script>
-    <script src="js/directive.js"></script>
+    <script src="main.js"></script>
+
+    <script src="services/app.js"></script>
+    <script src="services/session.js"></script>
+    <script src="services/utils.js"></script>
+    <script src="services/uoc.js"></script>
+    <script src="services/notifications.js"></script>
+    <script src="services/cron.js"></script>
+    <script src="services/storage.js"></script>
+    <script src="services/date.js"></script>
+    <script src="services/settings.js"></script>
+    <script src="services/classes.js"></script>
+    <script src="services/classroom.js"></script>
+    <script src="services/resource.js"></script>
+    <script src="services/grade.js"></script>
+    <script src="services/calevent.js"></script>
+    <script src="services/debug.js"></script>
+    <script src="services/queue.js"></script>
+    <script src="services/events.js"></script>
+
+    <script src="directives/event-date.js"></script>
+    <script src="directives/event-row.js"></script>
+    <script src="directives/resource.js"></script>
+
+    <script src="controllers/index.js"></script>
+    <script src="controllers/classroom.js"></script>
+    <script src="controllers/event.js"></script>
+    <script src="controllers/settings.js"></script>
+    <script src="controllers/link.js"></script>
+    <script src="controllers/task.js"></script>
   </head>
 
-  <body ng-app="UOCStarter">
+  <body ng-app="UOCNotifier">
     <ion-nav-view></ion-nav-view>
   </body>
 </html>

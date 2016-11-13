@@ -1,65 +1,55 @@
 <ion-view view-title="UOC Notifier">
-  <ion-content ng-controller="UOCCtrl" class="has-footer">
+  <ion-content class="has-footer">
     <ion-refresher pulling-text="{{'__PTR__' | translate}}" on-refresh="doRefresh()"></ion-refresher>
-    <div class="padding">
-        <div class="card" ng-if="!state.loading && !state.session" ng-click="openNoSessionInApp('https://cv.uoc.edu/webapps/cas/login?renew=true')">
-           <div class="item item-text-wrap" ng-bind-html=" '__INCORRECT_USER__' | translate " ></div>
-        </div>
-        <div class="card" ng-repeat="announcement in announcements">
-            <div href="#" class="item item-icon-left" ng-click="toggleAnnouncement(announcement)">
-              <i class="icon ion-speakerphone"></i>
-              <h2><a target="_blank" ng-click="openInApp(announcement.link)" ng-if="announcement.link">{{announcement.title}}</a>
-                <span ng-if="!announcement.link">{{announcement.title}}</span></h2>
-              <p ng-if="announcement.date">{{announcement.date}}</p>
-            </div>
-            <div class="item item-body item-text-wrap" ng-bind-html="announcement.description" ng-show="announcement.show">{{announcement.description}}</div>
+      <div class="card" ng-if="!state.loading && !state.session" ng-click="openNoSessionInApp('https://cv.uoc.edu/webapps/cas/login?renew=true')">
+         <div class="item item-text-wrap" ng-bind-html=" '__INCORRECT_USER__' | translate " ></div>
+      </div>
+      <div class="card" ng-repeat="announcement in announcements">
+          <div href="#" class="item item-icon-left item-text-wrap" ng-click="toggleAnnouncement(announcement)">
+            <i class="icon ion-speakerphone"></i>
+            <h2><a target="_blank" ng-click="openInApp(announcement.link)" ng-if="announcement.link">{{announcement.title}}</a>
+              <span ng-if="!announcement.link">{{announcement.title}}</span></h2>
+            <p ng-if="announcement.date">{{announcement.date}}</p>
+          </div>
+          <div class="item item-body item-text-wrap" ng-bind-html="announcement.description" ng-show="announcement.show">{{announcement.description}}</div>
 
-        </div>
-        <ion-list>
-            <ion-item ng-repeat="class in classes" ng-click="gotoClass(class.code)" class="item class">
-                <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
-                <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.messages > state.critical, 'badge-energized': class.messages <= state.critical}">
-                  {{class.messages}}
-                </span>
+      </div>
+    <ion-list>
+          <ion-item ng-repeat="class in classes" ng-click="gotoClassroom(class.code)" class="item class item-text-wrap">
+              <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
+              <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.messages > state.critical, 'badge-energized': class.messages <= state.critical}">
+                {{class.messages}}
+              </span>
 
-                <ion-list ng-if="class.messages">
-                    <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
-                    <resource ng-repeat="resource in class.resources" ng-if="resource.messages > 0 || resource.has_news()" title="resource.title"
-                    messages="resource.messages" allmessages="resource.all_messages" hasmessagecount="resource.has_message_count()"
-                    hasnews="resource.has_news()">
-                    </resource>
-                </ion-list>
+              <ion-list ng-if="class.messages">
+                  <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
+                  <resource ng-repeat="resource in class.resources" ng-if="resource.messages > 0 || resource.has_news()" title="resource.title"
+                  messages="resource.messages" allmessages="resource.all_messages" hasmessagecount="resource.has_message_count()"
+                  hasnews="resource.has_news()">
+                  </resource>
+              </ion-list>
 
-                <ion-list ng-if="class.events_today.length > 0">
-                    <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
-                    <ion-item ng-repeat="event in class.events_today" ng-if="!event.hide" class="item event {{event.eventstate}}">
-                      <div class="row">
-                        <div class="col col-40 col-title"><i class="icon {{event.icon}} {{event.iconcolor}}"></i> {{event.name}}</div>
-                        <eventdate ng-if="!event.graded" class="col col-15" date="event.starttext" graded="event.graded"></eventdate>
-                        <eventdate ng-if="!event.graded" class="col col-15" date="event.endtext" graded="event.graded"></eventdate>
-                        <eventdate ng-if="!event.graded" class="col col-15" date="event.soltext" graded="event.graded"></eventdate>
-                        <eventgrade class="col col-15" date="event.gradtext" graded="event.graded" comment="event.commenttext"></eventgrade>
-                      </div>
-                    </ion-item>
+              <ion-list ng-if="class.events_today.length > 0">
+                  <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
+                  <event-row ng-repeat="event in class.events_today" event="event"></event-row>
 
-                    <div class="item item-divider" ng-if="class.grades.length > 0">{{"__FINAL_GRADES__" | translate}}</div>
-                    <ion-item ng-repeat="grade in class.grades" class="item event">
-                      <div class="row">
-                       <div class="col col-85">{{"__"+grade.name+"__" | translate}}</div>
-                       <div class="col col-15">
-                        <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
-                        <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
-                       </div>
-                      </div>
-                    </ion-item>
-                </ion-list>
-            </ion-item>
-        </ion-list>
-    </div>
+                  <div class="item item-divider" ng-if="class.grades.length > 0">{{"__FINAL_GRADES__" | translate}}</div>
+                  <ion-item ng-repeat="grade in class.grades" class="item event">
+                    <div class="row">
+                     <div class="col col-85">{{"__"+grade.name+"__" | translate}}</div>
+                     <div class="col col-15">
+                      <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
+                      <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
+                     </div>
+                    </div>
+                  </ion-item>
+              </ion-list>
+          </ion-item>
+      </ion-list>
   </ion-content>
   <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #2e3a69;" ng-if="state.session">
     <div class="button-bar">
-      <button class="button button-clear icon ion-university" ng-click="openInApp('/cgi-bin/uocapp')"> {{'__GOTO_CAMPUS__' | translate}}</button>
+      <button class="button button-clear icon ion-university" ng-click="openInApp('/cgibin/uocapp')"> {{'__GOTO_CAMPUS__' | translate}}</button>
       <button class="button button-clear icon ion-email" ng-class="{'button-assertive': state.unread_mail > 0}" ng-click="openMail()"> {{'__MAIL__' | translate}}</button>
     </div>
   </ion-footer-bar>

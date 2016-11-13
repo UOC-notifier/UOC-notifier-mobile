@@ -23,10 +23,6 @@
     background-color: transparent;
 }
 
-.item.event .badge, .item.resource .badge {
-    top: 9px;
-}
-
 .item.resource {
     padding: 9px;
 }
@@ -52,8 +48,9 @@
 }
 
 .event.running .col-title,
-.item.event .col .near {
+event-date .near {
     font-weight: bold;
+    line-height: 18px;
 }
 
 .event.success .name a{
@@ -77,14 +74,19 @@
 }
 
 .bar .buttons-right .badge {
-    line-height: 24px;
+    line-height: 27px;
     margin-right: 6px;
 }
 
-.badge.badge-static {
-    right: initial;
-    position: static;
+.badge.badge-inline {
     display: inline;
+    position: relative;
+    top: 0;
+    right: 0;
+}
+
+.item.resource .badge {
+    top: 9px;
 }
 
 .col.col-title {
@@ -103,25 +105,6 @@
     white-space: nowrap;
 }
 
-ion-nav-bar {
-    display: inline !important;
-}
-
-body.show_menu .back-button {
-    display: none !important;
-}
-
-.back-button {
-    display: inline !important;
-}
-
-body.show_menu .ion-navicon  {
-    display: inline !important;
-}
-
-.ion-navicon  {
-    display: none !important;
-}
 
 .col-85 {
     -webkit-box-flex: 0;
@@ -155,4 +138,39 @@ body.show_menu .ion-navicon  {
 .item-body ul {
     padding-left: 40px;
     margin: 16px 0;
+}
+
+.item-input {
+    padding-right: 16px;
+}
+
+.item-text-wrap.item.item-toggle div {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+}
+
+.input-label {
+    width: 100%;
+    max-width: none;
+}
+
+.item input {
+    text-align: right;
+}
+
+event-date {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 15%;
+    -moz-box-flex: 0;
+    -moz-flex: 0 0 15;
+    -ms-flex: 0 0 15%;
+    flex: 0 0 15%;
+    max-width: 15%;
+    padding: 5px 0;
+
+    display: block;
+    width: 100%;
+    line-height: 22px;
+    text-align: center;
 }
