@@ -23,7 +23,7 @@
 
               <ion-list ng-if="class.messages">
                   <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
-                  <resource ng-repeat="resource in class.resources" ng-if="resource.messages > 0 || resource.has_news()" title="resource.title"
+                  <resource ng-repeat="resource in class.resources" ng-if="resource.messages > 0 || resource.has_news()" name="resource.title"
                   messages="resource.messages" allmessages="resource.all_messages" hasmessagecount="resource.has_message_count()"
                   hasnews="resource.has_news()">
                   </resource>
