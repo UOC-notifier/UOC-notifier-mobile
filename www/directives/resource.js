@@ -4,7 +4,7 @@ angular.module('UOCNotifier')
     return {
         restrict: 'E',
         scope: {
-            title: '=',
+            name: '=',
             messages: '=?',
             allmessages: '=?',
             hasmessagecount: '=?',

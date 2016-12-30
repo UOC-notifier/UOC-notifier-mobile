@@ -785,7 +785,7 @@ angular.module('UOCNotifier')
         try {
             var obj = {};
             $(item).children().each(function() {
-                var tagname = $(this).prop("tagName");
+                var tagname = $(this).prop("tagName").toLowerCase();
                 var element = $(this).text();
                 if (tagname == 'category' && $(this).attr('domain')) {
                     tagname = $(this).attr('domain');
