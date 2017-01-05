@@ -24,15 +24,7 @@
     "ionic-plugin-keyboard",
     "cordova-plugin-network-information",
     "de.appplant.cordova.plugin.badge",
-    "de.appplant.cordova.plugin.local-notification",
-    {
-      "locator": "https://github.com/Red-Folder/bgs-core.git",
-      "id": "com.red_folder.phonegap.plugin.backgroundservice"
-    },
-    {
-      "locator": "https://github.com/crazyserver/bgs-json.git",
-      "id": "com.uocnotifier.phonegap.plugin.bgservice"
-    }
+    "de.appplant.cordova.plugin.local-notification"
   ],
   "cordovaPlatforms": [
     "android"
