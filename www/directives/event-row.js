@@ -13,9 +13,18 @@ angular.module('UOCNotifier')
                 classroom;
 
             scope.show = event.is_assignment() || (!event.is_committed() || !event.is_completed());
+            if (!scope.show) {
+                return;
+            }
+
             scope.name = event.name;
 
-            scope.titleColumnWidth = event.graded ? 85 : 40;
+            scope.showOnlyGrade = ($date.isBeforeToday(event.start) &&
+                    $date.isBeforeToday(event.end) &&
+                    $date.isBeforeToday(event.solution)) ||
+                event.graded;
+
+            scope.titleColumnWidth = scope.showOnlyGrade ? 85 : 40;
 
             scope.status = $utils.get_event_state(event);
             scope.icon = $utils.get_event_icon(event);

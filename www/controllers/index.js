@@ -15,6 +15,7 @@ angular.module('UOCNotifier')
 
     var observer = $events.on('classesUpdated', $state.current.name, function(refresh) {
         load_view();
+        $date.updateSettings();
         if (refresh) {
             $scope.doRefresh();
         }

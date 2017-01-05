@@ -32,6 +32,18 @@ angular.module('UOCNotifier')
             $scope.exams.typeEX = $translate.instant('__EX__');
             $scope.exams.typePS = $translate.instant('__PS__');
         }
+
+        $scope.showEvents = false;
+        for (var x in classroom.events) {
+            var event = classroom.events[x];
+            $scope.showEvents = event.is_assignment() || (!event.is_committed() || !event.is_completed());
+            if ($scope.showEvents) {
+                break;
+            }
+        }
+
+
+
         $debug.log(classroom);
     }
 

@@ -186,24 +186,24 @@ angular.module('UOCNotifier')
         };
 
         return $queue.get('/rb/inici/grid.rss', args, false).then(function(resp) {
-            var announcements = [];
-            var items = $(resp).find('item category:contains(\'ANNOUNCEMENT\')').parents('item');
-            if (items.length > 0) {
-                items.each(function() {
-                    var json = rssitem_to_json(this);
-                    if (json.title != "" && json.description != "") {
-                        var announcement = {
-                            title: json.title,
-                            description: json.description,
-                            link: json.link
-                        };
+            var announcements = [],
+                items = angular.element(resp).find('item');
 
-                        announcement.date = $date.formatDate(json.pubDate);
+            angular.forEach(items, function(item) {
+                item = rssitem_to_json(item);
 
-                        announcements.push(announcement);
-                    }
-                });
-            }
+                if (item.TYPE == "ANNOUNCEMENT" && item.title != "" && item.description != "") {
+                    var announcement = {
+                        title: $utils.get_html_realtext(item.title),
+                        description: $utils.get_html_realtext(item.description),
+                        link: item.link
+                    };
+
+                    announcement.date = $date.formatDate(item.pubDate);
+
+                    announcements.push(announcement);
+                }
+            });
             $settings.save_announcements(announcements);
         });
     }
@@ -216,9 +216,12 @@ angular.module('UOCNotifier')
                 'app:only' : 'bustia'
             };
             return $queue.get('/rb/inici/grid.rss', args, false).then(function(resp) {
-                $(resp).find('item').each(function() {
-                    var description = $(this).find('description').first().text();
-                    var matches = description.match(/:([0-9]+):([0-9]+)$/);
+                var items = angular.element(resp).find('item');
+
+                angular.forEach(items, function(item) {
+                    item = rssitem_to_json(item);
+                    var description = item.description,
+                        matches = description.match(/:([0-9]+):[0-9]+$/);
                     if (matches && matches[1]) {
                         save_mail(matches[1]);
                     }
@@ -236,14 +239,17 @@ angular.module('UOCNotifier')
             'app:only' : 'aules'
         };
         return $queue.get('/rb/inici/grid.rss', args, false).then(function(resp) {
-            $(resp).find('item').each(function() {
-                var item = $(this);
-                var category = item.find('category').first().text();
+            var items = angular.element(resp).find('item'),
+                classroom = false,
+                findCode = false;
+
+            angular.forEach(items, function(item) {
+                item = rssitem_to_json(item);
+                var category = item.category[0];
                 if (category.indexOf('AULA_TUTOR_DEFINITION') >= 0) {
                     var code = category.split('-')[0],
                         domainId = category.split('-')[1];
-                        classroom = $classes.search('domainassig', domainId),
-                        title = $utils.get_html_realtext(item.find('title').text()),
+                        title = $utils.get_html_realtext(item.title),
                         codiTercers = code.split('_')[0].toUpperCase() || false;
 
                     if (codiTercers) {
@@ -251,6 +257,7 @@ angular.module('UOCNotifier')
                         title = aux ? aux : title;
                     }
 
+                    classroom = $classes.search('domainassig', domainId);
                     if (!classroom) {
                         classroom = new Classroom(title, code, domainId, 'TUTORIA');
                     } else {
@@ -262,38 +269,39 @@ angular.module('UOCNotifier')
                     }
                     classroom.aula = codiTercers;
 
-                    var tagColor = item.find('category:contains("MODUL_COLOR")').first().text();
+                    var tagColor = item.category[1];
                     if (tagColor) {
                         classroom.color = tagColor.split('#')[1].split('-')[0];
                     }
 
                     if (classroom.notify) {
+                        findCode = code + "-AULA_TUTOR_RESOURCES";
                         retrieve_consultor(classroom);
-                        try {
-                            $(resp).find("item > category:contains('" + code + "-AULA'):contains('_RESOURCES')").each(function() {
-                                var item = rssitem_to_json($(this).parent()),
-                                    title = $utils.get_html_realtext(item.title);
-
-                                if (title) {
-                                    var resource = new Resource(title, "");
-                                    resource.set_link(item.url);
-                                    resource.code = $utils.get_url_attr(resource.link, 'l');
-                                    if (title != 'Microblog') {
-                                        resource.type = "old";
-                                        var messages = parseInt(item.description.split(':')[0]);
-                                            allmessages = parseInt(item.description.split(':')[1]);
-                                        resource.set_messages(messages, allmessages);
-                                    } else {
-                                        resource.type = "oldblog";
-                                    }
-                                    classroom.add_resource(resource);
-                                }
-                            });
-                        } catch (err) {
-                            $debug.error(err);
-                        }
                     }
+                } else if (findCode && item.category.indexOf(findCode) >= 0) {
+                    // Add the resources to the classroom.
+                    try {
+                        title = $utils.get_html_realtext(item.title);
+                        if (title) {
+                            var resource = new Resource(title, "");
+                            resource.set_link(item.url);
+                            resource.code = $utils.get_url_attr(resource.link, 'l');
+                            if (title != 'Microblog') {
+                                resource.type = "old";
+                                var messages = parseInt(item.description.split(':')[0]);
+                                    allmessages = parseInt(item.description.split(':')[1]);
+                                resource.set_messages(messages, allmessages);
+                            } else {
+                                resource.type = "oldblog";
+                            }
+                            classroom.add_resource(resource);
+                        }
+                    } catch (err) {
+                        $debug.error(err);
+                    }
+                }
 
+                if (classroom) {
                     $classes.add(classroom);
                 }
             });
@@ -306,28 +314,36 @@ angular.module('UOCNotifier')
         }
 
         return $queue.get('/rb/inici/api/enrollment/rac.xml', {}, false).then(function(data) {
-            $(data).find('files>file').each(function() {
-                var exped = $(this).children('id').first().text().trim();
+            var files = angular.element(data).find('listaAsignaturas').parent();
+            angular.forEach(files, function(file) {
+                file = xml_getChildrenValues(file);
+                var exped = file.id;
 
-                $(this).find('listaAsignaturas asignatura').each(function() {
-                    // If has a children of same type
-                    if ($(this).has('asignatura').length > 0) {
+                var asignaturas = file.listaasignaturas.find('asignatura');
+                angular.forEach(asignaturas, function(asignatura) {
+                    // If has a children of same type.
+                    if (angular.element(asignatura).find('asignatura').length > 0) {
                         return;
                     }
+                    asignatura = xml_getChildrenValues(asignatura);
 
-                    var subject_code = $(this).find('codigo').first().text().trim();
-                    var classroom = $classes.search('subject_code', subject_code);
+                    var subject_code = asignatura.codigo,
+                        classroom = $classes.search('subject_code', subject_code);
+
                     if (classroom && !classroom.notify) {
                         return;
                     }
 
-                    $(this).find('listaActividades actividad').each(function() {
-                        // If has a children of same type
-                        if ($(this).has('actividad').length > 0) {
+                    var actividades = asignatura.listaactividades? asignatura.listaactividades.find('actividad') : [];
+                    angular.forEach(actividades, function(actividad) {
+                        // If has a children of same type.
+                        if (angular.element(actividad).find('actividad').length > 0) {
                             return;
                         }
 
-                        var eventid = $(this).find('pacId').text().trim();
+                        actividad = xml_getChildrenValues(actividad);
+
+                        var eventid = actividad.pacid;
                         if (eventid) {
                             if (!classroom) {
                                 classroom = $classes.get_class_by_event(eventid);
@@ -348,23 +364,21 @@ angular.module('UOCNotifier')
                             if (evnt && evnt.is_assignment()) {
                                 var changed = false;
 
-                                var committed = $(this).find('listaEntregas>entrega').length > 0;
-                                if (committed) {
+                                if (actividad.listaentregas && actividad.listaentregas.length > 0) {
+                                    var entrega = actividad.listaentregas[actividad.listaentregas.length - 1];
+                                    evnt.viewed = angular.element(entrega).find('fechaDescargaConsultor').html();
+                                    changed = true;
                                     evnt.committed = true;
-                                    var viewed = $(this).find('listaEntregas>entrega').last().find('fechaDescargaConsultor').html();
-                                    evnt.viewed = viewed && viewed.length ? viewed: false;
+                                }
+
+                                if (actividad.listacomentarios && actividad.listacomentarios.length > 0) {
+                                    var lastcomment = actividad.listacomentarios[actividad.listacomentarios.length - 1];
+                                    evnt.commenttext = angular.element(lastcomment).find('texto').html();
+                                    evnt.commentdate = angular.element(lastcomment).find('fechaComentario').html();
                                     changed = true;
                                 }
 
-                                var comments = $(this).find('listaComentarios>comentario').length > 0;
-                                if (comments) {
-                                    var lastcomment = $(this).find('listaComentarios>comentario').last();
-                                    evnt.commenttext = lastcomment.find('texto').html();
-                                    evnt.commentdate= lastcomment.find('fechaComentario').html();
-                                    changed = true;
-                                }
-
-                                var grade = $(this).find('nota').text().trim();
+                                var grade = actividad.nota;
                                 if (grade.length > 0 && grade != '-') {
                                     if (evnt.graded != grade) {
                                         evnt.graded = grade;
@@ -382,12 +396,12 @@ angular.module('UOCNotifier')
                             }
                             classroom.exped = exped;
 
-                            var nota = $(this).find('nota').text().trim();
+                            var nota = actividad.nota;
                             if (nota.length > 0 && nota != '-') {
-                                var name = $(this).find('descripcion').text().trim();
-                                var grade = classroom.add_grade(name, nota, false);
-                                if (grade) {
-                                    grade.notify(classroom.get_acronym());
+                                var name = actividad.descripcion,
+                                    finalGrade = classroom.add_grade(name, nota, false);
+                                if (finalGrade) {
+                                    finalGrade.notify(classroom.get_acronym());
                                 }
                             }
                         }
@@ -395,22 +409,23 @@ angular.module('UOCNotifier')
 
                     if (classroom) {
                         classroom.has_grades = true;
-                        var nota = $(this).find('notaFinal').text().trim();
+                        var nota = asignatura.notafinal;
                         if (nota.length > 0 && nota != '-') {
-                            var grade = classroom.add_grade('FA', nota, true);
-                            if (grade) {
-                                grade.notify(classroom.get_acronym());
+                            var notafinal = classroom.add_grade('FA', nota, true);
+                            if (notafinal) {
+                                notafinal.notify(classroom.get_acronym());
                             }
                         }
 
-                        nota = $(this).find('notaFinalContinuada').text().trim();
+                        nota = asignatura.notafinalcontinuada;
                         if (nota.length > 0 && nota != '-') {
-                            var grade = classroom.add_grade('FC', nota, false);
-                            if (grade) {
-                                grade.notify(classroom.get_acronym());
+                            var notacont = classroom.add_grade('FC', nota, false);
+                            if (notacont) {
+                                notacont.notify(classroom.get_acronym());
                             }
                         }
                     }
+
                 });
             });
         });
@@ -424,22 +439,20 @@ angular.module('UOCNotifier')
             'app:Delta' : 365
         };
         return $queue.get('/rb/inici/grid.rss', args, false).then(function(resp) {
-            var items = $(resp).find('item category:contains(\'CALENDAR\')').parents('item');
-            if (items.length > 0) {
-                items.each(function() {
-                    var json = rssitem_to_json(this);
+            var items = angular.element(resp).find('item');
+            angular.forEach(items, function(item) {
+                item = rssitem_to_json(item);
 
-                    // General events
-                    if (parseInt(json.EVENT_TYPE) == 16) {
-                        var title = json.title + ' ' + json.description;
-                        var evnt = new CalEvent(title, json.guid, 'UOC');
-                        evnt.start = $date.getDate(json.pubDate, true);
-                        $classes.add_event(evnt);
-                    }
-                    // Classroom events now are parsed in other places.
-                    //parse_agenda_event(json);
-                });
-            }
+                // General events
+                if (item.TYPE == "CALENDAR" && parseInt(item.EVENT_TYPE, 10) == 16) {
+                    var title = $utils.get_html_realtext(item.title + ' ' + item.description),
+                        evnt = new CalEvent(title, item.guid, 'UOC');
+                    evnt.start = $date.getDate(item.pubDate, true);
+                    $classes.add_event(evnt);
+                }
+                // Classroom events now are parsed in other places.
+                //parse_agenda_event(item);
+            });
         });
     }
 
@@ -691,7 +704,7 @@ angular.module('UOCNotifier')
         return $queue.get('/webapps/rac/getEstadisticasAsignaturaAjax.action', args, false).then(function(data) {
             $debug.print(data);
             //UI.fill_pac_stats(classroom, data);
-            $(button).removeClass('spin');
+            angular.element(button).removeClass('spin');
             return data;
         });
     }
@@ -783,16 +796,20 @@ angular.module('UOCNotifier')
 
     function rssitem_to_json(item) {
         try {
-            var obj = {};
-            $(item).children().each(function() {
-                var tagname = $(this).prop("tagName").toLowerCase();
-                var element = $(this).text();
-                if (tagname == 'category' && $(this).attr('domain')) {
-                    tagname = $(this).attr('domain');
+            var obj = {},
+                items = angular.element(item).children();
+
+            angular.forEach(items, function(item) {
+                item = angular.element(item);
+                var tagname = item.prop("tagName").toLowerCase();
+                var element = item.text().trim();
+                if (tagname == 'category' && item.attr('domain')) {
+                    tagname = item.attr('domain');
                 } else {
                     /*
+                    TODO: Remove Jquery dependencies
                     var element = {};
-                    element['inner'] = $(this).html();
+                    element['inner'] = item.html();
                     $(this).each(function() {
                       $.each(this.attributes, function() {
                         // this.attributes is not a plain object, but an array
@@ -803,9 +820,41 @@ angular.module('UOCNotifier')
                       });
                     });*/
                 }
-                obj[tagname] = element;
+                if (typeof obj[tagname] == "undefined") {
+                    obj[tagname] = element;
+                } else if (typeof obj[tagname] == "array" || typeof obj[tagname] == "object") {
+                    obj[tagname].push(element);
+                } else {
+                    var oldElement = obj[tagname];
+                    obj[tagname] = [oldElement, element];
+                }
             });
+            $debug.log(obj);
 
+            return obj;
+        } catch (e) {
+            $debug.error(e.message);
+        }
+    }
+
+    function xml_getChildrenValues(item) {
+         try {
+            var obj = {},
+                tagname,
+                item = angular.element(item);
+            if (typeof item == "array") {
+                item = item[0];
+            }
+
+            angular.forEach(item.children(), function(child) {
+                child = angular.element(child);
+                tagname = child.prop("tagName").toLowerCase();
+                if (child.children().length > 0) {
+                    obj[tagname] = child.children();
+                } else {
+                    obj[tagname] = child.text().trim();
+                }
+            });
             return obj;
         } catch (e) {
             $debug.error(e.message);

@@ -3,15 +3,12 @@ angular.module('UOCNotifier')
 .factory('$date', function($settings) {
 
     var self = {},
-        todayDate = new Date(),
-        today = {
-                year: todayDate.getFullYear() - 2000,
-                month: todayDate.getMonth() +1,
-                day: todayDate.getDate()
-            },
+        today = getToday(),
         limit = getTodayLimit();
 
+
     self.updateSettings = function() {
+        today = getToday();
         limit = getTodayLimit();
     };
 
@@ -131,6 +128,15 @@ angular.module('UOCNotifier')
             };
         }
         return false;
+    }
+
+    function getToday() {
+        var todayDate = new Date();
+        return {
+            year: todayDate.getFullYear() - 2000,
+            month: todayDate.getMonth() + 1,
+            day: todayDate.getDate()
+        };
     }
 
     function splitDate(date) {

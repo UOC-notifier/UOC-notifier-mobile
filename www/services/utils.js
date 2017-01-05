@@ -77,7 +77,7 @@ angular.module('UOCNotifier')
     };
 
     self.get_html_realtext = function(text) {
-        return $('<textarea />').html(text).text();
+        return angular.element('<textarea />').html(text).text();
     };
 
     self.get_url_attr = function (url, attr) {

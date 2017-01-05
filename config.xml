@@ -15,7 +15,7 @@
   <preference name="AutoHideSplashScreen" value="true"/>
   <preference name="FadeSplashScreen" value="true"/>
   <preference name="FadeSplashScreenDuration" value="1000"/>
-  <preference name="android-installLocation" value="auto" />
+  <preference name="android-installLocation" value="auto"/>
   <preference name="permissions" value="none"/>
   <feature name="SplashScreen">
     <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen"/>

@@ -27,22 +27,21 @@
         </ion-list>
         <br ng-if="resources.length">
 
-        <ion-list ng-if="events.length">
+        <ion-list ng-if="showEvents">
             <div class="item item-divider">{{"__ACTIVITIES__" | translate}}</div>
             <event-row ng-repeat="event in events" event="event"></event-row>
+        </ion-list>
+        <br ng-if="showEvents">
 
+        <ion-list ng-if="grades.length > 0">
             <div class="item item-divider" ng-if="grades.length > 0">{{"__FINAL_GRADES__" | translate}}</div>
-            <ion-item ng-repeat="grade in grades" class="item event">
-                <div class="row">
-                    <div class="col col-85">{{"__"+grade.name+"__" | translate}}</div>
-                    <div class="col col-15">
-                        <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
-                        <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
-                    </div>
-                </div>
+            <ion-item ng-repeat="grade in grades" class="item resource item-text-wrap item-icon-right">
+                {{"__"+grade.name+"__" | translate}}
+                <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
+                <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
             </ion-item>
         </ion-list>
-        <br ng-if="events.length">
+        <br ng-if="grades.length > 0">
 
         <ion-list>
             <div class="item item-divider">{{"__TOOLS__" | translate}}</div>
