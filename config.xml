@@ -71,6 +71,7 @@
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
   <plugin name="de.appplant.cordova.plugin.badge" source="pgb"/>
   <plugin name="de.appplant.cordova.plugin.local-notification" source="pgb"/>
+  <plugin name="de.appplant.cordova.plugin.background-mode" source="pgb"/>
   <plugin name="cordova-plugin-console" source="npm"/>
   <plugin name="cordova-plugin-splashscreen" source="npm"/>
   <plugin name="cordova-plugin-statusbar" source="npm"/>

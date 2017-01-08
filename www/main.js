@@ -107,7 +107,7 @@ angular.module('UOCNotifier', ['ionic', 'pascalprecht.translate', 'ngCordova'])
         return false;
     }, 101);
 
-    $cron.reset_alarm();
+    $cron.init();
   });
 
   function loadLanguage() {

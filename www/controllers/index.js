@@ -102,31 +102,20 @@ angular.module('UOCNotifier')
     };
 
     $scope.doRefresh = function() {
-        var promise,
-            isonline = $app.is_online();
+        $scope.state.loading = true;
+        $debug.print('Refresh');
 
-        if (!isonline) {
-            $debug.print('Offline');
-            promise = $q.reject();
-        } else if($queue.is_running()) {
-            $debug.print('Running queue...');
-            promise = $queue.finish_queue();
-        } else if (!$session.has_username_password()) {
-            $state.go('app.settings');
-            return $q.when();
-        } else {
-            $scope.state.session = true;
-            $scope.state.loading = true;
-            $debug.print('Refresh');
-            promise = $cron.run_tasks().then(function() {
-                $debug.print('End Refresh ok');
-            }).catch(function() {
-                $scope.state.session = !!$session.get();
-                $debug.print('End Refresh fail');
-            });
-        }
+        return $cron.run_tasks().then(function() {
+            $debug.print('End Refresh ok');
+        }).catch(function() {
+            if (!$session.has_username_password()) {
+                $state.go('app.settings');
+                return $q.when();
+            }
 
-        return promise.finally(function() {
+            $scope.state.session = !!$session.get();
+            $debug.print('End Refresh fail');
+        }).finally(function() {
             $scope.$broadcast('scroll.refreshComplete');
             $scope.loaded = true;
             $scope.state.loading = false;
