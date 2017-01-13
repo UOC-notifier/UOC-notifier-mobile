@@ -3,9 +3,9 @@ angular.module('UOCNotifier')
 .factory('$notifications', function($settings, $storage, $cordovaLocalNotification, $cordovaBadge, $debug, $translate) {
 
     var self = {},
-        notificationId = 0;
+        notificationId = 5;
 
-    self.notify = function(body, translateParams) {
+    self.notify = function(body, translateParams, id) {
         if (!body) {
             return;
         }
@@ -14,18 +14,36 @@ angular.module('UOCNotifier')
 
         save_has_news(true);
         if ($settings.get_notification()) {
+            id = id || notificationId++;
             $debug.print(body);
             // timeout = timeout == undefined ? 3000 : timeout;
             try {
                 $cordovaLocalNotification.schedule({
-                    id: notificationId++,
+                    id: id,
                     title: 'UOC notifier',
                     text: body,
-                    icon: 'res://icon'
+                    icon: 'res://icon',
+                    sound: null
                 });
             } catch(err) {
 
             }
+        }
+    };
+
+    self.cancel_notification = function(id) {
+        try {
+            $cordovaLocalNotification.clear(id);
+        } catch(err) {
+
+        }
+    };
+
+    self.cancel_all_notifications = function() {
+        try {
+            $cordovaLocalNotification.clearAll();
+        } catch(err) {
+
         }
     };
 
@@ -70,9 +88,11 @@ angular.module('UOCNotifier')
         // Set icon
         if (messages > 0) {
             if (messages > old_messages && messages >= critical) {
-                self.notify('NOTIFICATION_UNREAD', {messages: messages});
+                self.notify('NOTIFICATION_UNREAD', {messages: messages}, 3);
             }
             color = messages >= critical ? '#AA0000' : '#EB9316';
+        } else {
+            self.cancel_notification(3);
         }
 
         $debug.print("Check messages: Old "+old_messages+" New "+messages);

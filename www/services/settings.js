@@ -59,7 +59,7 @@ angular.module('UOCNotifier')
 
     // OPTIONS - CHECK INTERVAL
     self.get_interval = function() {
-        return $storage.get_option_int("check_interval", 20);
+        return $storage.get_option_int("check_interval", 30);
     };
 
     self.save_interval = function(minutes) {
@@ -91,6 +91,15 @@ angular.module('UOCNotifier')
     self.save_notification = function(notify) {
         $storage.set_option("notification", notify);
     };
+
+    self.get_bgchecking = function() {
+        return $storage.get_option_bool("bgchecking", false);
+    };
+
+    self.save_bgchecking = function(bgchecking) {
+        $storage.set_option("bgchecking", bgchecking);
+    };
+
 
     //OPTIONS - SHOW AGENDA
     self.get_show_agenda = function() {

@@ -91,7 +91,9 @@ angular.module('UOCNotifier')
             if (matchs) {
                 var session = matchs[1];
                 if (!is_working()) {
-                    $notifications.notify('UOC_WORKING');
+                    $notifications.notify('UOC_WORKING', 1);
+                } else {
+                    $notifications.cancel_notification(1);
                 }
                 save_session(session);
                 $debug.print('Session! '+session);

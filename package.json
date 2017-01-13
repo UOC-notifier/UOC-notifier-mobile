@@ -1,7 +1,7 @@
 {
   "name": "UOC-notifier",
-  "version": "1.1.1",
-  "description": "UOC-notifier: An Ionic project",
+  "version": "1.4",
+  "description": "UOC-notifier: Notifier of news on UOC",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",

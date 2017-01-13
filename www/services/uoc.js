@@ -192,14 +192,14 @@ angular.module('UOCNotifier')
             angular.forEach(items, function(item) {
                 item = rssitem_to_json(item);
 
-                if (item.TYPE == "ANNOUNCEMENT" && item.title != "" && item.description != "") {
+                if (item.category == "ANNOUNCEMENT" && item.title != "" && item.description != "") {
                     var announcement = {
                         title: $utils.get_html_realtext(item.title),
                         description: $utils.get_html_realtext(item.description),
                         link: item.link
                     };
 
-                    announcement.date = $date.formatDate(item.pubDate);
+                    announcement.date = $date.formatDate(item.pubdate);
 
                     announcements.push(announcement);
                 }
@@ -461,7 +461,9 @@ angular.module('UOCNotifier')
         $settings.save_mails_unread(mails);
         $debug.print("Check mails: "+mails);
         if (mails > 0 && old_mails < mails && mails >= $settings.get_critical()) {
-            $notifications.notify('NOTIFICATION_MAIL', {messages: mails});
+            $notifications.notify('NOTIFICATION_MAIL', {messages: mails}, 2);
+        } else if (mails <= 0) {
+            $notifications.cancel_notification(2);
         }
     }
 
