@@ -1,6 +1,6 @@
 angular.module('UOCNotifier')
 
-.controller('ClassroomCtrl', function($scope, $stateParams, $state, $classes, $date, $app, $settings, $events, $session,
+.controller('ClassroomCtrl', function($scope, $stateParams, $state, $classes, $date, $app, $settings, $events, $session, $uoc,
             $translate, $debug) {
 
     var classroom,
@@ -42,8 +42,6 @@ angular.module('UOCNotifier')
             }
         }
 
-
-
         $debug.log(classroom);
     }
 
@@ -55,24 +53,36 @@ angular.module('UOCNotifier')
                 classroomId: classroom.domain,
                 subjectId: classroom.domainassig
             };
-        $app.open_in_app(link, data);
+        $app.open_in_app(link, data, false, 'classroom', classroom);
     };
 
     $scope.openResource = function(resource) {
+        var promise;
         if (resource.link) {
-            $app.open_in_app(resource.link, {}, true);
+            $app.open_in_app(resource.link, {}, true, 'resource', {resource: resource, classroom: classroom});
         } else {
-            $app.open_in_app('/webapps/bustiaca/listMails.do', {l: resource.code}, true);
+            $app.open_in_app('/webapps/bustiaca/listMails.do', {l: resource.code}, true, 'resource', {resource: resource, classroom: classroom});
         }
     };
 
-    $scope.openMaterials = function() {
-        var link = '/webapps/aulaca/classroom/Materials.action',
-            data = {
-                classroomId: classroom.domain,
-                subjectId: classroom.domainassig
-            };
-        $app.open_in_app(link, data);
+    $scope.gotoUsers = function() {
+        $state.go('app.users', {code: classroom.code});
+    };
+
+    $scope.gotoMaterials = function() {
+        $uoc.retrieve_materials(classroom).then(function(materials) {
+            if (materials.length > 0) {
+                $state.go('app.materials', {code: classroom.code});
+            } else {
+                var link = '/webapps/aulaca/classroom/Materials.action',
+                    data = {
+                        classroomId: classroom.domain,
+                        subjectId: classroom.domainassig
+                    };
+                $app.open_in_app(link, data);
+            }
+        });
+
     };
 
     $scope.openTeachingPlan = function() {

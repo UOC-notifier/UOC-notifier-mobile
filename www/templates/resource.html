@@ -1,6 +1,6 @@
 <ion-item class="item resource item-text-wrap item-icon-right" ng-click="action()">
     {{name}}
-    <span class="badge" ng-if="hasmessagecount" ng-class="{'badge-assertive': messages > critical, 'badge-energized': messages <= critical && messages > 0, 'badge-balanced': messages == 0}">
+    <span class="badge" ng-if="hasmessagecount" ng-class="{'badge-assertive': notify && messages > critical, 'badge-energized': notify && messages <= critical && messages > 0, 'badge-balanced': notify && messages == 0, 'badge-dark': !notify}">
         {{messages}} / {{allmessages}}
     </span>
     <span class="badge badge-assertive ion-flag" ng-if="!hasmessagecount && hasnews">

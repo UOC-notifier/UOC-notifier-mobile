@@ -1,13 +1,66 @@
 angular.module('UOCNotifier')
 
 .factory('$app', function($session, $settings, $cordovaNetwork, $cordovaInAppBrowser, $cordovaLocalNotification, $cordovaBadge,
-        $rootScope, $utils, $translate, $ionicHistory, $state, $q) {
+        $rootScope, $utils, $translate, $ionicHistory, $state, $q, $ionicPopup, $timeout, $classes, $cache) {
 
     var self = {};
 
     $rootScope.$on('$cordovaInAppBrowser:loaderror', function(e, event){
+        browserInfo = false;
         $cordovaInAppBrowser.close();
     });
+
+    $rootScope.$on('$cordovaInAppBrowser:exit', function(e, event){
+        if (browserInfo) {
+            var type = browserInfo.type,
+                data = browserInfo.data;
+            switch (browserInfo.type) {
+                case 'resource':
+                    invalidateResource(data.classroom, data.resource);
+                    break;
+                case 'classroom':
+                    invalidateClassroom(data);
+                    break;
+                case 'all':
+                    invalidateAll();
+                    break;
+            }
+        }
+        browserInfo = false;
+    });
+
+    function invalidateResource(classroom, resource) {
+        var args = {
+            sectionId : '-1',
+            pageSize : 0,
+            pageCount: 0,
+            classroomId: classroom.domain,
+            subjectId: classroom.domainassig,
+            resourceId: resource.code
+        };
+        $cache.invalidate_cache( '/webapps/aulaca/classroom/LoadResource.action', args);
+    }
+
+    function invalidateClassroom(classroom) {
+        angular.forEach(classroom.resources, function(resource) {
+            invalidateResource(classroom, resource)
+        });
+        if (!classroom.final_grades && !classroom.stats) {
+            var args = {
+                classroomId: classroom.domain,
+                subjectId: classroom.domainassig,
+                javascriptDisabled: false
+            };
+
+            $cache.invalidate_cache('/webapps/aulaca/classroom/timeline/timeline', args);
+        }
+    }
+
+    function invalidateAll() {
+        angular.forEach($classes.get_notified(), function(classroom) {
+            invalidateClassroom(classroom)
+        });
+    }
 
     function open_url_session(url, where, data, nossl) {
         var session = $session.get();
@@ -32,12 +85,13 @@ angular.module('UOCNotifier')
         return open_url_session(url, '_system', data, nossl);
     };
 
-    self.open_in_app = function(url, data, nossl) {
-        return open_url_session(url, '_blank', data, nossl);
+    self.open_in_app = function(url, data, nossl, browserType, browserData) {
+        browserInfo = browserType ?  {type: browserType, data: browserData} : false;
+        return open_url_session(url, '_self', data, nossl);
     };
 
     self.open_url = function(url, where) {
-        where = where || '_blank';
+        where = where || '_self';
 
         var options = {
             enableViewPortScale: 'yes'
@@ -60,18 +114,26 @@ angular.module('UOCNotifier')
     self.goBack = function() {
         var currentView = $ionicHistory.currentView();
         if (currentView.stateName == 'app.main') {
-            // We're in main, exit!
-            ionic.Platform.exitApp();
-        } else {
-            var backView = $ionicHistory.backView();
-            if (!backView) {
-                // Go to main first.
-                self.gotoMain();
-            } else {
-              // There is a back view, go to it
-              backView.go();
+            // We're in main, exit or minimize!
+            if ($settings.get_interval() && $settings.get_bgchecking()) {
+                if (window.plugins && window.plugins.appMinimize) {
+                    window.plugins.appMinimize.minimize();
+                    return;
+                }
             }
+
+            ionic.Platform.exitApp();
+            return;
         }
+
+        var backView = $ionicHistory.backView();
+        if (!backView) {
+            // Not in main, go to main first.
+            self.gotoMain();
+            return;
+        }
+        // There is a back view, go to it
+        backView.go();
     };
 
     self.gotoMain = function() {
@@ -79,6 +141,19 @@ angular.module('UOCNotifier')
             disableBack: true
         });
         return $state.go('app.main');
+    };
+
+    self.showError = function(message, autocloseTime) {
+        var popup = $ionicPopup.alert({
+                title: 'Ooops',
+                template: message // Add format-text to handle links.
+            });
+
+        if (typeof autocloseTime != 'undefined' && !isNaN(parseInt(autocloseTime))) {
+            $timeout(function() {
+                popup.close();
+            }, parseInt(autocloseTime));
+        }
     };
 
     return self;

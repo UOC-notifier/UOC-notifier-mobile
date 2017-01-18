@@ -1,5 +1,5 @@
 <ion-view view-title="{{title}}">
-    <ion-content class="has-footer">
+    <ion-content ng-class="{'has-footer' : state.session}">
         <div class="card" ng-if="classroom.final_grades && classroom.stats">
             <div class="item item-text-wrap">{{"__END_OF_CLASSROOMS__" | translate}}</div>
         </div>
@@ -23,7 +23,7 @@
             <div class="item item-divider">{{"__RESOURCES__" | translate}}</div>
             <resource ng-repeat="resource in classroom.resources" name="resource.title" action="openResource(resource)"
               messages="resource.messages" allmessages="resource.all_messages" hasmessagecount="resource.has_message_count()"
-              hasnews="resource.has_news()">
+              hasnews="resource.has_news()" notify="classroom.notify">
         </ion-list>
         <br ng-if="resources.length">
 
@@ -45,22 +45,27 @@
 
         <ion-list>
             <div class="item item-divider">{{"__TOOLS__" | translate}}</div>
-                <ion-item ng-click="openMail()" class="item-text-wrap"><i class="icon ion-email"></i> {{"__TEACHER__" | translate}} <strong>{{classroom.consultor}}</strong><br>
-                    <span ng-if="classroom.consultorlastviewed">
+                <ion-item ng-click="openMail()" class="item-text-wrap item-icon-left">
+                    <i class="icon ion-email"></i>
+                    <h2>{{"__TEACHER__" | translate}} <strong>{{classroom.consultor}}</strong></h2>
+                    <p ng-if="classroom.consultorlastviewed">
                         <span ng-if="consultorlastviewtranslate.time == '00:00'">{{"__VIEWED_LAST_DATE__" | translate: consultorlastviewtranslate}}</span>
                         <span ng-if="consultorlastviewtranslate.time != '00:00'">{{"__VIEWED_LAST_TIME__" | translate: consultorlastviewtranslate}}</span>
-                    </span>
+                    </p>
+                    <p ng-if="classroom.aula"><strong>{{'__CLASSROOM__' |translate}}</strong> {{classroom.aula}}
+                        <span ng-if="classroom.subject_code"> ({{classroom.subject_code}})</span></p>
                 </ion-item>
-                <ion-item ng-click="openMaterials()" class="item-text-wrap">
+                <ion-item ng-click="gotoUsers()" class="item-text-wrap item-icon-left">
+                    <i class="icon ion-person"></i> {{"__USERS__" | translate}}
+                </ion-item>
+                <ion-item ng-click="gotoMaterials()" class="item-text-wrap item-icon-left">
                     <i class="icon ion-briefcase"></i> {{"__EQUIPMENT__" | translate}}
                 </ion-item>
-                <ion-item ng-if="classroom.stats" ng-click="openStats()" class="item-text-wrap">
+                <ion-item ng-if="classroom.stats" ng-click="openStats()" class="item-text-wrap item-icon-left">
                     <i class="icon ion-stats-bars"></i> {{"__STATS__" | translate}}
                 </ion-item>
-                <ion-item ng-if="classroom.type != 'TUTORIA'" ng-click="openTeachingPlan()" class="item-text-wrap">
+                <ion-item ng-if="classroom.type != 'TUTORIA'" ng-click="openTeachingPlan()" class="item-text-wrap item-icon-left">
                     <i class="icon ion-easel"></i> {{"__TEACHING_PLAN__" | translate}}<br>
-                    <span ng-if="classroom.aula"><strong>{{'__CLASSROOM__' |translate}}</strong> {{classroom.aula}}</span>
-                    <span ng-if="classroom.subject_code"> ({{classroom.subject_code}})</span>
                 </ion-item>
         </ion-list>
     </ion-content>

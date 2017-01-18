@@ -22,27 +22,30 @@
   <ion-side-menu side="left">
     <ion-content>
       <ion-list>
-        <ion-item menu-close ui-sref="app.main">
+        <ion-item class="item-icon-left" menu-close ui-sref="app.main">
           <i class="icon ion-home"></i> {{"TITLE" | translate}}
         </ion-item>
-        <div class="item item-divider" ng-if="classes">{{"__CLASSROOMS__" | translate}}</div>
-        <ion-item menu-close ng-repeat="class in classes" ng-click="gotoClassroom(class.code)">
+        <div class="item item-divider" ng-if="allclasses.length > 0">{{"__CLASSROOMS__" | translate}}</div>
+        <ion-item menu-close ng-repeat="class in allclasses | orderBy:'title' | orderBy: 'type' | orderBy:'-notify' " ng-click="gotoClassroom(class.code)">
           <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
-          <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.messages > state.critical, 'badge-energized': class.messages <= state.critical}">
+          <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.notify && class.messages > state.critical, 'badge-energized': class.notify && class.messages <= state.critical, 'badge-dark': !class.notify}">
             {{class.messages}}
           </span>
         </ion-item>
-        <div class="item item-divider"></div>
-        <ion-item menu-close ng-click="gotoPage('tasks')" ng-if="hasAssignments">
+        <div class="item item-divider" ng-if="hasAssignments || state.session"></div>
+        <ion-item class="item-icon-left" menu-close ng-click="gotoPage('tasks')" ng-if="hasAssignments">
             <i class="icon ion-flag"></i> {{"__ASSIGNMENTS__" | translate}}
         </ion-item>
-        <ion-item menu-close ng-click="gotoPage('links')" ng-if="state.session">
+        <ion-item class="item-icon-left" menu-close ng-click="gotoPage('links')" ng-if="state.session">
             <i class="icon ion-bookmark"></i> {{"__LINKS_TO_CAMPUS__" | translate}}
           </ion-item>
         </ion-list>
         <div class="item item-divider"></div>
-        <ion-item menu-close ng-click="gotoPage('settings')">
+        <ion-item class="item-icon-left" menu-close ng-click="gotoPage('settings')">
           <i class="icon ion-settings"></i> {{"__OPTIONS__" | translate}}
+        </ion-item>
+        <ion-item class="item-icon-left" menu-close ng-click="gotoPage('login')">
+          <i class="icon ion-person"></i> {{"__LOGIN__" | translate}}
         </ion-item>
       </ion-list>
     </ion-content>

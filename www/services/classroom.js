@@ -99,8 +99,6 @@ angular.module('UOCNotifier')
 	};
 
 	Classroom.prototype.add_resource = function(resource) {
-		if(!this.notify) return;
-
 		var idx = this.get_index(resource.code);
 		if (idx >= 0) {
 			this.resource_merge(idx, resource);

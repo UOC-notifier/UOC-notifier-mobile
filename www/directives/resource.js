@@ -9,7 +9,8 @@ angular.module('UOCNotifier')
             allmessages: '=?',
             hasmessagecount: '=?',
             hasnews: '=?',
-            action: '&?'
+            action: '&?',
+            notify: '=?'
         },
         templateUrl: 'templates/resource.html',
         link: function(scope, elem, attr) {

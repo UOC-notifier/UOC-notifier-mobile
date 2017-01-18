@@ -59,15 +59,11 @@ angular.module('UOCNotifier')
 
     // OPTIONS - CHECK INTERVAL
     self.get_interval = function() {
-        return $storage.get_option_int("check_interval", 30);
+        return $storage.get_option_bool("check_interval", true);
     };
 
-    self.save_interval = function(minutes) {
-        // Do not allow < 5 intervals to not saturate.
-        if (minutes < 5 && minutes !== 0) {
-            minutes = 5;
-        }
-        $storage.set_option("check_interval", minutes);
+    self.save_interval = function(checking) {
+        $storage.set_option("check_interval", checking);
     };
 
     //OPTIONS - CRITICAL

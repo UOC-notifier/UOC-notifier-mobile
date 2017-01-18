@@ -3,8 +3,6 @@
     float: left;
     width: 20px;
     height: 20px;
-    border-width: 1px;
-    border-style: solid;
     border-radius: 4px;
     background: gray;
     margin-right: 5px;
@@ -12,7 +10,7 @@
 }
 
 .item.class {
-    padding: 16px;
+    padding: 16px 1px 16px 8px;
 }
 
 .item.class .list {
@@ -148,7 +146,8 @@ event-date .near {
     padding-right: 16px;
 }
 
-.item-text-wrap.item.item-toggle div {
+.item-text-wrap.item.item-toggle div,
+.col.wrap-text {
     overflow: visible;
     text-overflow: clip;
     white-space: normal;
@@ -159,7 +158,7 @@ event-date .near {
     max-width: none;
 }
 
-.item input {
+.item input[type="number"] {
     text-align: right;
 }
 
@@ -188,4 +187,12 @@ event-date .badge.badge-inline {
     top: 0;
     right: 0;
     display: inline;
+}
+
+.button-bar {
+    flex-flow: row wrap;
+}
+
+.button-bar > .button {
+    flex-basis: 20%;
 }

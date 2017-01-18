@@ -1,9 +1,6 @@
 <ion-view view-title="UOC Notifier">
-    <ion-content class="has-footer">
+    <ion-content ng-class="{'has-footer' : state.session}">
         <ion-refresher pulling-text="{{'__PTR__' | translate}}" on-refresh="doRefresh()"></ion-refresher>
-            <div class="card" ng-if="!state.loading && !state.session" ng-click="openNoSessionInApp('https://cv.uoc.edu/webapps/cas/login?renew=true')">
-                <div class="item item-text-wrap" ng-bind-html=" '__INCORRECT_USER__' | translate " ></div>
-            </div>
             <div class="card" ng-repeat="announcement in announcements">
                 <div href="#" class="item item-icon-left item-text-wrap" ng-click="toggleAnnouncement(announcement)">
                     <i class="icon ion-speakerphone"></i>
@@ -15,8 +12,12 @@
                 </div>
                 <div class="item item-body item-text-wrap" ng-bind-html="announcement.description" ng-show="announcement.show">{{announcement.description}}</div>
             </div>
+
+            <div class="card list" ng-if="events_today.length > 0">
+                <event-row ng-repeat="event in events_today" event="event" class="item event"></event-row>
+            </div>
         <ion-list>
-            <ion-item ng-repeat="class in classes" ng-click="gotoClassroom(class.code)" class="item class item-text-wrap">
+            <ion-item ng-repeat="class in classes | orderBy:'title' | orderBy: 'type'" ng-click="gotoClassroom(class.code)" class="item class item-text-wrap">
                 <h2>
                     <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
                     <span class="badge" ng-if="class.messages > 0" ng-class="{'badge-assertive': class.messages > state.critical, 'badge-energized': class.messages <= state.critical}">
@@ -26,7 +27,7 @@
                 <ion-list ng-if="class.messages || class.events_today.length > 0 || class.grades.length > 0">
                     <resource ng-repeat="resource in class.resources" ng-if="resource.messages > 0 || resource.has_news()" name="resource.title"
                       messages="resource.messages" allmessages="resource.all_messages" hasmessagecount="resource.has_message_count()"
-                      hasnews="resource.has_news()">
+                      hasnews="resource.has_news()" notify="class.notify">
                     </resource>
 
                     <event-row ng-repeat="event in class.events_today" event="event"></event-row>

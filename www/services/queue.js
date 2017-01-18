@@ -1,23 +1,23 @@
 angular.module('UOCNotifier')
 
-.factory('$queue', function($http, $q, $debug, $session, $utils, $app) {
+.factory('$queue', function($http, $q, $debug, $session, $utils, $app, $cache) {
 
     var self = {},
-        promises = [];
+        promises = {};
 
-    self.get = function(url, data, no_ssl) {
-        return request('GET', url, data, no_ssl);
+    self.get = function(url, data, no_ssl, cacheMinutes) {
+        return request('GET', url, data, no_ssl, cacheMinutes);
     };
 
-    self.post = function(url, data, no_ssl) {
-        return request('POST', url, data, no_ssl);
+    self.post = function(url, data, no_ssl, cacheMinutes) {
+        return request('POST', url, data, no_ssl, cacheMinutes);
     };
 
-    self.json = function(url, data, no_ssl) {
-        return request('json', url, data, no_ssl);
+    self.json = function(url, data, no_ssl, cacheMinutes) {
+        return request('json', url, data, no_ssl, cacheMinutes);
     };
 
-    function request(type, url, data, no_ssl) {
+    function request(type, url, data, no_ssl, cacheMinutes, tryed) {
         return $session.get_retrieve().then(function(session) {
             $debug.print('Run ' + url);
 
@@ -25,13 +25,20 @@ angular.module('UOCNotifier')
                 data = {};
             }
 
-            var id = $utils.utf8_to_b64(url + JSON.stringify(data));
+            var id = $cache.get_cache_key(url, data);
             if (promises[id]) {
                 return promises[id].promise;
             }
 
+            if ($cache.is_cached(id)) {
+                return $q.when($cache.get_cache(id));
+            }
 
-            var query = {};
+            var deferred = $q.defer(),
+                req,
+                query = {};
+
+            promises[id] = deferred;
 
             query.url = $utils.get_url(url, !no_ssl);
 
@@ -64,20 +71,32 @@ angular.module('UOCNotifier')
                 query.data = data;
             }
 
-            var deferred = $q.defer(),
-                req;
-
-            promises[id] = deferred;
-
             $http(query).then(function(resp) {
+                $cache.set_cache(id, resp.data, cacheMinutes);
                 return deferred.resolve(resp.data);
             }, function(resp) {
                 $debug.error('ERROR: Cannot fetch ' + url);
                 $debug.log(resp);
+
+                var reset_promise = $q.when();
                 if (resp.status == 401) {
-                    $session.reset();
+                    reset_promise = $session.reset();
                 }
-                return deferred.reject();
+
+                if (tryed) {
+                    // Emergency cache.
+                    var resp = $cache.get_cache(id);
+                    if (resp) {
+                        return deferred.resolve(resp);
+                    }
+                    return deferred.reject();
+                } else {
+                    $debug.error('Trying again...');
+                    // Try again.
+                    return reset_promise.then(function() {;
+                        return request(type, url, data, no_ssl, cacheMinutes, true);
+                    });
+                }
             }).finally(function() {
                 delete promises[id];
             });
@@ -87,7 +106,7 @@ angular.module('UOCNotifier')
     }
 
     self.is_running = function() {
-        return !!promises.length;
+        return !!Object.keys(promises).length;
     };
 
     self.finish_queue = function() {

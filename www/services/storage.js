@@ -26,6 +26,9 @@ angular.module('UOCNotifier')
         if (typeof value == 'undefined' || value === null) {
             return default_value;
         }
+        if (!isNaN(parseInt(value))  && parseInt(value) > 0) {
+            return true;
+        }
         return value == "true";
     };
 

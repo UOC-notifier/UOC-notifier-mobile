@@ -1,11 +1,10 @@
 angular.module('UOCNotifier')
 
-.factory('$cron', function($settings, $storage, $debug, $queue, $session, $uoc, $interval, $q, $app, $translate) {
+.factory('$cron', function($settings, $storage, $debug, $queue, $session, $uoc, $interval, $q, $app, $translate, $events) {
 
     var self = {},
         bgService = false,
         timer = false,
-        interval = false,
         init = false;
 
     self.init = function() {
@@ -32,36 +31,31 @@ angular.module('UOCNotifier')
     };
 
     self.reset_alarm = function() {
-        var oldInterval = interval;
-        interval = $settings.get_interval();
-        interval = interval > 0 ? interval : false;
+        var check = $settings.get_interval();
 
         if (bgService) {
             // Set background service.
-            if (interval > 0 && $settings.get_bgchecking()) {
+            if (check && $settings.get_bgchecking()) {
                 bgService.enable();
             } else {
                 bgService.disable();
             }
         }
 
-        if (interval == oldInterval) {
-            return;
-        }
-
-        if (timer) {
-            $interval.cancel(timer);
-        }
-
-        if (interval > 0) {
+        if (check && !timer) {
             // Enable timer.
             timer = $interval(function() {
                 self.run_tasks();
-            }, interval * 60000);
-        } else {
+            }, 30 * 60000);
+        } else if (!check && timer) {
             // Disable timer.
+            $interval.cancel(timer);
             timer = false;
         }
+    };
+
+    self.is_running = function() {
+        return $queue.is_running();
     };
 
     self.run_tasks = function() {
@@ -71,8 +65,11 @@ angular.module('UOCNotifier')
         }
 
         if ($queue.is_running()) {
+            $events.trigger('tasksChange', true);
             $debug.print('Running queue...');
-            return $queue.finish_queue();
+            return $queue.finish_queue().finally(function() {
+                $events.trigger('tasksChange');
+            });
         }
 
         if (!$session.has_username_password()) {
@@ -83,7 +80,10 @@ angular.module('UOCNotifier')
             $debug.print('Background checking...');
         }
 
-        return $uoc.check_messages();
+        $events.trigger('tasksChange', true);
+        return $uoc.check_messages().finally(function() {
+            $events.trigger('tasksChange');
+        });
     };
 
     return self;

@@ -70,9 +70,7 @@ angular.module('UOCNotifier')
 		});*/
 
 		for (var i in classes) {
-			if (classes[i].notify) {
-				classes[i].sort_things();
-			}
+			classes[i].sort_things();
 		}
 
 		$debug.print(classes);
@@ -97,10 +95,8 @@ angular.module('UOCNotifier')
 
 	self.get_class_by_event = function(eventid) {
 		for (var i in classes) {
-			if (classes[i].notify) {
-				if (classes[i].get_event_idx(eventid) >= 0) {
-					return classes[i];
-				}
+			if (classes[i].get_event_idx(eventid) >= 0) {
+				return classes[i];
 			}
 		}
 		return false;
@@ -108,10 +104,8 @@ angular.module('UOCNotifier')
 
 	self.get_class_by_acronym = function(acronym) {
 		for (var i in classes) {
-			if (classes[i].notify) {
-				if (classes[i].get_acronym() == acronym) {
-					return classes[i];
-				}
+			if (classes[i].get_acronym() == acronym) {
+				return classes[i];
 			}
 		}
 		return false;
@@ -178,38 +172,36 @@ angular.module('UOCNotifier')
 				classr.consultormail = classl.consultormail;
 				classr.consultorlastviewed = classl.consultorlastviewed;
 				classr.set_notify(classl.notify);
-				if (classl.notify) {
-					classr.final_grades = classl.final_grades;
-					for (var j in classl.resources) {
-						var resourcel = classl.resources[j];
-						var resource = new Resource(resourcel.title, resourcel.code);
-						resource.set_messages(resourcel.messages, resourcel.all_messages);
-						resource.set_pos(resourcel.pos);
-						resource.set_link(resourcel.link);
-						resource.type = resourcel.type;
-						resource.news = resourcel.news;
-						classr.add_resource(resource);
-					}
-					for (var k in classl.events) {
-						var evl = classl.events[k];
-						var ev = new CalEvent(evl.name, evl.eventId, evl.type);
-						ev.start = evl.start;
-						ev.end = evl.end;
-						ev.grading = evl.grading;
-						ev.solution = evl.solution;
-						ev.link = evl.link;
-						ev.graded = evl.graded;
-						ev.committed = evl.committed;
-						ev.completed = evl.completed;
-						ev.viewed = evl.viewed;
-						ev.commenttext = evl.commenttext;
-						ev.commentdate = evl.commentdate;
-						classr.add_event(ev);
-					}
-					for (var l in classl.grades) {
-						var g = classl.grades[l];
-						classr.add_grade(g.name, g.grade, g.prov);
-					}
+				classr.final_grades = classl.final_grades;
+				for (var j in classl.resources) {
+					var resourcel = classl.resources[j];
+					var resource = new Resource(resourcel.title, resourcel.code);
+					resource.set_messages(resourcel.messages, resourcel.all_messages);
+					resource.set_pos(resourcel.pos);
+					resource.set_link(resourcel.link);
+					resource.type = resourcel.type;
+					resource.news = resourcel.news;
+					classr.add_resource(resource);
+				}
+				for (var k in classl.events) {
+					var evl = classl.events[k];
+					var ev = new CalEvent(evl.name, evl.eventId, evl.type);
+					ev.start = evl.start;
+					ev.end = evl.end;
+					ev.grading = evl.grading;
+					ev.solution = evl.solution;
+					ev.link = evl.link;
+					ev.graded = evl.graded;
+					ev.committed = evl.committed;
+					ev.completed = evl.completed;
+					ev.viewed = evl.viewed;
+					ev.commenttext = evl.commenttext;
+					ev.commentdate = evl.commentdate;
+					classr.add_event(ev);
+				}
+				for (var l in classl.grades) {
+					var g = classl.grades[l];
+					classr.add_grade(g.name, g.grade, g.prov);
 				}
 				self.add_class(classr);
 			}
@@ -229,7 +221,11 @@ angular.module('UOCNotifier')
 	};
 
 	self.get_all = function () {
-		return classes;
+		var classrooms = [];
+		for (var i in classes) {
+			classrooms.push(classes[i]);
+		}
+		return classrooms;
 	};
 
 	self.get_notified = function () {

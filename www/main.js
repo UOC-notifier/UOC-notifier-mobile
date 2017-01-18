@@ -44,6 +44,15 @@ angular.module('UOCNotifier', ['ionic', 'pascalprecht.translate', 'ngCordova'])
         }
       }
     })
+    .state('app.login', {
+      url: '/login',
+      views: {
+        'menu': {
+          templateUrl: 'templates/login.html',
+          controller: 'LoginCtrl'
+        }
+      }
+    })
     .state('app.classroom', {
       url: '/class/:code',
       views: {
@@ -59,6 +68,24 @@ angular.module('UOCNotifier', ['ionic', 'pascalprecht.translate', 'ngCordova'])
         'menu': {
           templateUrl: 'templates/event.html',
           controller: 'EventCtrl'
+        }
+      }
+    })
+    .state('app.materials', {
+      url: '/materials/:code',
+      views: {
+        'menu': {
+          templateUrl: 'templates/materials.html',
+          controller: 'MaterialsCtrl'
+        }
+      }
+    })
+    .state('app.users', {
+      url: '/users/:code',
+      views: {
+        'menu': {
+          templateUrl: 'templates/users.html',
+          controller: 'UsersCtrl'
         }
       }
     })

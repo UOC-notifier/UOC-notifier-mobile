@@ -1,23 +1,17 @@
 angular.module('UOCNotifier')
 
-.controller('SettingsCtrl', function($scope, $state, $ionicHistory, $settings, $classes, $date, $session, $cron, $events, $app,
-            $notifications) {
+.controller('SettingsCtrl', function($scope, $state, $settings, $classes, $date, $events, $notifications, $cron) {
 
-    var user,
-        observer = $events.on('classesUpdated', $state.current.name, function() {
+    var observer = $events.on('classesUpdated', $state.current.name, function() {
             load_view();
         });
 
     function load_view() {
         $scope.allclasses = $classes.get_all();
 
-        user = $session.get_user();
         $scope.settings = {
-            username: user.username,
-            password: user.password,
             uni: $settings.get_uni(),
-            check_interval: $settings.get_interval() <= 0 ? 30 : $settings.get_interval(),
-            auto_check: $settings.get_interval() > 0,
+            auto_check: $settings.get_interval(),
             critical: $settings.get_critical(),
             notification: $settings.get_notification(),
             today_tab: $settings.get_today(),
@@ -35,22 +29,18 @@ angular.module('UOCNotifier')
         $scope.save_setting('mail');
         $scope.save_setting('notification');
         $scope.save_setting('today');
-        $scope.save_setting('user');
 
         $classes.save(true);
     }
 
-    $scope.set_classroom_notify = function(code) {
-        $classes.set_notify(code, $scope.allclasses[code].notify);
+    $scope.set_classroom_notify = function(classroom) {
+        $classes.set_notify(classroom.code, classroom.notify);
     };
 
     $scope.save_setting = function(setting) {
         switch (setting) {
             case 'interval':
-                var interval = $scope.settings.auto_check ? $scope.settings.check_interval : 0;
-                $settings.save_interval(interval);
-                $scope.settings.check_interval = $settings.get_interval() <= 0 ? 30 : $settings.get_interval();
-
+                $settings.save_interval($scope.settings.auto_check);
                 $settings.save_bgchecking($scope.settings.bg_checking);
 
                 $cron.reset_alarm();
@@ -74,16 +64,11 @@ angular.module('UOCNotifier')
                 $settings.save_today($scope.settings.today_tab);
                 $date.updateSettings();
                 break;
-            case 'user':
-                if ($session.save_user($scope.settings.username, $scope.settings.password)) {
-                    $classes.purge_all();
-                }
-                break;
         }
 
     };
 
-    $scope.$on('$destroy', function(){
+    $scope.$on('$destroy', function() {
         observer && observer.off && observer.off();
         save_all();
     });

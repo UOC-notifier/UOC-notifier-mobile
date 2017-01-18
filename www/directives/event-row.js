@@ -24,7 +24,8 @@ angular.module('UOCNotifier')
                     $date.isBeforeToday(event.solution)) ||
                 event.graded;
 
-            scope.titleColumnWidth = scope.showOnlyGrade ? 85 : 40;
+            scope.titleColumnWidth = scope.showOnlyGrade || event.type == "UOC" ? 85 : 40;
+            scope.wrapText = event.type == "UOC";
 
             scope.status = $utils.get_event_state(event);
             scope.icon = $utils.get_event_icon(event);

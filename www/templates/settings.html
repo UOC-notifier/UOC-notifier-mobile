@@ -1,20 +1,7 @@
 <ion-view view-title="{{'__OPTIONS__' | translate}}">
   <ion-content>
-    <form ng-submit="save()">
+    <form>
         <div class="list">
-          <div class="item item-divider">{{"__LOGIN__" | translate}}</div>
-            <label class="item item-input" for="username">
-              <i class="icon ion-person placeholder-icon"></i>
-              <input id="username" type="text" ng-model="settings.username" placeholder="{{ '__USER__' |translate }}">
-            </label>
-
-            <label class="item item-input" for="password">
-              <i class="icon ion-locked placeholder-icon"></i>
-              <input id="password" type="password" ng-model="settings.password" placeholder="{{ '__PASSWORD__' |translate }}">
-            </label>
-
-          <div class="item item-divider">{{"__OPTIONS__" | translate}}</div>
-
             <label class="item item-input item-select" for="uni">
               <div class="input-label">
                 <i class="icon ion-earth"></i> {{"__UNI__" | translate}}
@@ -30,15 +17,8 @@
             </ion-toggle>
 
             <ion-toggle ng-model="settings.bg_checking" class="item-text-wrap" ng-if="settings.auto_check" ng-change="save_setting('interval')">
-              <i class="icon ion-clock"></i> {{"__BG_CHECK__" |translate}}
+              <i class="icon ion-radio-waves"></i> {{"__BG_CHECK__" |translate}}
             </ion-toggle>
-
-            <label class="item item-input item-stacked-label" for="check_interval" ng-if="settings.auto_check">
-              <div class="input-label">
-                <i class="icon ion-clock"></i> {{"__INTERVAL__" | translate}}
-              </div>
-              <input id="check_interval" type="number" ng-model="settings.check_interval" min="30" step="10" ng-change="save_setting('interval')">
-            </label>
 
             <label class="item item-input item-stacked-label item-text-wrap" for="critical">
               <div class="input-label">
@@ -55,8 +35,6 @@
               <i class="icon ion-speakerphone"></i> {{"__PUSH_NOTIFICATIONS__" |translate}}
             </ion-toggle>
 
-          <div class="item item-divider">{{"__SHOW__" | translate}}</div>
-
             <label class="item item-input item-stacked-label item-text-wrap" for="today_tab">
               <div class="input-label">
                 <i class="icon ion-flag"></i> {{"__UPCOMMING_DAYS__" | translate}}
@@ -68,7 +46,7 @@
           <i class="icon ion-alert-circled"></i> {{"__DISABLE_UNUSED_CLASSROOMS__" | translate}}
           </div>
 
-          <ion-toggle ng-repeat="classroom in allclasses" ng-model="classroom.notify" ng-change="set_classroom_notify(classroom.code)">
+          <ion-toggle ng-repeat="classroom in allclasses | orderBy:'title' | orderBy: 'type'" ng-model="classroom.notify" ng-change="set_classroom_notify(classroom)">
             <span class="class-color" style="background-color: #{{classroom.color}};"></span> {{classroom.title}}
           </ion-toggle>
         </div>

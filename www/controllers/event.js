@@ -59,7 +59,7 @@ angular.module('UOCNotifier')
     load_view()
 
     $scope.openEvent = function() {
-        $app.open_in_app(event.link);
+        $app.open_in_app(event.link, null, false, 'classroom', classroom);
     };
 
     $scope.$on('$destroy', function(){

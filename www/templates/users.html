@@ -1,0 +1,17 @@
+<ion-view view-title="{{acronym}} - {{'__USERS__' | translate}}">
+  <ion-content>
+    <div class="list" ng-show="loaded">
+      <ion-item ng-repeat="user in users" class="item-icon-left item-icon-right" ng-click="mailUser(user.email)">
+          <i class="icon ion-person" ng-class="{'balanced': user.connected, 'assertive': !user.connected}"></i>
+          <h2>{{user.fullName}}</h2>
+          <p ng-if="user.connected">{{"__CONNECTED__" | translate}}</p>
+          <p ng-if="!user.connected && user.lastLoginTime">
+            <span ng-if="user.lastviewtranslate.time == '00:00'">{{"__VIEWED_LAST_DATE__" | translate: user.lastviewtranslate}}</span>
+            <span ng-if="user.lastviewtranslate.time != '00:00'">{{"__VIEWED_LAST_TIME__" | translate: user.lastviewtranslate}}</span>
+          </p>
+          <p ng-if="!user.connected && !user.lastLoginTime">{{"__DISCONNECTED__" | translate}}</p>
+          <i class="icon ion-email"></i>
+      </ion-item>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,6 +1,6 @@
 <ion-item ng-if="show" class="item event {{status}}" ng-click="gotoEvent()">
     <div class="row">
-      <div class="col col-title col-{{titleColumnWidth}}">
+      <div class="col col-title col-{{titleColumnWidth}}" ng-class="{'wrap-text': wrapText}">
         <span ng-if="task" class="class-color" style="{{style}}"></span>
         <span ng-if="task">{{acronym}}</span>
         <i class="icon {{icon}} {{iconcolor}}"></i> {{name}}

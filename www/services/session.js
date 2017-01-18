@@ -19,6 +19,7 @@ angular.module('UOCNotifier')
         session = false;
         return self.retrieve().then(function() {
             $events.trigger('classesUpdated');
+            return $q.when();
         });
     };
 
@@ -29,6 +30,10 @@ angular.module('UOCNotifier')
         } else {
             return self.retrieve();
         }
+    };
+
+    self.session_ko = function() {
+        return self.is_online() && self.has_username_password() && !self.get();
     };
 
     self.retrieve = function() {
@@ -134,10 +139,16 @@ angular.module('UOCNotifier')
 
     // USER
     self.get_user = function() {
+        console.log('get username '+ get_username());
         return {
             username: get_username(),
             password: get_password()
         };
+    };
+
+    self.has_user_changed = function(newUsername) {
+        var oldusername = get_username();
+        return oldusername != newUsername;
     };
 
     self.save_user = function(username, password) {
@@ -145,18 +156,17 @@ angular.module('UOCNotifier')
             oldpassword = get_password();
 
         $storage.set_option("user_username", username);
+        console.log('set username ' + username);
 
         password = $utils.utf8_to_b64(password);
         $storage.set_option("user_password",password);
 
-        var changed = (oldusername != username);
-
         // Username or password changed
         if (oldusername != username || oldpassword != password) {
-            self.reset();
+            return self.reset();
         }
 
-        return changed;
+        return $q.when();
     };
 
     self.has_username_password = function() {

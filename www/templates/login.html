@@ -1,0 +1,24 @@
+<ion-view view-title="{{'__LOGIN__' | translate}}">
+  <ion-content>
+    <form ng-submit="login()">
+        <div class="list">
+            <label class="item item-input item-stacked-label" for="username">
+              <span class="input-label"><i class="icon ion-person"></i> {{ '__USER__' |translate }}</span>
+              <input id="username" type="text" ng-model="settings.username" placeholder="{{ '__USER__' |translate }}">
+            </label>
+
+            <label class="item item-input item-stacked-label" for="password">
+              <span class="input-label"><i class="icon ion-locked"></i> {{ '__PASSWORD__' |translate }}</span>
+              <input id="password" type="password" ng-model="settings.password" placeholder="{{ '__PASSWORD__' |translate }}">
+            </label>
+            <div class="item item-noborder">
+              <button type="submit" class="button button-block button-positive">{{"__LOGIN__" | translate}}</button>
+            </div>
+        </div>
+
+        <div class="card" ng-if="incorrectLogin" ng-click="openNoSessionInApp('https://cv.uoc.edu/webapps/cas/login?renew=true')">
+            <div class="item item-text-wrap" ng-bind-html=" '__INCORRECT_USER__' | translate " ></div>
+        </div>
+    </form>
+  </ion-content>
+</ion-view>

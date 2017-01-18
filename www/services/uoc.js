@@ -25,7 +25,7 @@ angular.module('UOCNotifier')
             format: 'json'
         };
 
-        return $queue.get('/app/guaita/calendari', args, true).then(function(data) {
+        return $queue.get('/app/guaita/calendari', args, true, 120).then(function(data) {
             $settings.save_idp(data.idp);
 
             for (var x in data.classrooms) {
@@ -89,10 +89,6 @@ angular.module('UOCNotifier')
             }
         }
         $classes.add(classroom);
-
-        if (!$classes.get_notify(classroom.code)) {
-            return $q.when();
-        }
 
         // Parse events
         if (classr.activitats.length > 0) {
@@ -185,7 +181,7 @@ angular.module('UOCNotifier')
             'app:only' : 'avisos'
         };
 
-        return $queue.get('/rb/inici/grid.rss', args, false).then(function(resp) {
+        return $queue.get('/rb/inici/grid.rss', args, false, 60).then(function(resp) {
             var announcements = [],
                 items = angular.element(resp).find('item');
 
@@ -241,11 +237,13 @@ angular.module('UOCNotifier')
         return $queue.get('/rb/inici/grid.rss', args, false).then(function(resp) {
             var items = angular.element(resp).find('item'),
                 classroom = false,
-                findCode = false;
+                findCode = false,
+                promises = [];
 
             angular.forEach(items, function(item) {
                 item = rssitem_to_json(item);
                 var category = item.category[0];
+
                 if (category.indexOf('AULA_TUTOR_DEFINITION') >= 0) {
                     var code = category.split('-')[0],
                         domainId = category.split('-')[1];
@@ -276,7 +274,7 @@ angular.module('UOCNotifier')
 
                     if (classroom.notify) {
                         findCode = code + "-AULA_TUTOR_RESOURCES";
-                        retrieve_consultor(classroom);
+                        promises.push(retrieve_consultor(classroom));
                     }
                 } else if (findCode && item.category.indexOf(findCode) >= 0) {
                     // Add the resources to the classroom.
@@ -305,6 +303,7 @@ angular.module('UOCNotifier')
                     $classes.add(classroom);
                 }
             });
+            return $q.all(promises);
         });
     }
 
@@ -438,7 +437,7 @@ angular.module('UOCNotifier')
             'app:only' : 'agenda',
             'app:Delta' : 365
         };
-        return $queue.get('/rb/inici/grid.rss', args, false).then(function(resp) {
+        return $queue.get('/rb/inici/grid.rss', args, false, 120).then(function(resp) {
             var items = angular.element(resp).find('item');
             angular.forEach(items, function(item) {
                 item = rssitem_to_json(item);
@@ -447,7 +446,7 @@ angular.module('UOCNotifier')
                 if (item.TYPE == "CALENDAR" && parseInt(item.EVENT_TYPE, 10) == 16) {
                     var title = $utils.get_html_realtext(item.title + ' ' + item.description),
                         evnt = new CalEvent(title, item.guid, 'UOC');
-                    evnt.start = $date.getDate(item.pubDate, true);
+                    evnt.start = $date.getDate(item.pubdate, true);
                     $classes.add_event(evnt);
                 }
                 // Classroom events now are parsed in other places.
@@ -468,7 +467,7 @@ angular.module('UOCNotifier')
     }
 
     function retrieve_resource(classroom, resource) {
-        if (resource.type == "externallink") {
+        if (!$classes.get_notify(classroom.code) || resource.type == "externallink") {
             return $q.when();
         }
 
@@ -497,11 +496,14 @@ angular.module('UOCNotifier')
     }
 
     function retrieve_consultor(classroom) {
+        if (!$classes.get_notify(classroom.code)) {
+            return $q.when();
+        }
         var args = {
             classroomId : classroom.domain,
             subjectId : classroom.domainassig
         };
-        return $queue.get('/webapps/aulaca/classroom/UsersList.action', args, false).then(function(data) {
+        return $queue.get('/webapps/aulaca/classroom/UsersList.action', args, false, 120).then(function(data) {
             var user;
             try {
                 if (data.tutorUsers[0]) {
@@ -524,12 +526,15 @@ angular.module('UOCNotifier')
     }
 
     function retrieve_timeline(classroom) {
+        if (!$classes.get_notify(classroom.code)) {
+            return $q.when();
+        }
         var args = {
             classroomId: classroom.domain,
             subjectId: classroom.domainassig,
             javascriptDisabled: false
         };
-        return $queue.post('/webapps/aulaca/classroom/timeline/timeline', args, false).then(function(data) {
+        return $queue.post('/webapps/aulaca/classroom/timeline/timeline', args, false, 120).then(function(data) {
             for (var i in data.events) {
                 var event = data.events[i];
                 var class_event = classroom.get_event(event.id);
@@ -568,7 +573,7 @@ angular.module('UOCNotifier')
             }]
         };
         // Always GAT_EXP, not dependant on UOCi
-        return $queue.json('/tren/trenacc/webapp/GEPAF.FULLPERSONAL/gwtRequest', args, false).then(function(resp) {
+        return $queue.json('/tren/trenacc/webapp/GEPAF.FULLPERSONAL/gwtRequest', args, false, 120).then(function(resp) {
             try {
                 var objects = resp.O;
                 for (var x in objects) {
@@ -602,7 +607,7 @@ angular.module('UOCNotifier')
     }
 
     function retrieve_final_grades(classroom) {
-        if (!classroom.exped || !classroom.subject_code || classroom.final_grades || !classroom.all_events_completed(true)) {
+        if (!classroom.exped || !classroom.subject_code || classroom.final_grades || !classroom.all_events_completed(true) || !$classes.get_notify(classroom.code)) {
             return $q.when();
         }
 
@@ -685,7 +690,7 @@ angular.module('UOCNotifier')
                     assig: classroom.subject_code,
                     pAnyAcademic: classroom.any
                 };
-        return $queue.get('/tren/trenacc', args, false).then(function(data) {
+        return $queue.get('/tren/trenacc', args, false, 30).then(function(data) {
             var index = data.indexOf("addRow");
             if (index != -1) {
                 $notifications.notify('NOT_STATS', {class: classroom.get_acronym()});
@@ -715,7 +720,7 @@ angular.module('UOCNotifier')
         var args = {
             codAssig : classroom.subject_code
         };
-        return $queue.get('/webapps/mymat/listMaterialsAjax.action', args).then(function(data) {
+        return $queue.get('/webapps/mymat/listMaterialsAjax.action', args, false, 10).then(function(data) {
             var material;
             if (data.dades) {
                 var materials = [];
@@ -748,25 +753,25 @@ angular.module('UOCNotifier')
             var icon = {};
             switch(format.tipus._name) {
                 case 'PDF':
-                    icon.icon = 'file';
+                    icon.icon = 'document';
                     break;
                 case 'PDF_GRAN':
-                    icon.icon = 'text-height';
+                    icon.icon = 'document-text';
                     break;
                 case 'AUDIOLLIBRE':
-                    icon.icon = 'headphones';
+                    icon.icon = 'headphone';
                     break;
                 case 'VIDEOLLIBRE':
-                    icon.icon = 'facetime-video';
+                    icon.icon = 'videocamera';
                     break;
                 case 'WEB':
                     icon.icon = 'link';
                     break;
                 case 'EPUB':
-                    icon.icon = 'book';
+                    icon.icon = 'bookmark';
                     break;
                 case 'MOBIPOCKET':
-                    icon.icon = 'phone';
+                    icon.icon = 'android-phone-portrait';
                     break;
                 case 'HTML5':
                     icon.icon = 'cloud';
@@ -791,8 +796,18 @@ angular.module('UOCNotifier')
             classroomId : classroom.domain,
             subjectId : classroom.domainassig
         };
-        return $queue.get('/webapps/aulaca/classroom/UsersList.action', args).then(function(data) {
-            return data;
+        return $queue.get('/webapps/aulaca/classroom/UsersList.action', args, false, 10).then(function(data) {
+            var users = data.studentUsers,
+                idp = $settings.get_idp();
+
+            users = users.filter(function(user) {
+                return user.userNumber != idp;
+            });
+
+            users.sort(function(x, y) {
+                return (x.connected === y.connected)? 0 : x.connected? -1 : 1;
+            });
+            return users;
         });
     };
 
