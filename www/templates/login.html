@@ -11,13 +11,12 @@
               <span class="input-label"><i class="icon ion-locked"></i> {{ '__PASSWORD__' |translate }}</span>
               <input id="password" type="password" ng-model="settings.password" placeholder="{{ '__PASSWORD__' |translate }}">
             </label>
+            <div class="item item-text-wrap item-assertive item-icon-left" ng-if="incorrectLogin" ng-click="openLogin()">
+            <i class="icon ion-alert-circled"></i> <span ng-bind-html=" '__INCORRECT_USER__' | translate ">{{'__INCORRECT_USER__' | translate}}</span>
+            </div>
             <div class="item item-noborder">
               <button type="submit" class="button button-block button-positive">{{"__LOGIN__" | translate}}</button>
             </div>
-        </div>
-
-        <div class="card" ng-if="incorrectLogin" ng-click="openNoSessionInApp('https://cv.uoc.edu/webapps/cas/login?renew=true')">
-            <div class="item item-text-wrap" ng-bind-html=" '__INCORRECT_USER__' | translate " ></div>
         </div>
     </form>
   </ion-content>

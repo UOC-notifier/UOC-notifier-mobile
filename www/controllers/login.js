@@ -3,21 +3,34 @@ angular.module('UOCNotifier')
 .controller('LoginCtrl', function($scope, $state, $classes, $session, $cache, $app, $cron, $events) {
 
     var observer = $events.on('classesUpdated', $state.current.name, function() {
-            load_view();
+            load_view(false);
         });
 
-    function load_view() {
+    function load_view(reset) {
         var user = $session.get_user();
         $scope.settings = {
             username: user.username,
             password: user.password
         };
-        $scope.incorrectLogin = !$cron.is_running() && $session.session_ko();
+        $scope.incorrectLogin = false;
+
+        var promise;
+        if (reset) {
+            promise = $session.reset();
+        } else {
+            promise = $session.get_retrieve();
+        }
+        promise.then(function() {
+            $scope.incorrectLogin = false;
+        }).catch(function() {
+            $scope.incorrectLogin = true;
+        });
     }
 
-    load_view();
+    load_view(true);
 
     $scope.login = function() {
+        $scope.incorrectLogin = false;
         var changed = $session.has_user_changed($scope.settings.username);
         return $session.save_user($scope.settings.username, $scope.settings.password).then(function() {
             $scope.incorrectLogin = false;
@@ -39,7 +52,8 @@ angular.module('UOCNotifier')
         }
     }
 
-    $scope.openNoSessionInApp = function(url, nossl) {
+    $scope.openLogin = function() {
+        var url = 'https://cv.uoc.edu/webapps/cas/login?renew=true';
         return $app.open_url(url);
     };
 

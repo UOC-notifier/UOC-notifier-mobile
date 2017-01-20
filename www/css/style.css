@@ -196,3 +196,7 @@ event-date .badge.badge-inline {
 .button-bar > .button {
     flex-basis: 20%;
 }
+
+.item-assertive a {
+    color: white;
+}

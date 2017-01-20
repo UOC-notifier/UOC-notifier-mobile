@@ -1,6 +1,6 @@
 angular.module('UOCNotifier')
 
-.controller('IndexCtrl', function($scope, $state, $stateParams, $q, $translate,
+.controller('IndexCtrl', function($scope, $state, $q, $translate,
         $app, $settings, $classes, $session, $date, $cron, CalEvent, $events, $debug, $cache) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -71,11 +71,6 @@ angular.module('UOCNotifier')
         }
 
         $scope.state.loading = $cron.is_running();
-
-        if (!$session.has_username_password() || (!$cron.is_running() && $session.session_ko())) {
-            $state.go('app.login');
-            return $q.when();
-        }
 
         return $q.when();
     }

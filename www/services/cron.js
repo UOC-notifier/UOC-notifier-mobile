@@ -1,6 +1,6 @@
 angular.module('UOCNotifier')
 
-.factory('$cron', function($settings, $storage, $debug, $queue, $session, $uoc, $interval, $q, $app, $translate, $events) {
+.factory('$cron', function($settings, $storage, $debug, $queue, $session, $uoc, $interval, $q, $app, $translate, $events, $state) {
 
     var self = {},
         bgService = false,
@@ -25,9 +25,13 @@ angular.module('UOCNotifier')
             });
         }
 
-        self.reset_alarm();
-        self.run_tasks();
-        init = true;
+        $session.reset().catch(function() {
+            $state.go('app.login');
+        }).finally(function() {
+            self.reset_alarm();
+            self.run_tasks();
+            init = true;
+        });
     };
 
     self.reset_alarm = function() {

@@ -21,9 +21,6 @@ angular.module('UOCNotifier', ['ionic', 'pascalprecht.translate', 'ngCordova'])
     .state('app', {
       url: '/app',
       abstract: true,
-      params: {
-        refresh: true
-      },
       templateUrl: 'templates/menu.html',
       controller: 'IndexCtrl'
     })
@@ -109,7 +106,7 @@ angular.module('UOCNotifier', ['ionic', 'pascalprecht.translate', 'ngCordova'])
     });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/main', {refresh: true});
+  $urlRouterProvider.otherwise('/app/main');
 })
 
 .run(function($ionicPlatform, $translate, $cron, $app, $debug) {

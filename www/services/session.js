@@ -91,7 +91,6 @@ angular.module('UOCNotifier')
             not_working();
             return retrieving.reject();
         }).then(function(resp) {
-            $debug.log(resp);
             var matchs = resp.match(/campusSessionId = ([^\n]*)/);
             if (matchs) {
                 var session = matchs[1];
@@ -101,7 +100,7 @@ angular.module('UOCNotifier')
                     $notifications.cancel_notification(1);
                 }
                 save_session(session);
-                $debug.print('Session! '+session);
+                $debug.print('Session! ' + session);
                 return retrieving.resolve(session);
             }
 
@@ -139,7 +138,6 @@ angular.module('UOCNotifier')
 
     // USER
     self.get_user = function() {
-        console.log('get username '+ get_username());
         return {
             username: get_username(),
             password: get_password()
@@ -156,7 +154,6 @@ angular.module('UOCNotifier')
             oldpassword = get_password();
 
         $storage.set_option("user_username", username);
-        console.log('set username ' + username);
 
         password = $utils.utf8_to_b64(password);
         $storage.set_option("user_password",password);

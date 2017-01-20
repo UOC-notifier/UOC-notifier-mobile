@@ -79,7 +79,7 @@ angular.module('UOCNotifier')
                 $debug.log(resp);
 
                 var reset_promise = $q.when();
-                if (resp.status == 401) {
+                if (resp.status == 401 || resp.status == 500) {
                     reset_promise = $session.reset();
                 }
 
