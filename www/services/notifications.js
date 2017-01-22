@@ -16,15 +16,18 @@ angular.module('UOCNotifier')
         if ($settings.get_notification()) {
             id = id || notificationId++;
             $debug.print(body);
+            var options = {
+                id: id,
+                title: 'UOC notifier',
+                text: body,
+                sound: null
+            };
+            if (!ionic.Platform.isIOS()) {
+                options.icon = 'res://icon'
+            }
             // timeout = timeout == undefined ? 3000 : timeout;
             try {
-                $cordovaLocalNotification.schedule({
-                    id: id,
-                    title: 'UOC notifier',
-                    text: body,
-                    icon: 'res://icon',
-                    sound: null
-                });
+                $cordovaLocalNotification.schedule(options);
             } catch(err) {
 
             }
@@ -48,15 +51,22 @@ angular.module('UOCNotifier')
     };
 
     function set_badge(number, color) {
+        if (!cordova.plugins.notification.badge) {
+            $debug.log('No badges');
+            return;
+        }
         try {
-            var oldnumber = $cordovaBadge.get();
-            if (oldnumber != number) {
-                if (number > 0) {
-                    $cordovaBadge.set(number);
-                } else {
-                    $cordovaBadge.clear();
+            $cordovaBadge.get().then(function (oldnumber) {
+                if (oldnumber != number) {
+                    if (number > 0) {
+                        return $cordovaBadge.set(number);
+                    } else {
+                        return $cordovaBadge.clear();
+                    }
                 }
-            }
+            }).catch(function(err) {
+                $debug.error(err);
+            });
         } catch(err) {
             $debug.error(err);
         }

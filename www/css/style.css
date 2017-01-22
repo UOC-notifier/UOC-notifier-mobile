@@ -200,3 +200,7 @@ event-date .badge.badge-inline {
 .item-assertive a {
     color: white;
 }
+
+.platform-ios ion-side-menu.menu.menu-left {
+    top: 20px;
+}

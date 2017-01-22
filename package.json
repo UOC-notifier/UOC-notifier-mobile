@@ -28,6 +28,7 @@
     "cordova-plugin-background-mode"
   ],
   "cordovaPlatforms": [
+    "ios",
     "android"
   ]
 }

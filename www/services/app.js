@@ -6,8 +6,10 @@ angular.module('UOCNotifier')
     var self = {};
 
     $rootScope.$on('$cordovaInAppBrowser:loaderror', function(e, event){
-        browserInfo = false;
-        $cordovaInAppBrowser.close();
+        if (!ionic.Platform.isIOS()) {
+            browserInfo = false;
+            $cordovaInAppBrowser.close();
+        }
     });
 
     $rootScope.$on('$cordovaInAppBrowser:exit', function(e, event){
@@ -87,14 +89,15 @@ angular.module('UOCNotifier')
 
     self.open_in_app = function(url, data, nossl, browserType, browserData) {
         browserInfo = browserType ?  {type: browserType, data: browserData} : false;
-        return open_url_session(url, '_self', data, nossl);
+        return open_url_session(url, false, data, nossl);
     };
 
     self.open_url = function(url, where) {
-        where = where || '_self';
+        where = where || ionic.Platform.isIOS() ? '_blank' : '_self';
 
         var options = {
-            enableViewPortScale: 'yes'
+            enableViewPortScale: 'yes',
+            toolbarposition: 'top'
         };
 
         if (ionic.Platform.isIOS() && url.indexOf('file://') === 0) {

@@ -5,7 +5,8 @@
     "ionic": "1.3.2",
     "angular-translate": ">=2.7.0",
     "angular-translate-loader-static-files": "^2.9.0",
-    "ngCordova": "^0.1.24-alpha"
+    "ngCordova": "^0.1.24-alpha",
+    "platform.js": "platform#^1.3.3"
   },
   "resolutions": {
     "angular": "1.5.3",
