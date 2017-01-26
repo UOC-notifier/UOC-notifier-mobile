@@ -1,6 +1,6 @@
 angular.module('UOCNotifier')
 
-.controller('IndexCtrl', function($scope, $state, $q, $translate,
+.controller('MainCtrl', function($scope, $state, $q, $translate,
         $app, $settings, $classes, $session, $date, $cron, CalEvent, $events, $debug, $cache) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -51,6 +51,10 @@ angular.module('UOCNotifier')
                     $scope.hasAssignments = true;
                 }
             }
+
+            angular.forEach(classroom.grades, function(grade) {
+                grade.stats = classroom.get_grade_stats(grade.name);
+            });
 
             // Final tests
             if (classroom.exams && classroom.exams.date && $date.isNearDate(classroom.exams.date)) {

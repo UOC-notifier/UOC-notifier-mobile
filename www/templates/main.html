@@ -32,10 +32,11 @@
 
                     <event-row ng-repeat="event in class.events_today" event="event"></event-row>
 
-                    <ion-item ng-repeat="grade in class.grades" class="item resource item-text-wrap item-icon-right">
+                    <ion-item ng-repeat="grade in class.grades" class="item grade item-text-wrap">
                         {{"__"+grade.name+"__" | translate}}
-                        <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
-                        <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
+                        <span class="badge" ng-if="grade.grade" ng-class="{'badge-energized': grade.prov, 'badge-positive': !grade.prov}">
+                            <i ng-if="grade.stats" class="icon ion-pie-graph"></i><i ng-if="grade.prov" class="icon ion-alert-circled"></i>&nbsp;{{grade.grade}}
+                        </span>
                     </ion-item>
                 </ion-list>
             </ion-item>

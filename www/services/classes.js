@@ -46,28 +46,6 @@ angular.module('UOCNotifier')
 	self.save = function(refresh) {
 		self.count_messages();
 		$notifications.set_messages(self.notified_messages);
-		/*classes.sort(function(a, b) {
-			if (a.subject_code && !b.subject_code) {
-				return -1;
-			} else if(b.subject_code && !a.subject_code) {
-				return 1;
-			}
-
-			if(a.any > b.any) return -1;
-		    if(a.any < b.any) return 1;
-
-			if (a.type != b.type) {
-				if (a.type == 'TUTORIA') {
-					return 1;
-				}
-				if (b.type == 'TUTORIA') {
-					return -1;
-				}
-			}
-			if(a.title < b.title) return -1;
-		    if(a.title > b.title) return 1;
-		    return 0;
-		});*/
 
 		for (var i in classes) {
 			classes[i].sort_things();
@@ -167,6 +145,7 @@ angular.module('UOCNotifier')
 				classr.has_grades = classl.has_grades;
 				classr.exped = classl.exped;
 				classr.stats = classl.stats;
+				classr.pacstats = classl.pacstats;
 				classr.exams = classl.exams;
 				classr.consultor = classl.consultor;
 				classr.consultormail = classl.consultormail;
@@ -264,34 +243,8 @@ angular.module('UOCNotifier')
 
 	self.load();
 
-	// DEPRECATED
-	self.search_domainassig = function(domain) {
-		return search('domainassig', domain);
-	};
-
-	// DEPRECATED
-	self.search_subject_code = function(subject_code) {
-		return search('subject_code', subject_code);
-	};
-
-	// DEPRECATED
 	self.search_code = function(code) {
 		return classes[code] || false;
-	};
-
-	// DEPRECATED
-	self.get_index = function(code) {
-		for (var i in classes) {
-			if (classes[i].code == code) {
-				return i;
-			}
-		}
-		return false;
-	};
-
-	// DEPRECATED
-	self.add = function(classr) {
-		return self.add_class(classr);
 	};
 
     return self;

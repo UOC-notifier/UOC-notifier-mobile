@@ -14,35 +14,22 @@ angular.module('UOCNotifier')
 
     // OPTIONS - UNIVERSITY
     self.get_uni = function() {
-        return $storage.get_option("uni", 'UOCc');
-    };
-
-    self.get_gat = function() {
-        var uni =  self.get_uni();
+        var uni = $storage.get_option("uni", 'GAT_EXP');
         if (uni == 'UOCi') {
+            // Ibero.
+            $storage.set_option("uni", 'GAT_EXPIB');
             return 'GAT_EXPIB';
         }
-        return 'GAT_EXP';
+        if (uni == 'UOCc') {
+            // Catalana.
+            $storage.set_option("uni", 'GAT_EXP');
+            return 'GAT_EXP';
+        }
+        return uni;
     };
 
     self.save_uni = function(uni) {
         $storage.set_option("uni",uni);
-    };
-
-    self.get_lang = function() {
-        var uni =  self.get_uni();
-        if(uni == 'UOCi') {
-            return 'es';
-        }
-        return 'ca';
-    };
-
-    self.get_lang_code = function() {
-        var uni =  self.get_uni();
-        if(uni == 'UOCi') {
-            return 'b';
-        }
-        return 'a';
     };
 
     self.get_today = function() {

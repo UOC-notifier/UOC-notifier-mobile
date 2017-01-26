@@ -1,11 +1,27 @@
 angular.module('UOCNotifier')
 
-.factory('$utils', function() {
+.factory('$utils', function($translate) {
 
     var self = {};
 
     self.get_url = function(url, ssl) {
         return (ssl ? 'https://' : 'http://') + 'cv.uoc.edu' + url;
+    };
+
+    self.get_lang = function() {
+        return $translate.proposedLanguage();
+    };
+
+    self.get_lang_code = function() {
+        switch (self.get_lang()) {
+            case 'ca':
+                return 'a';
+            case 'en':
+                return 'c';
+            case 'es':
+            default:
+                return 'b';
+        }
     };
 
     self.get_event_icon = function(evnt) {
@@ -131,6 +147,20 @@ angular.module('UOCNotifier')
             return '/' + url;
         }
         return url;
+    }
+
+    var ARGUMENT_NAMES = /([^\s,]+)/g;
+    self.getParamNames = function(functionName, text) {
+        var start = text.indexOf(functionName + '(');
+        if (start < 0) {
+            return false;
+        }
+        start += functionName.length + 1;
+        var result = text.slice(start, text.indexOf(')', start)).match(ARGUMENT_NAMES);
+        if (result === null) {
+            return false;
+        }
+        return result;
     }
 
 

@@ -25,6 +25,11 @@
     padding: 9px;
 }
 
+.item.grade {
+    padding: 9px;
+    padding-right: 70px;
+}
+
 .item.event, .item.event a{
     padding: 0;
 }
@@ -83,7 +88,8 @@ event-date .near {
     right: 0;
 }
 
-.item.resource .badge {
+.item.resource .badge,
+.item.grade .badge {
     top: 9px;
 }
 

@@ -29,6 +29,7 @@ angular.module('UOCNotifier')
 		this.messages = 0;
 		this.resources = [];
 		this.events = [];
+		this.pacstats = [];
 		this.grades = [];
 		this.exams = false;
   	}
@@ -218,8 +219,41 @@ angular.module('UOCNotifier')
 		return -1;
 	};
 
+	Classroom.prototype.get_grade_stats = function(eventOrFinal) {
+		var index = parseInt(eventOrFinal, 10) ? get_event_idx_for_stats(this.events, eventOrFinal) : eventOrFinal;
+
+		if (index && this.pacstats[index]) {
+			return this.pacstats[index];
+		}
+
+		if (index == 'FA' && this.stats && this.stats.length > 0) {
+			return this.stats;
+		}
+		return false;
+
+		function get_event_idx_for_stats(events, id) {
+			var j = 1;
+			for (var i in events) {
+				if (events[i].is_assignment()) {
+					if (events[i].eventId == id) {
+						return j;
+					}
+					j++;
+				}
+			}
+			return false;
+		}
+	};
+
 	Classroom.prototype.has_events = function() {
 		return this.events.length > 0;
+	};
+
+	Classroom.prototype.has_assignments = function() {
+		var assignments = this.events.filter(function (event) {
+			return event.is_assignment();
+		});
+		return assignments.length > 0;
 	};
 
 	Classroom.prototype.has_all_grades = function() {

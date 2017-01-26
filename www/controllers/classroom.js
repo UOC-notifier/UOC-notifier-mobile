@@ -16,6 +16,9 @@ angular.module('UOCNotifier')
         $scope.resources = classroom.resources;
         $scope.events = classroom.events;
         $scope.grades = classroom.grades;
+        angular.forEach($scope.grades, function(grade) {
+            grade.stats = classroom.get_grade_stats(grade.name);
+        });
         $scope.state.session = !!$session.get();
 
         if (classroom.consultorlastviewed) {
@@ -82,7 +85,12 @@ angular.module('UOCNotifier')
                 $app.open_in_app(link, data);
             }
         });
+    };
 
+    $scope.gotoStats = function(grade) {
+        if (classroom.get_grade_stats(grade)) {
+            $state.go('app.stats', {code: classroom.code, grade: grade});
+        }
     };
 
     $scope.openTeachingPlan = function() {
@@ -104,17 +112,6 @@ angular.module('UOCNotifier')
     $scope.openMail = function() {
         var link = '/WebMail/writeMail.do',
             data = {to: classroom.consultormail};
-        $app.open_in_app(link, data);
-    };
-
-    $scope.openStats = function() {
-        var link = '/tren/trenacc',
-            gat = $settings.get_gat(),
-            data = {
-                modul: gat + '.ESTADNOTES/estadis.assignatures',
-                assig: classroom.subject_code,
-                pAnyAcademic: classroom.any
-            };
         $app.open_in_app(link, data);
     };
 

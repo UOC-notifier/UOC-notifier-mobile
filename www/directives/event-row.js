@@ -31,14 +31,19 @@ angular.module('UOCNotifier')
             scope.icon = $utils.get_event_icon(event);
             scope.iconcolor = $utils.get_event_icon_color(event);
 
+            if (event.is_assignment()) {
+                classroom = $classes.get_class_by_event(event.eventId);
+                scope.stats = classroom.get_grade_stats(event.eventId);
+            }
+
             if (scope.task) {
                 if (event.is_assignment() && !event.has_ended()) {
-                    classroom = $classes.get_class_by_event(event.eventId);
                     scope.titleColumnWidth = 70;
                     scope.style = "background-color: #" + classroom.color + ";";
                     scope.acronym = classroom.get_acronym();
                 } else {
                     scope.show = false;
+                    return;
                 }
             }
 

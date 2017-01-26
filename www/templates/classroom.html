@@ -35,10 +35,11 @@
 
         <ion-list ng-if="grades.length > 0">
             <div class="item item-divider" ng-if="grades.length > 0">{{"__FINAL_GRADES__" | translate}}</div>
-            <ion-item ng-repeat="grade in grades" class="item resource item-text-wrap item-icon-right">
+            <ion-item ng-repeat="grade in grades" class="item grade item-text-wrap" ng-click="gotoStats(grade.name)">
                 {{"__"+grade.name+"__" | translate}}
-                <span class="badge badge-energized" ng-if="grade.grade && grade.prov"><i class="icon ion-alert-circled"></i> {{grade.grade}}</span>
-                <span class="badge badge-positive" ng-if="grade.grade && !grade.prov">{{grade.grade}}</span>
+                <span class="badge" ng-if="grade.grade" ng-class="{'badge-energized': grade.prov, 'badge-positive': !grade.prov}">
+                    <i ng-if="grade.stats" class="icon ion-pie-graph"></i><i ng-if="grade.prov" class="icon ion-alert-circled"></i>&nbsp;{{grade.grade}}
+                </span>
             </ion-item>
         </ion-list>
         <br ng-if="grades.length > 0">
@@ -61,7 +62,7 @@
                 <ion-item ng-click="gotoMaterials()" class="item-text-wrap item-icon-left">
                     <i class="icon ion-briefcase"></i> {{"__EQUIPMENT__" | translate}}
                 </ion-item>
-                <ion-item ng-if="classroom.stats" ng-click="openStats()" class="item-text-wrap item-icon-left">
+                <ion-item ng-if="classroom.stats" ng-click="gotoStats('FA')" class="item-text-wrap item-icon-left">
                     <i class="icon ion-stats-bars"></i> {{"__STATS__" | translate}}
                 </ion-item>
                 <ion-item ng-if="classroom.type != 'TUTORIA'" ng-click="openTeachingPlan()" class="item-text-wrap item-icon-left">
@@ -72,7 +73,7 @@
     <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #{{classroom.color}};" ng-if="state.session">
         <div class="button-bar">
             <button class="button button-clear icon ion-university" ng-click="openClassroom()"> {{'__GOTO_CLASS__' | translate}}</button>
-            <button ng-if="classroom.has_events() && classroom.subject_code" class="button button-clear icon ion-speedometer" ng-click="openGrades()">{{'__GRADES__' | translate}}</button>
+            <button ng-if="classroom.has_assignments() && classroom.subject_code" class="button button-clear icon ion-speedometer" ng-click="openGrades()">{{'__GRADES__' | translate}}</button>
         </div>
     </ion-footer-bar>
 </ion-view>

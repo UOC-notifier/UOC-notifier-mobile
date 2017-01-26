@@ -1,0 +1,14 @@
+<ion-view view-title="{{'__STATS__' | translate}}">
+  <ion-content>
+    <ion-list>
+      <ion-item>
+        <h2>{{title}}</h2>
+        <p>{{"__"+grade+"__" | translate}}</p>
+      </ion-item>
+      <div class="item" ng-repeat="chart in charts">
+        <h2 ng-if="chart.name">{{chart.name}}</h2>
+        <canvas id="pie" class="chart chart-pie" chart-data="chart.values" chart-labels="chart.labels" chart-colors="chartColors"></canvas>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-view>

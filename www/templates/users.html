@@ -1,7 +1,7 @@
 <ion-view view-title="{{acronym}} - {{'__USERS__' | translate}}">
   <ion-content>
     <div class="list" ng-show="loaded">
-      <ion-item ng-repeat="user in users" class="item-icon-left item-icon-right" ng-click="mailUser(user.email)">
+      <ion-item ng-repeat="user in users" class="item-icon-left item-icon-right item-text-wrap" ng-click="mailUser(user.email)">
           <i class="icon ion-person" ng-class="{'balanced': user.connected, 'assertive': !user.connected}"></i>
           <h2>{{user.fullName}}</h2>
           <p ng-if="user.connected">{{"__CONNECTED__" | translate}}</p>

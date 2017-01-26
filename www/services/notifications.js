@@ -51,7 +51,7 @@ angular.module('UOCNotifier')
     };
 
     function set_badge(number, color) {
-        if (!cordova.plugins.notification.badge) {
+        if (typeof cordova == "undefined" || !cordova.plugins.notification.badge) {
             $debug.log('No badges');
             return;
         }

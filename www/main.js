@@ -1,6 +1,6 @@
 // UOC Starter App
 
-angular.module('UOCNotifier', ['ionic', 'pascalprecht.translate', 'ngCordova'])
+angular.module('UOCNotifier', ['ionic', 'pascalprecht.translate', 'ngCordova', 'chart.js'])
 
 .config(function($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
 
@@ -22,7 +22,7 @@ angular.module('UOCNotifier', ['ionic', 'pascalprecht.translate', 'ngCordova'])
       url: '/app',
       abstract: true,
       templateUrl: 'templates/menu.html',
-      controller: 'IndexCtrl'
+      controller: 'MainCtrl'
     })
     .state('app.main', {
       url: '/main',
@@ -74,6 +74,15 @@ angular.module('UOCNotifier', ['ionic', 'pascalprecht.translate', 'ngCordova'])
         'menu': {
           templateUrl: 'templates/materials.html',
           controller: 'MaterialsCtrl'
+        }
+      }
+    })
+    .state('app.stats', {
+      url: '/stats/:code/:grade',
+      views: {
+        'menu': {
+          templateUrl: 'templates/stats.html',
+          controller: 'StatsCtrl'
         }
       }
     })

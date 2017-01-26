@@ -7,6 +7,7 @@ angular.module('UOCNotifier')
             date: '=?',
             isGrades: '=?',
             comment: '=?',
+            hasStats: '=?',
             graded: '=?'
         },
         templateUrl: 'templates/event-date.html',

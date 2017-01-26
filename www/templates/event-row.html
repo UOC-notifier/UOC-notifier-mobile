@@ -8,6 +8,6 @@
       <event-date ng-if="!showOnlyGrade" date="event.start" graded="event.graded"></event-date>
       <event-date ng-if="!showOnlyGrade" date="event.end" graded="event.graded"></event-date>
       <event-date ng-if="!showOnlyGrade && !task" date="event.solution" graded="event.graded"></event-date>
-      <event-date ng-if="!task" date="event.grading" graded="event.graded" comment="event.commenttext" is-grades="true"></event-date>
+      <event-date ng-if="!task" date="event.grading" graded="event.graded" comment="event.commenttext" is-grades="true" has-stats="stats"></event-date>
     </div>
 </ion-item>

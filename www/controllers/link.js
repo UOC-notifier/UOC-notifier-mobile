@@ -1,13 +1,13 @@
 angular.module('UOCNotifier')
 
-.controller('LinksCtrl', function($scope, $state, $classes, $app, $settings) {
+.controller('LinksCtrl', function($scope, $state, $classes, $app, $settings, $utils) {
     $scope.gotoTool = function(link, nossl) {
         var url;
         if (link[0] == '/') {
             url = link;
         } else {
-            var gat =  $settings.get_gat();
-            url = '/tren/trenacc?modul='+gat+link;
+            var gat =  $settings.get_uni();
+            url = '/tren/trenacc?modul=' + gat + link;
             nossl = false;
         }
         $app.open_in_app(url, null, nossl);
@@ -27,7 +27,7 @@ angular.module('UOCNotifier')
     };
 
     $scope.gotoFiles = function() {
-        var url = '/webapps/filearea/servlet/iuoc.fileserver.servlets.FAGateway?opId=getMainFS&company=/UOC&idLang=/'+$settings.get_lang_code()+'&sessionId=';
-        $app.open_in_app(url);
+        var url = '/webapps/filearea/servlet/iuoc.fileserver.servlets.FAGateway?opId=getMainFS&company=/UOC&idLang=/'+$utils.get_lang_code()+'&sessionId=';
+        $app.open_in_app(url, false, true);
     };
 });

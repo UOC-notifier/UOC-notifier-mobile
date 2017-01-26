@@ -1,7 +1,7 @@
 <ion-view view-title="{{acronym}} - {{'__EQUIPMENT__' | translate}}">
   <ion-content  ng-class="{'has-footer' : state.session}">
     <div class="list" ng-show="loaded">
-      <ion-item ng-repeat="material in materials">
+      <ion-item ng-repeat="material in materials" class="item-text-wrap">
           <h2>{{material.title}}</h2>
           <div class="button-bar" ng-if="material.icons.length > 0">
             <div class="button icon ion-{{icon.icon}}" ng-repeat="icon in material.icons" aria-label="{{icon.description}}" title="{{icon.description}}" ng-click="openMaterial(icon.url)"></div>

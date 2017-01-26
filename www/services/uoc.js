@@ -21,7 +21,7 @@ angular.module('UOCNotifier')
         // Get the new aulas
         var args = {
             perfil : 'estudiant',
-            setLng : $settings.get_lang(),
+            setLng : $utils.get_lang(),
             format: 'json'
         };
 
@@ -45,7 +45,7 @@ angular.module('UOCNotifier')
             var classrooms = $classes.get_notified();
             for(var i in classrooms) {
                 promises.push(retrieve_final_grades(classrooms[i]));
-                promises.push(retrieve_stats(classrooms[i]));
+                promises.push(self.retrieve_stats(classrooms[i]));
             }
 
             promises.push(retrieve_final_exams_event());
@@ -88,7 +88,7 @@ angular.module('UOCNotifier')
                 break;
             }
         }
-        $classes.add(classroom);
+        $classes.add_class(classroom);
 
         // Parse events
         if (classr.activitats.length > 0) {
@@ -135,13 +135,12 @@ angular.module('UOCNotifier')
                         args.domainId = act.domainId;
                         var aux = classr.domainCode.split('_');
                         args.domainTemplate = 'uoc_'+aux[0]+'_'+classr.codi;
-                        args.idLang =  $settings.get_lang_code();
+                        args.idLang =  $utils.get_lang_code();
                         args.eventsId = act.eventId;
                         args.opId = 'view';
                         args.userTypeId = 'ESTUDIANT';
                         args.canCreateEvent = false;
                     }
-                    evnt.link = urlbase + '?' + $utils.uri_data(args) + '&s=';
                 }
 
                 evnt.start = $date.getDate(act.startDate, true);
@@ -152,8 +151,9 @@ angular.module('UOCNotifier')
             }
         }
 
-        // Parse resources
         var promises = [];
+
+        // Parse resources
         if (classr.widget.eines.length > 0) {
             classroom.delete_old_resources();
             for(var j in classr.widget.eines) {
@@ -168,8 +168,14 @@ angular.module('UOCNotifier')
             }
         }
 
-        if (!classroom.final_grades && !classroom.stats) {
+        if (!classroom.final_grades && !classroom.stats && classroom.has_events()) {
             promises.push(retrieve_timeline(classroom));
+
+            if (classroom.has_assignments()) {
+                promises.push(self.retrieve_pac_stats(classroom).then(function(stats) {
+                    classroom.pacstats = stats;
+                }));
+            }
         }
         return $q.all(promises);
     }
@@ -300,7 +306,7 @@ angular.module('UOCNotifier')
                 }
 
                 if (classroom) {
-                    $classes.add(classroom);
+                    $classes.add_class(classroom);
                 }
             });
             return $q.all(promises);
@@ -675,32 +681,32 @@ angular.module('UOCNotifier')
         });
     }
 
-    function retrieve_stats(classroom) {
+    self.retrieve_stats = function(classroom) {
         if (!classroom.has_grades || !classroom.subject_code || classroom.stats || !classroom.all_events_completed(true)) {
-            return $q.when();
+            return $q.when(classroom.stats);
         }
 
         // Stop retrieving this when exams are not done
         if (classroom.exams && classroom.exams.date && !$date.isBeforeToday(classroom.exams.date) && !$date.isToday(classroom.exams.date)) {
-            $debug.print('Exam not done, not retrieving stats for '+classroom.acronym);
+            $debug.print('Exam not done, not retrieving stats for ' + classroom.acronym);
             return $q.when();
         }
 
-        var args = {modul: $settings.get_gat() + '.ESTADNOTES/estadis.assignatures',
+        var args = {modul: $settings.get_uni() + '.ESTADNOTES/estadis.assignatures',
                     assig: classroom.subject_code,
                     pAnyAcademic: classroom.any
                 };
         return $queue.get('/tren/trenacc', args, false, 30).then(function(data) {
-            var index = data.indexOf("addRow");
-            if (index != -1) {
+            var stats = $utils.getParamNames('addRow', data);
+            if (stats && stats.length > 0) {
                 $notifications.notify('NOT_STATS', {class: classroom.get_acronym()});
-                classroom.stats = true;
+                classroom.stats = stats;
+                return stats;
             }
         });
     }
 
-    // UI!!! NOT used
-    function retrieve_pac_stats(classroom, button) {
+    self.retrieve_pac_stats = function(classroom, activity) {
         var args = {
             codiTercers : classroom.subject_code,
             anyAcademic : classroom.any,
@@ -708,11 +714,48 @@ angular.module('UOCNotifier')
             type: 't' // If not present only shows the current classroom
         };
 
-        return $queue.get('/webapps/rac/getEstadisticasAsignaturaAjax.action', args, false).then(function(data) {
-            $debug.print(data);
-            //UI.fill_pac_stats(classroom, data);
-            angular.element(button).removeClass('spin');
-            return data;
+        return $queue.get('/webapps/rac/getEstadisticasAsignaturaAjax.action', args, false, 20).then(function(data) {
+            var stats = {};
+            angular.forEach(data.actividades, function(actividad, index) {
+                var table = data.dataTables[index],
+                    aulas = [];
+
+                angular.forEach(table.cols, function(col, i) {
+                    if (i > 0) {
+                        aulas[i - 1] =  {
+                            name: col.label,
+                            labels: [],
+                            values: []
+                        };
+                    }
+                });
+
+                angular.forEach(table.rows, function(row) {
+                    var label = row.c[0].v;
+
+                    angular.forEach(row.c, function(val, i) {
+                        if (i > 0) {
+                            var value = val.f.split(' - ');
+                            aulas[i - 1].labels.push(label + ' ' + value[1]);
+                            aulas[i - 1].values.push(parseInt(value[0], 10));
+                        }
+                    });
+                });
+
+                angular.forEach(aulas, function(aula, i) {
+                    var value = aula.values.reduce(function(a, b) {
+                        return a + b;
+                    }, 0);
+                    if (value == 0) {
+                        aulas.splice(i);
+                    }
+                });
+                if (aulas.length > 0) {
+                    stats[actividad] = aulas;
+                }
+            });
+
+            return stats;
         });
     }
 

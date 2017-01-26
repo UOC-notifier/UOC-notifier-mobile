@@ -2,6 +2,10 @@
   <ion-content ng-class="{'has-footer' : state.session}">
 
     <div class="list">
+      <ion-item>
+        <h2>{{title}}</h2>
+        <p>{{event.name}}</p>
+      </ion-item>
       <ion-item class="item item-icon-left item-text-wrap">
           <i class="icon {{icon}} {{iconcolor}}"></i>
           <strong>{{typetext}}</strong><span ng-if="status">: <br/>{{status | translate: statusparams }}</span>
@@ -35,6 +39,10 @@
           <i class="icon ion-chatbubble"></i><strong>{{"__COMMENT__" |translate: commentdate}}</strong>
       </ion-item>
       <div class="item item-body" ng-if="event.commenttext" ng-bind-html="commenttext"></div>
+      <div class="item" ng-repeat="chart in charts">
+        <h2>{{chart.name}}</h2>
+        <canvas id="pie" class="chart chart-pie" chart-data="chart.values" chart-labels="chart.labels" chart-colors="chartColors"></canvas>
+      </div>
   </div>
   </ion-content>
   <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #{{classroomColor}};" ng-if="state.session">

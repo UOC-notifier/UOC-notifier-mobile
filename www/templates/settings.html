@@ -7,8 +7,8 @@
                 <i class="icon ion-earth"></i> {{"__UNI__" | translate}}
               </div>
               <select id="uni" ng-model="settings.uni" ng-change="save_setting('uni')">
-                <option value="UOCc">UOC catalana</option>
-                <option value="UOCi">UOC iberoamericana</option>
+                <option value="GAT_EXP">UOC catalana</option>
+                <option value="GAT_EXPIB">UOC iberoamericana</option>
               </select>
             </label>
 
@@ -42,8 +42,9 @@
               <input id="today_tab" type="number" ng-model="settings.today_tab" min="0" ng-change="save_setting('today')">
             </label>
 
-          <div class="item item-divider item-text-wrap">{{"__CLASS_NOTIFY__" | translate}}<br>
-          <i class="icon ion-alert-circled"></i> {{"__DISABLE_UNUSED_CLASSROOMS__" | translate}}
+          <div class="item item-divider item-text-wrap">
+            <h2>{{"__CLASS_NOTIFY__" | translate}}</h2>
+            <p><i class="icon ion-alert-circled"></i> {{"__DISABLE_UNUSED_CLASSROOMS__" | translate}}</p>
           </div>
 
           <ion-toggle ng-repeat="classroom in allclasses | orderBy:'title' | orderBy: 'type'" ng-model="classroom.notify" ng-change="set_classroom_notify(classroom)">

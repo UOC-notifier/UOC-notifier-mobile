@@ -1,6 +1,6 @@
 angular.module('UOCNotifier')
 
-.controller('EventCtrl', function($scope, $stateParams, $state, $classes, $date, $app, $utils, $events, $session, $translate) {
+.controller('EventCtrl', function($scope, $stateParams, $state, $classes, $date, $app, $utils, $events, $session, $translate, $uoc) {
 
     var classroom, event,
         id = $state.current.name + '/' + $stateParams.eventid,
@@ -13,6 +13,7 @@ angular.module('UOCNotifier')
 
         classroom = $classes.get_class_by_event($stateParams.eventid);
         $scope.acronym = classroom.get_acronym();
+        $scope.title = classroom.title;
         $scope.classroomColor = classroom.color;
 
         event = classroom.get_event($stateParams.eventid);
@@ -56,7 +57,9 @@ angular.module('UOCNotifier')
         $scope.iconcolor = $utils.get_event_icon_color(event);
     }
 
-    load_view()
+    load_view();
+    $scope.charts = classroom.get_grade_stats($stateParams.eventid);
+    $scope.chartColors = ['#79C753', '#FDB45C', '#FF8000', '#F7786B', '#DD4132', '#DCDCDC'];
 
     $scope.openEvent = function() {
         $app.open_in_app(event.link, null, false, 'classroom', classroom);
