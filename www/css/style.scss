@@ -1,0 +1,231 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/release/fonts" !default;
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+
+.class-color {
+    float: left;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: gray;
+    margin-right: 5px;
+    background-color: #555;
+}
+
+.item {
+    &.class {
+        padding: 16px 1px 16px 8px;
+        .list {
+            margin-top: 10px;
+        }
+    }
+
+    &.event {
+        padding: 0;
+        .item-content:not(.activated) {
+            background-color: transparent;
+        }
+        &.success {
+            background-color: #dff0d8;
+            .name a{
+                color: #3c763d;
+            }
+        }
+        &.warning {
+            background-color: #fcf8e3;
+            .name a{
+                color: #8a6d3b;
+            }
+        }
+        &.danger {
+            background-color: #f2dede;
+            .name a{
+                color: #a94442;
+            }
+        }
+        a {
+            padding: 0;
+        }
+    }
+
+    &.resource {
+        padding: 9px;
+        a {
+            padding: 9px;
+        }
+    }
+
+    &.grade {
+        padding: 9px;
+        padding-right: 70px;
+    }
+
+    &.resource,
+    &.grade {
+        .badge {
+            top: 9px;
+        }
+    }
+
+    .badge {
+        right: 10px;
+    }
+}
+
+.event.running .col-title,
+event-date .near {
+    font-weight: bold;
+    line-height: 18px;
+}
+
+.bar-colored,
+.bar-colored .button {
+    color: white;
+}
+
+.bar-colored {
+    background-color: #555;
+}
+
+.bar .buttons-right .badge {
+    line-height: 27px;
+    margin-right: 6px;
+}
+
+.badge.badge-inline {
+    display: inline;
+    position: relative;
+    top: 0;
+    right: 0;
+}
+
+.col.col-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.placeholder-icon {
+    color: #444;
+}
+
+.item.item-toggle div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.col-85 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 85%;
+    -moz-box-flex: 0;
+    -moz-flex: 0 0 85;
+    -ms-flex: 0 0 85%;
+    flex: 0 0 85%;
+    max-width: 85%;
+}
+
+.col-15 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 15%;
+    -moz-box-flex: 0;
+    -moz-flex: 0 0 15;
+    -ms-flex: 0 0 15%;
+    flex: 0 0 15%;
+    max-width: 15%;
+}
+
+.item-body {
+    ol {
+        list-style-type: decimal;
+    }
+    ul {
+        list-style-type: disc;
+    }
+    ol, ul {
+        padding-left: 40px;
+        margin: 16px 0;
+    }
+}
+
+.item-input {
+    padding-right: 16px;
+}
+
+.item-text-wrap.item.item-toggle div,
+.col.wrap-text {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+}
+
+.input-label {
+    width: 100%;
+    max-width: none;
+}
+
+.item input[type="number"] {
+    text-align: right;
+}
+
+.item p:first-child {
+    margin-top: 0;
+}
+
+event-date {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 15%;
+    -moz-box-flex: 0;
+    -moz-flex: 0 0 15;
+    -ms-flex: 0 0 15%;
+    flex: 0 0 15%;
+    max-width: 15%;
+    padding: 5px 0;
+
+    display: block;
+    width: 100%;
+    line-height: 22px;
+    text-align: center;
+
+    .badge.badge-inline {
+        position: relative;
+        top: 0;
+        right: 0;
+        display: inline;
+    }
+}
+
+.button-bar {
+    flex-flow: row wrap;
+
+    > .button {
+        flex-basis: 20%;
+    }
+}
+
+.item-assertive a {
+    color: white;
+}
+
+.platform-ios ion-side-menu.menu.menu-left {
+    top: 20px;
+}

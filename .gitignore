@@ -4,4 +4,5 @@
 node_modules/
 platforms/
 plugins/
-npm-debug.log
+www/build/
+npm-debug*.log
