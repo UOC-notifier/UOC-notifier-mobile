@@ -43,7 +43,7 @@ angular.module('UOCNotifier')
             promises.push(retrieve_gradeinfo());
 
             var classrooms = $classes.get_notified();
-            for(var i in classrooms) {
+            for (var i in classrooms) {
                 promises.push(retrieve_final_grades(classrooms[i]));
                 promises.push(self.retrieve_stats(classrooms[i]));
             }
@@ -172,7 +172,7 @@ angular.module('UOCNotifier')
             promises.push(retrieve_timeline(classroom));
 
             if (classroom.has_assignments()) {
-                promises.push(self.retrieve_pac_stats(classroom).then(function(stats) {
+                promises.push(retrieve_pac_stats(classroom).then(function(stats) {
                     classroom.pacstats = stats;
                 }));
             }
@@ -706,7 +706,11 @@ angular.module('UOCNotifier')
         });
     }
 
-    self.retrieve_pac_stats = function(classroom, activity) {
+    function retrieve_pac_stats(classroom, activity) {
+        if (!$classes.get_notify(classroom.code)) {
+            return $q.when();
+        }
+
         var args = {
             codiTercers : classroom.subject_code,
             anyAcademic : classroom.any,

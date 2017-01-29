@@ -16,7 +16,7 @@
             <div class="card list" ng-if="events_today.length > 0">
                 <event-row ng-repeat="event in events_today" event="event" class="item event"></event-row>
             </div>
-        <ion-list>
+        <ion-list ng-if="classes.length > 0">
             <ion-item ng-repeat="class in classes | orderBy:'title' | orderBy: 'type'" ng-click="gotoClassroom(class.code)" class="item class item-text-wrap">
                 <h2>
                     <span class="class-color" style="background-color: #{{class.color}};"></span> {{class.title}}
@@ -41,6 +41,9 @@
                 </ion-list>
             </ion-item>
         </ion-list>
+        <ion-item ng-if="!classes || !classes.length" class="item-text-wrap" ng-click="gotoPage('settings')">
+            {{ "__NO_CLASSROOMS__" | translate }}
+        </ion-item>
     </ion-content>
     <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #2e3a69;" ng-if="state.session">
         <div class="button-bar">

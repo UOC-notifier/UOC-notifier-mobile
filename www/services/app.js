@@ -118,7 +118,7 @@ angular.module('UOCNotifier')
         var currentView = $ionicHistory.currentView();
         if (currentView.stateName == 'app.main') {
             // We're in main, exit or minimize!
-            if ($settings.get_interval() && $settings.get_bgchecking()) {
+            if ($settings.get_bgchecking()) {
                 if (window.plugins && window.plugins.appMinimize) {
                     window.plugins.appMinimize.minimize();
                     return;

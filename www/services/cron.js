@@ -35,26 +35,20 @@ angular.module('UOCNotifier')
     };
 
     self.reset_alarm = function() {
-        var check = $settings.get_interval();
-
         if (bgService) {
             // Set background service.
-            if (check && $settings.get_bgchecking()) {
+            if ($settings.get_bgchecking()) {
                 bgService.enable();
             } else {
                 bgService.disable();
             }
         }
 
-        if (check && !timer) {
+        if (!timer) {
             // Enable timer.
             timer = $interval(function() {
                 self.run_tasks();
             }, 30 * 60000);
-        } else if (!check && timer) {
-            // Disable timer.
-            $interval.cancel(timer);
-            timer = false;
         }
     };
 

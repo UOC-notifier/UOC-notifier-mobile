@@ -12,11 +12,7 @@
               </select>
             </label>
 
-            <ion-toggle ng-model="settings.auto_check" class="item-text-wrap" ng-change="save_setting('interval')">
-              <i class="icon ion-clock"></i> {{"__AUTO_CHECK__" |translate}}
-            </ion-toggle>
-
-            <ion-toggle ng-model="settings.bg_checking" class="item-text-wrap" ng-if="settings.auto_check" ng-change="save_setting('interval')">
+            <ion-toggle ng-model="settings.bg_checking" class="item-text-wrap" ng-change="save_setting('interval')">
               <i class="icon ion-radio-waves"></i> {{"__BG_CHECK__" |translate}}
             </ion-toggle>
 

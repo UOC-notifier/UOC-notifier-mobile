@@ -1,7 +1,10 @@
 <ion-view view-title="{{'__ASSIGNMENTS__' | translate}}">
   <ion-content>
-    <ion-list>
-      <event-row ng-if="assignments.length > 0" ng-repeat="event in assignments" event="event" task="true"></event-row>
+    <ion-list ng-if="assignments.length > 0">
+      <event-row ng-repeat="event in assignments" event="event" task="true"></event-row>
     </ion-list>
+    <ion-item ng-if="!assignments || !assignments.length" class="item-text-wrap">
+        {{ "__NOTHING_AHEAD__" | translate }}
+    </ion-item>
   </ion-content>
 </ion-view>

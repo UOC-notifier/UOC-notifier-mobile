@@ -222,7 +222,7 @@ angular.module('UOCNotifier')
 	Classroom.prototype.get_grade_stats = function(eventOrFinal) {
 		var index = parseInt(eventOrFinal, 10) ? get_event_idx_for_stats(this.events, eventOrFinal) : eventOrFinal;
 
-		if (index && this.pacstats[index]) {
+		if (index && this.pacstats && this.pacstats[index]) {
 			return this.pacstats[index];
 		}
 

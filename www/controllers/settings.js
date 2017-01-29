@@ -11,7 +11,6 @@ angular.module('UOCNotifier')
 
         $scope.settings = {
             uni: $settings.get_uni(),
-            auto_check: $settings.get_interval(),
             critical: $settings.get_critical(),
             notification: $settings.get_notification(),
             today_tab: $settings.get_today(),
@@ -40,7 +39,6 @@ angular.module('UOCNotifier')
     $scope.save_setting = function(setting) {
         switch (setting) {
             case 'interval':
-                $settings.save_interval($scope.settings.auto_check);
                 $settings.save_bgchecking($scope.settings.bg_checking);
 
                 $cron.reset_alarm();

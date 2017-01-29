@@ -43,16 +43,6 @@ angular.module('UOCNotifier')
         $storage.set_option("today", today);
     };
 
-
-    // OPTIONS - CHECK INTERVAL
-    self.get_interval = function() {
-        return $storage.get_option_bool("check_interval", true);
-    };
-
-    self.save_interval = function(checking) {
-        $storage.set_option("check_interval", checking);
-    };
-
     //OPTIONS - CRITICAL
     self.get_critical = function() {
         return $storage.get_option_int("critical", 10);
