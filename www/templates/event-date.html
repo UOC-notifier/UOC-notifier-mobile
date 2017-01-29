@@ -3,6 +3,7 @@
         <i ng-if="hasPassed && (!isGrades || !graded)" class="icon ion-checkmark-round"></i>
         <i ng-if="isToday && (!isGrades || !graded)" class="icon ion-clock"></i>
         <i ng-if="hasStats" class="icon ion-pie-graph"></i>
+        <i ng-if="comment" class="icon ion-chatbubble"></i>
         <span ng-if="!hasPassed && !isToday && (!isGrades || !graded)"> {{dateFormatted}}</span>
         <span ng-if="isGrades && graded"> {{graded}}</span>
     </span>

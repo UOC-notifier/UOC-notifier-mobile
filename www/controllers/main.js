@@ -79,6 +79,11 @@ angular.module('UOCNotifier')
         return $q.when();
     }
 
+    $scope.openCampus = function() {
+        $app.open_in_app('/cgibin/uocapp', false, true);
+    };
+
+
     $scope.gotoClassroom = function(classcode) {
         $state.go('app.classroom', {code: classcode});
     };

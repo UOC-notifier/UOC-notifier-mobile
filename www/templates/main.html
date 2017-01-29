@@ -44,7 +44,7 @@
     </ion-content>
     <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #2e3a69;" ng-if="state.session">
         <div class="button-bar">
-            <button class="button button-clear icon ion-university" ng-click="openInApp('/cgibin/uocapp')"> {{'__GOTO_CAMPUS__' | translate}}</button>
+            <button class="button button-clear icon ion-university" ng-click="openCampus()"> {{'__GOTO_CAMPUS__' | translate}}</button>
             <button class="button button-clear icon ion-email" ng-class="{'button-assertive': state.unread_mail > 0}" ng-click="openMail()"> {{'__MAIL__' | translate}}</button>
         </div>
     </ion-footer-bar>
