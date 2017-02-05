@@ -578,7 +578,6 @@ angular.module('UOCNotifier')
                 "P": ['' + any, "1", '' + idp, "ESTUDIANT"]
             }]
         };
-        // Always GAT_EXP, not dependant on UOCi
         return $queue.json('/tren/trenacc/webapp/GEPAF.FULLPERSONAL/gwtRequest', args, false, 120).then(function(resp) {
             try {
                 var objects = resp.O;
@@ -630,7 +629,6 @@ angular.module('UOCNotifier')
                 "P": [classroom.subject_code, parseInt(classroom.exped)]
             }]
         };
-        // Always GAT_EXP, not dependant on UOCi
         return $queue.json( '/tren/trenacc/webapp/GAT_EXP.CEXPEDWEB/gwtRequest', args, false).then(function(resp) {
             try {
                 var grades = false;
@@ -692,7 +690,7 @@ angular.module('UOCNotifier')
             return $q.when();
         }
 
-        var args = {modul: $settings.get_uni() + '.ESTADNOTES/estadis.assignatures',
+        var args = {modul: 'GAT_EXP.ESTADNOTES/estadis.assignatures',
                     assig: classroom.subject_code,
                     pAnyAcademic: classroom.any
                 };

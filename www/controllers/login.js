@@ -23,7 +23,7 @@ angular.module('UOCNotifier')
         promise.then(function() {
             $scope.incorrectLogin = false;
         }).catch(function() {
-            $scope.incorrectLogin = true;
+            $scope.incorrectLogin = $app.is_online();
         });
     }
 

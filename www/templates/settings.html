@@ -2,19 +2,20 @@
   <ion-content>
     <form>
         <div class="list">
-            <label class="item item-input item-select" for="uni">
-              <div class="input-label">
-                <i class="icon ion-earth"></i> {{"__UNI__" | translate}}
-              </div>
-              <select id="uni" ng-model="settings.uni" ng-change="save_setting('uni')">
-                <option value="GAT_EXP">UOC catalana</option>
-                <option value="GAT_EXPIB">UOC iberoamericana</option>
-              </select>
-            </label>
 
-            <ion-toggle ng-model="settings.bg_checking" class="item-text-wrap" ng-change="save_setting('interval')">
-              <i class="icon ion-radio-waves"></i> {{"__BG_CHECK__" |translate}}
-            </ion-toggle>
+            <div class="item item-text-wrap" for="bg_checking">
+              <div class="input-label">
+                <i class="icon ion-radio-waves"></i> {{"__BG_CHECK__" | translate}}
+              </div>
+              <label class="item-input item-select item-text-wrap">
+                <div>&nbsp;</div>
+                <select id="bg_checking" ng-model="settings.bg_checking" ng-change="save_setting('interval')">
+                  <option value="0">{{"__NEVER__" | translate}}</option>
+                  <option value="1">{{"__ASK__" | translate}}</option>
+                  <option value="2">{{"__ALWAYS__" | translate}}</option>
+                </select>
+              </label>
+            </div>
 
             <label class="item item-input item-stacked-label item-text-wrap" for="critical">
               <div class="input-label">

@@ -5,7 +5,6 @@
     "__OPTIONS__": "Options",
     "__USER__": "User",
     "__PASSWORD__": "Password",
-    "__UNI__": "University",
     "__BG_CHECK__": "Check with app on background",
     "__BG_TICKER__": "UOC notifier will keep checking on background",
     "__CRITICAL__": "Mínimum messages to consider it critical and notify",
@@ -101,5 +100,12 @@
     "__ACTIVITIES__": "Activities",
     "__TOOLS__": "Tools",
     "__PUSH_NOTIFICATIONS__" : "Push Notifications",
-    "__PTR__" : "Pull to refresh..."
+    "__PTR__" : "Pull to refresh...",
+    "__NEVER__" : "Never",
+    "__ASK__" : "Ask before exit",
+    "__ALWAYS__" : "Always",
+    "__NEVER_ASK_AGAIN__" : "Don't ask again",
+    "__CONTINUE_WORKING__" : "Do you want the app to keep checking in background?",
+    "__YES__" : "Yes",
+    "__NO__" : "No"
 }

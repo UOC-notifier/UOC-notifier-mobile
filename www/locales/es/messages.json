@@ -5,7 +5,6 @@
     "__OPTIONS__": "Opciones",
     "__USER__": "Usuario",
     "__PASSWORD__": "Contraseña",
-    "__UNI__": "Universidad",
     "__BG_CHECK__": "Comprobar con la aplicación en segundo plano",
     "__BG_TICKER__": "UOC notifier trabajará en segundo plano",
     "__CRITICAL__": "Mínimo de mensajes para considerar crítico y notificar",
@@ -101,5 +100,12 @@
     "__ACTIVITIES__": "Actividades",
     "__TOOLS__": "Herramientas",
     "__PUSH_NOTIFICATIONS__" : "Notificaciones Push",
-    "__PTR__" : "Estira para actualizar..."
+    "__PTR__" : "Estira para actualizar...",
+    "__NEVER__" : "Nunca",
+    "__ASK__" : "Preguntar antes de salir",
+    "__ALWAYS__" : "Siempre",
+    "__NEVER_ASK_AGAIN__" : "No volver a preguntar",
+    "__CONTINUE_WORKING__" : "¿Quieres que la aplicación siga comprobando en segund plano?",
+    "__YES__" : "Si",
+    "__NO__" : "No"
 }

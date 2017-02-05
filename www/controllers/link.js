@@ -6,8 +6,7 @@ angular.module('UOCNotifier')
         if (link[0] == '/') {
             url = link;
         } else {
-            var gat =  $settings.get_uni();
-            url = '/tren/trenacc?modul=' + gat + link;
+            url = '/tren/trenacc?modul=GAT_EXP.' + link;
             nossl = false;
         }
         $app.open_in_app(url, null, nossl);
@@ -22,7 +21,7 @@ angular.module('UOCNotifier')
             break;
             }
         }
-        var url = '/webapps/classroom/081_common/jsp/calendari_semestral.jsp?appId=UOC&idLang=a&assignment=ESTUDIANT&domainPontCode=sem_pont'+domainId+'&s=';
+        var url = '/webapps/classroom/081_common/jsp/calendari_semestral.jsp?appId=UOC&idLang='+$utils.get_lang_code()+'&assignment=ESTUDIANT&domainPontCode=sem_pont'+domainId+'&s=';
         $app.open_in_app(url);
     };
 

@@ -10,12 +10,11 @@ angular.module('UOCNotifier')
         $scope.allclasses = $classes.get_all();
 
         $scope.settings = {
-            uni: $settings.get_uni(),
             critical: $settings.get_critical(),
             notification: $settings.get_notification(),
             today_tab: $settings.get_today(),
             check_mail: $settings.get_check_mail(),
-            bg_checking: $settings.get_bgchecking()
+            bg_checking: $settings.get_bgchecking() + ""
         };
     }
 
@@ -23,7 +22,6 @@ angular.module('UOCNotifier')
 
     function save_all() {
         $scope.save_setting('interval');
-        $scope.save_setting('uni');
         $scope.save_setting('critical');
         $scope.save_setting('mail');
         $scope.save_setting('notification');
@@ -42,9 +40,6 @@ angular.module('UOCNotifier')
                 $settings.save_bgchecking($scope.settings.bg_checking);
 
                 $cron.reset_alarm();
-                break;
-            case 'uni':
-                $settings.save_uni($scope.settings.uni);
                 break;
             case 'critical':
                 $settings.save_critical($scope.settings.critical);

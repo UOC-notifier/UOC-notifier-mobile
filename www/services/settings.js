@@ -12,26 +12,6 @@ angular.module('UOCNotifier')
         $storage.set_option("idp", idp);
     };
 
-    // OPTIONS - UNIVERSITY
-    self.get_uni = function() {
-        var uni = $storage.get_option("uni", 'GAT_EXP');
-        if (uni == 'UOCi') {
-            // Ibero.
-            $storage.set_option("uni", 'GAT_EXPIB');
-            return 'GAT_EXPIB';
-        }
-        if (uni == 'UOCc') {
-            // Catalana.
-            $storage.set_option("uni", 'GAT_EXP');
-            return 'GAT_EXP';
-        }
-        return uni;
-    };
-
-    self.save_uni = function(uni) {
-        $storage.set_option("uni",uni);
-    };
-
     self.get_today = function() {
         return $storage.get_option_int("today", 6);
     };
@@ -66,13 +46,12 @@ angular.module('UOCNotifier')
     };
 
     self.get_bgchecking = function() {
-        return $storage.get_option_bool("bgchecking", false);
+        return $storage.get_option_int("bgchecking", 1);
     };
 
     self.save_bgchecking = function(bgchecking) {
         $storage.set_option("bgchecking", bgchecking);
     };
-
 
     //OPTIONS - SHOW AGENDA
     self.get_show_agenda = function() {

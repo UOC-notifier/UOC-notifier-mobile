@@ -5,7 +5,6 @@
     "__OPTIONS__": "Opcions",
     "__USER__": "Usuari",
     "__PASSWORD__": "Contrasenya",
-    "__UNI__": "Universitat",
     "__BG_CHECK__": "Comprova amb l'aplicació en segon pla",
     "__BG_TICKER__": "UOC notifier treballarà en segon pla",
     "__CRITICAL__": "Mínim de missatges per considerar crític i notificar",
@@ -101,5 +100,12 @@
     "__ACTIVITIES__": "Activitats",
     "__TOOLS__": "Eines",
     "__PUSH_NOTIFICATIONS__" : "Notifications Push",
-    "__PTR__" : "Estira per actualitzar..."
+    "__PTR__" : "Estira per actualitzar...",
+    "__NEVER__" : "Mai",
+    "__ASK__" : "Pregunta abans de sortir",
+    "__ALWAYS__" : "Sempre",
+    "__NEVER_ASK_AGAIN__" : "No m'ho tornis a preguntar",
+    "__CONTINUE_WORKING__" : "Vols que l'aplicació continui comprovant en segon pla?",
+    "__YES__" : "Si",
+    "__NO__" : "No"
 }

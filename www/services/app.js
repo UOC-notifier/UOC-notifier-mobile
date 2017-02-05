@@ -1,7 +1,7 @@
 angular.module('UOCNotifier')
 
 .factory('$app', function($session, $settings, $cordovaNetwork, $cordovaInAppBrowser, $cordovaLocalNotification, $cordovaBadge,
-        $rootScope, $utils, $translate, $ionicHistory, $state, $q, $ionicPopup, $timeout, $classes, $cache) {
+        $rootScope, $utils, $translate, $ionicHistory, $state, $q, $ionicPopup, $timeout, $classes, $cache, $bgservice) {
 
     var self = {};
 
@@ -118,13 +118,24 @@ angular.module('UOCNotifier')
         var currentView = $ionicHistory.currentView();
         if (currentView.stateName == 'app.main') {
             // We're in main, exit or minimize!
-            if ($settings.get_bgchecking()) {
-                if (window.plugins && window.plugins.appMinimize) {
-                    window.plugins.appMinimize.minimize();
+            var bgChecking = $settings.get_bgchecking();
+            if (bgChecking == 2) {
+                if (minimize()) {
                     return;
                 }
+            } else if (bgChecking == 1) {
+                var options = {
+                        template: $translate.instant("__CONTINUE_WORKING__"),
+                        cancelText: $translate.instant("__NO__"),
+                        okText: $translate.instant("__YES__")
+                      };
+                return $ionicPopup.confirm(options).then(function(confirmed) {
+                    $bgservice.set_background(confirmed);
+                    if (!confirmed || !minimize()) {
+                        ionic.Platform.exitApp();
+                    }
+                });
             }
-
             ionic.Platform.exitApp();
             return;
         }
@@ -138,6 +149,14 @@ angular.module('UOCNotifier')
         // There is a back view, go to it
         backView.go();
     };
+
+    function minimize() {
+        if (window.plugins && window.plugins.appMinimize) {
+            window.plugins.appMinimize.minimize();
+            return true;
+        }
+        return false;
+    }
 
     self.gotoMain = function() {
         $ionicHistory.nextViewOptions({

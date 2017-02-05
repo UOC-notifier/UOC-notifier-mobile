@@ -1,9 +1,8 @@
 angular.module('UOCNotifier')
 
-.factory('$cron', function($settings, $storage, $debug, $queue, $session, $uoc, $interval, $q, $app, $translate, $events, $state) {
+.factory('$cron', function($settings, $debug, $queue, $session, $uoc, $interval, $q, $app, $events, $state, $bgservice) {
 
     var self = {},
-        bgService = false,
         timer = false,
         init = false;
 
@@ -12,18 +11,7 @@ angular.module('UOCNotifier')
             return;
         }
 
-        if (!bgService && window.cordova && window.cordova.plugins && window.cordova.plugins.backgroundMode) {
-            bgService = window.cordova.plugins.backgroundMode;
-            bgService.setDefaults({
-                text: $translate.instant('__BG_TICKER__'),
-                title: $translate.instant('TITLE'),
-                ticker: $translate.instant('__BG_TICKER__'),
-                color: "#FFFFFF",
-                icon: "icon",
-                isPublic: true,
-                resume: true
-            });
-        }
+        $bgservice.init();
 
         $session.reset().catch(function() {
             $state.go('app.login');
@@ -35,14 +23,7 @@ angular.module('UOCNotifier')
     };
 
     self.reset_alarm = function() {
-        if (bgService) {
-            // Set background service.
-            if ($settings.get_bgchecking()) {
-                bgService.enable();
-            } else {
-                bgService.disable();
-            }
-        }
+        $bgservice.set_background($settings.get_bgchecking() == 2);
 
         if (!timer) {
             // Enable timer.
@@ -72,10 +53,6 @@ angular.module('UOCNotifier')
 
         if (!$session.has_username_password()) {
             return $q.reject();
-        }
-
-        if (bgService && bgService.isActive()) {
-            $debug.print('Background checking...');
         }
 
         $events.trigger('tasksChange', true);
