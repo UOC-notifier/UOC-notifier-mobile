@@ -18,7 +18,7 @@ angular.module('UOCNotifier')
   	}
 
 	Resource.prototype.has_message_count = function() {
-		if (this.type == "messagelist") {
+		if (this.type == "messagelist" || this.type == "grupsdetreball") {
 			if (isNaN(this.messages)) {
 				this.messages = 0;
 			}
@@ -31,7 +31,7 @@ angular.module('UOCNotifier')
 	};
 
 	Resource.prototype.has_news = function() {
-		return (this.type == "blog" || this.type == "oldblog") && this.news;
+		return (this.type == "blog" || this.type == "microblog" || this.type == "oldblog") && this.news;
 	};
 
 	Resource.prototype.set_messages = function(messages, all_messages) {
@@ -62,7 +62,12 @@ angular.module('UOCNotifier')
 
 	Resource.prototype.set_link = function(link) {
 		var url = $utils.get_url_attr(link, 'redirectUrl');
-		link = url ? decodeURIComponent(url) : link;
+		link = url ? url : link;
+
+		var pos = link.indexOf('&htm=/');
+		if (pos > 0) {
+			link = link.substr(pos + 5);
+		}
 
 		link = $utils.empty_url_attr(link, 's');
 		this.link = $utils.empty_url_attr(link, 'sessionId');

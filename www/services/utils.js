@@ -105,7 +105,7 @@ angular.module('UOCNotifier')
         regexp = new RegExp(regexp);
         var match = url.match(regexp);
         if(match){
-            return match[1];
+            return decodeURIComponent(match[1]);
         }
         return false;
     };
@@ -113,7 +113,7 @@ angular.module('UOCNotifier')
     self.empty_url_attr = function (url, attr) {
         // Strip hashes.
         url = url.split('#')[0];
-        var value = self.get_url_attr(url, 's');
+        var value = self.get_url_attr(url, attr);
         return value ? get_url_withoutattr(url, attr) + '&' + attr + '=' : url;
     };
 
