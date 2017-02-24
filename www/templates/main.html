@@ -1,16 +1,18 @@
 <ion-view view-title="UOC Notifier">
     <ion-content ng-class="{'has-footer' : state.session}">
         <ion-refresher pulling-text="{{'__PTR__' | translate}}" on-refresh="doRefresh()"></ion-refresher>
-            <div class="card" ng-repeat="announcement in announcements">
-                <div href="#" class="item item-icon-left item-text-wrap" ng-click="toggleAnnouncement(announcement)">
+            <div class="card" ng-if="announcements && announcements.length > 0">
+                <div ng-repeat="announcement in announcements" class="item item-icon-left" ng-click="toggleAnnouncement(announcement)">
                     <i class="icon ion-speakerphone"></i>
-                    <h2>
-                        <a target="_blank" ng-click="openInApp(announcement.link)" ng-if="announcement.link">{{announcement.title}}</a>
-                        <span ng-if="!announcement.link">{{announcement.title}}</span>
-                    </h2>
-                    <p ng-if="announcement.date">{{announcement.date}}</p>
+                    <div href="#" class="item-text-wrap">
+                        <h2>
+                            <a target="_blank" ng-click="openInApp(announcement.link)" ng-if="announcement.link">{{announcement.title}}</a>
+                            <span ng-if="!announcement.link">{{announcement.title}}</span>
+                        </h2>
+                        <p ng-if="announcement.date">{{announcement.date}}</p>
+                    </div>
+                    <div class="item-body item-text-wrap" ng-bind-html="announcement.description" ng-show="announcement.show">{{announcement.description}}</div>
                 </div>
-                <div class="item item-body item-text-wrap" ng-bind-html="announcement.description" ng-show="announcement.show">{{announcement.description}}</div>
             </div>
 
             <div class="card list" ng-if="events_today.length > 0">

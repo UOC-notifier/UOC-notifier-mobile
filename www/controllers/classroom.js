@@ -118,7 +118,7 @@ angular.module('UOCNotifier')
     $scope.openGrades = function() {
         var link = '/webapps/rac/listEstudiant.action',
             data = { domainId: classroom.domain };
-        $app.open_in_app(link, data);
+        $app.open_in_app(link, data, true);
     };
 
     $scope.$on('$destroy', function(){

@@ -43,6 +43,7 @@ var paths = {
 gulp.task('default', ['sass', 'js']);
 gulp.task('build', ['sass', 'js']);
 gulp.task('build-prepare', ['build']);
+gulp.task('serve:before', ['build', 'watch']);
 
 gulp.task('sass', function(done) {
   gulp.src(paths.sass)

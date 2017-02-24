@@ -111,6 +111,8 @@ angular.module('UOCNotifier')
     };
 
     self.empty_url_attr = function (url, attr) {
+        // Strip hashes.
+        url = url.split('#')[0];
         var value = self.get_url_attr(url, 's');
         return value ? get_url_withoutattr(url, attr) + '&' + attr + '=' : url;
     };

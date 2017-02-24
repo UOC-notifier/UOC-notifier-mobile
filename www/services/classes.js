@@ -104,7 +104,7 @@ angular.module('UOCNotifier')
 		if (max_any > 0) {
 			for (var x in classes) {
 				if (classes[x].any && parseInt(classes[x].any) < max_any) {
-					classes.splice(x, 1);
+					delete classes[x];
 				}
 			}
 		}

@@ -1,12 +1,10 @@
 {
   "name": "UOC-notifier",
   "app_id": "",
-  "gulpStartupTasks": [
-    "build",
-    "watch"
-  ],
   "watchPatterns": [
-    "www/**/*",
+    "www/**/*.html",
+    "www/build/**/*",
+    "www/index.html",
     "!www/lib/**/*"
   ]
 }
