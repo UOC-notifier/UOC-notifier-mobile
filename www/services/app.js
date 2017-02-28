@@ -93,7 +93,9 @@ angular.module('UOCNotifier')
     };
 
     self.open_url = function(url, where) {
-        where = where || ionic.Platform.isIOS() ? '_blank' : '_self';
+        if (!where) {
+            where = ionic.Platform.isIOS() ? '_blank' : '_self';
+        }
 
         var options = {
             enableViewPortScale: 'yes',

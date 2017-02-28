@@ -45,6 +45,7 @@
     "__COMMITTED_VIEWED__": "Entregado y visto por el consultor:  {{date}} a las {{time}}",
     "__NOT_COMMITTED__": "No entregado",
     "__EQUIPMENT__": "Materiales",
+    "__OTHER_EQUIPMENT__": "Otros materiales",
     "__LINK_TO_EQUIPMENT__": "Enlace a los materiales",
     "__TEACHING_PLAN__": "Plan Docente",
     "__GOTO_CAMPUS__": "Ir al campus",

@@ -45,6 +45,7 @@
     "__COMMITTED_VIEWED__": "Committed and seen by the teacher: {{date}} at {{time}}",
     "__NOT_COMMITTED__": "Not committed",
     "__EQUIPMENT__": "Equipment",
+    "__OTHER_EQUIPMENT__": "Other equipment",
     "__LINK_TO_EQUIPMENT__": "Link to Equipment",
     "__TEACHING_PLAN__": "Teaching Plan",
     "__GOTO_CAMPUS__": "Go to Campus",

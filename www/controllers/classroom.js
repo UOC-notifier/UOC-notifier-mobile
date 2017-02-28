@@ -74,7 +74,7 @@ angular.module('UOCNotifier')
 
     $scope.gotoMaterials = function() {
         $uoc.retrieve_materials(classroom).then(function(materials) {
-            if (materials.length > 0) {
+            if (materials.materials.length > 0 || materials.other.length > 0) {
                 $state.go('app.materials', {code: classroom.code});
             } else {
                 var link = '/webapps/aulaca/classroom/Materials.action',

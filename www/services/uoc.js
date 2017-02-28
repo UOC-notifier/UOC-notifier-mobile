@@ -766,29 +766,51 @@ angular.module('UOCNotifier')
             codAssig : classroom.subject_code
         };
         return $queue.get('/webapps/mymat/listMaterialsAjax.action', args, false, 10).then(function(data) {
-            var material;
             if (data.dades) {
-                var materials = [];
-                for (var x in data.dades) {
-                    var dada = data.dades[x];
-                    if (dada.defecte) {
-                        if (material && material.title && material.title == dada.titol) {
-                            for (var y in dada.formats) {
-                                material.icons.push(get_icon_link(dada.formats[y]));
-                            }
-                        } else {
-                            material = {};
-                            material.title = dada.titol;
-                            material.code = dada.codMaterial;
-                            material.icons = [];
-                            for (var z in dada.formats) {
-                                material.icons.push(get_icon_link(dada.formats[z]));
-                            }
-                            materials.push(material);
+                var dades = data.dades.filter(function(a) {
+                        return a.defecte;
+                    }),
+                    materials = dades.filter(function(a) {
+                            return !!a.codMaterial;
+                        }),
+                    other = dades.filter(function(a) {
+                        return !a.codMaterial;
+                    }),
+                    material,
+                    mats = {
+                        materials: [],
+                        other: []
+                    };
+
+                for (var x in materials) {
+                    var dada = materials[x];
+                    if (material && material.title && material.title == dada.titol) {
+                        for (var y in dada.formats) {
+                            material.icons.push(get_icon_link(dada.formats[y]));
                         }
+                    } else {
+                        material = {};
+                        material.title = dada.titol;
+                        material.code = dada.codMaterial;
+                        material.icons = [];
+                        for (var z in dada.formats) {
+                            material.icons.push(get_icon_link(dada.formats[z]));
+                        }
+                        mats.materials.push(material);
                     }
                 }
-                return materials;
+
+                for (var x in other) {
+                    var dada = other[x];
+                    material = {};
+                    material.title = dada.titol;
+                    material.icons = [];
+                    for (var z in dada.formats) {
+                        material.icons.push(get_icon_link(dada.formats[z]));
+                    }
+                    mats.other.push(material);
+                }
+                return mats;
             } else {
                 $q.reject();
             }
@@ -810,7 +832,7 @@ angular.module('UOCNotifier')
                     icon.icon = 'videocamera';
                     break;
                 case 'WEB':
-                    icon.icon = 'link';
+                    icon.icon = 'earth';
                     break;
                 case 'EPUB':
                     icon.icon = 'bookmark';
@@ -823,6 +845,12 @@ angular.module('UOCNotifier')
                     break;
                 case 'PROGRAMARI_EN_LINIA':
                     icon.icon = 'wrench';
+                    break;
+                case 'RECURS':
+                    icon.icon = 'link';
+                    break;
+                case 'AUDIOVISUAL':
+                    icon.icon = 'ios-videocam';
                     break;
             }
 

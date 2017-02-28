@@ -11,7 +11,8 @@ angular.module('UOCNotifier')
         $scope.acronym = classroom.get_acronym();
         $scope.classroomColor = classroom.color;
         return $uoc.retrieve_materials(classroom).then(function(materials) {
-            $scope.materials = materials;
+            $scope.materials = materials.materials;
+            $scope.other = materials.other;
             $scope.loaded = true;
         });
     }
