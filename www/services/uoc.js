@@ -720,7 +720,8 @@ angular.module('UOCNotifier')
             var stats = {};
             angular.forEach(data.actividades, function(actividad, index) {
                 var table = data.dataTables[index],
-                    aulas = [];
+                    aulas = [],
+                    aulasDef = [];
 
                 angular.forEach(table.cols, function(col, i) {
                     if (i > 0) {
@@ -746,14 +747,16 @@ angular.module('UOCNotifier')
 
                 angular.forEach(aulas, function(aula, i) {
                     var value = aula.values.reduce(function(a, b) {
+                        if(index == 0 && classroom.subject_code == "06.529") console.log(a,b);
                         return a + b;
                     }, 0);
-                    if (value == 0) {
-                        aulas.splice(i);
+
+                    if (value > 0) {
+                        aulasDef.push(aula);
                     }
                 });
-                if (aulas.length > 0) {
-                    stats[actividad] = aulas;
+                if (aulasDef.length > 0) {
+                    stats[actividad] = aulasDef;
                 }
             });
 

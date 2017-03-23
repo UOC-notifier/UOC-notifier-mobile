@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="112000" id="com.ionicframework.uocnotifier" version="1.12" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="113000" id="com.ionicframework.uocnotifier" version="1.13" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>UOC Notifier</name>
     <description>UOC notifier for Mobile</description>
     <author email="uoc-notifier@googlegroups.com" href="https://github.com/crazyserver/UOC-notifier-mobile/">Pau Ferrer Ocaña</author>
