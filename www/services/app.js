@@ -67,11 +67,12 @@ angular.module('UOCNotifier')
     function open_url_session(url, where, data, nossl) {
         var session = $session.get();
         if (session){
+            console.error(url);
             if (url.indexOf('?') == -1) {
                 if(!data) data = {};
                 data.s = session;
                 url += '?' + $utils.uri_data(data);
-            } else if (url[url.length-1] == '=') {
+            } else if (url[url.length - 1] == '=') {
                 url += session;
             }
             if (url[0] == '/') {

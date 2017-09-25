@@ -384,7 +384,7 @@ angular.module('UOCNotifier')
                                 }
 
                                 var grade = actividad.nota;
-                                if (grade.length > 0 && grade != '-') {
+                                if (grade && grade.length > 0 && grade != '-') {
                                     if (evnt.graded != grade) {
                                         evnt.graded = grade;
                                         changed = true;
@@ -415,7 +415,7 @@ angular.module('UOCNotifier')
                     if (classroom) {
                         classroom.has_grades = true;
                         var nota = asignatura.notafinal;
-                        if (nota.length > 0 && nota != '-') {
+                        if (nota && nota.length > 0 && nota != '-') {
                             var notafinal = classroom.add_grade('FA', nota, true);
                             if (notafinal) {
                                 notafinal.notify(classroom.get_acronym());
@@ -423,7 +423,7 @@ angular.module('UOCNotifier')
                         }
 
                         nota = asignatura.notafinalcontinuada;
-                        if (nota.length > 0 && nota != '-') {
+                        if (nota && nota.length > 0 && nota != '-') {
                             var notacont = classroom.add_grade('FC', nota, false);
                             if (notacont) {
                                 notacont.notify(classroom.get_acronym());

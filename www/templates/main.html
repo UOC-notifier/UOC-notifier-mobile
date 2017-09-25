@@ -1,7 +1,7 @@
 <ion-view view-title="UOC Notifier">
     <ion-content ng-class="{'has-footer' : state.session}">
         <ion-refresher pulling-text="{{'__PTR__' | translate}}" on-refresh="doRefresh()"></ion-refresher>
-            <div class="card" ng-if="announcements && announcements.length > 0">
+            <div class="card card-energized" ng-if="announcements && announcements.length > 0">
                 <div ng-repeat="announcement in announcements" class="item item-icon-left" ng-click="toggleAnnouncement(announcement)">
                     <i class="icon ion-speakerphone"></i>
                     <div href="#" class="item-text-wrap">
@@ -47,7 +47,7 @@
             {{ "__NO_CLASSROOMS__" | translate }}
         </ion-item>
     </ion-content>
-    <ion-footer-bar align-title="center" class="bar-colored" style="background-color: #2e3a69;" ng-if="state.session">
+    <ion-footer-bar align-title="center" class="bar-colored bar-uoc" ng-if="state.session">
         <div class="button-bar">
             <button class="button button-clear icon ion-university" ng-click="openCampus()"> {{'__GOTO_CAMPUS__' | translate}}</button>
             <button class="button button-clear icon ion-email" ng-class="{'button-assertive': state.unread_mail > 0}" ng-click="openMail()"> {{'__MAIL__' | translate}}</button>

@@ -1,6 +1,6 @@
 <ion-side-menus enable-menu-with-back-views="false">
   <ion-side-menu-content>
-    <ion-nav-bar class="bar-stable">
+    <ion-nav-bar>
       <ion-nav-back-button></ion-nav-back-button>
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
@@ -32,7 +32,7 @@
             {{class.messages}}
           </span>
         </ion-item>
-        <div class="item item-divider" ng-if="hasAssignments || state.session"></div>
+        <div class="item item-divider item-divider-small" ng-if="hasAssignments || state.session"></div>
         <ion-item class="item-icon-left" menu-close ng-click="gotoPage('tasks')" ng-if="hasAssignments">
             <i class="icon ion-flag"></i> {{"__ASSIGNMENTS__" | translate}}
         </ion-item>
@@ -40,7 +40,7 @@
             <i class="icon ion-bookmark"></i> {{"__LINKS_TO_CAMPUS__" | translate}}
           </ion-item>
         </ion-list>
-        <div class="item item-divider"></div>
+        <div class="item item-divider item-divider-small"></div>
         <ion-item class="item-icon-left" menu-close ng-click="gotoPage('settings')">
           <i class="icon ion-settings"></i> {{"__OPTIONS__" | translate}}
         </ion-item>

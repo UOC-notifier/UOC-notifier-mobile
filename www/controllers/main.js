@@ -28,6 +28,10 @@ angular.module('UOCNotifier')
         }
     });
 
+    var taskObserver = $events.on('loginChanged', $state.current.name, function() {
+        $scope.state.session = !!$session.get();
+    });
+
     function load_view() {
         $scope.classes = $classes.get_notified();
         $scope.allclasses = $classes.get_all();

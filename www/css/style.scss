@@ -1,19 +1,25 @@
-/*
-To customize the look and feel of Ionic, you can override the variables
-in ionic's _variables.scss file.
+$green: #5cb85c;
+$green-light: #EEFCEE;
+$yellow: #f0ad4e;
+$yellow-light: #FCFCEE;
+$red: #f85361;
+$red-light: #FCEEEE;
 
-For example, you might change some of the default colors:
+$positive:     #337AB7 !default;
+$balanced:     $green !default;
+$energized:    $yellow !default;
+$assertive:    $red !default;
 
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
-$positive:                        #387ef5 !default;
-$calm:                            #11c1f3 !default;
-$balanced:                        #33cd5f !default;
-$energized:                       #ffc900 !default;
-$assertive:                       #ef473a !default;
-$royal:                           #886aea !default;
-$dark:                            #444 !default;
-*/
+$uoc: #000078;
+$uoc-alt: #73EDFF;
+$links: #706F6F;
+
+$base-color: $uoc !default;
+$base-background-color: #f2f2f2 !default;
+
+$item-divider-bg: white !default;
+
+$toggle-on-default-bg: $uoc;
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/release/fonts" !default;
@@ -26,9 +32,8 @@ $ionicons-font-path: "../lib/ionic/release/fonts" !default;
     width: 20px;
     height: 20px;
     border-radius: 4px;
-    background: gray;
+    background: $uoc-alt;
     margin-right: 5px;
-    background-color: #555;
 }
 
 .item {
@@ -45,21 +50,21 @@ $ionicons-font-path: "../lib/ionic/release/fonts" !default;
             background-color: transparent;
         }
         &.success {
-            background-color: #dff0d8;
+            background-color: $green-light;
             .name a{
-                color: #3c763d;
+                color: $green;
             }
         }
         &.warning {
-            background-color: #fcf8e3;
+            background-color: $yellow-light;
             .name a{
-                color: #8a6d3b;
+                color: $yellow;
             }
         }
         &.danger {
-            background-color: #f2dede;
+            background-color: $red-light;
             .name a{
-                color: #a94442;
+                color: $red;
             }
         }
         a {
@@ -97,13 +102,27 @@ event-date .near {
     line-height: 18px;
 }
 
+.item-divider,
+.bar-header {
+    color: $uoc;
+    border: 0;
+    border-bottom: 3px solid $uoc;
+}
+
+.bar-header,
+.bar-header .button,
 .bar-colored,
 .bar-colored .button {
-    color: white;
+    color: $uoc;
 }
 
 .bar-colored {
-    background-color: #555;
+    border: 0;
+    border-top: 3px solid $uoc-alt;
+
+    &.bar-uoc {
+        border-top-color: $uoc;
+    }
 }
 
 .bar .buttons-right .badge {
@@ -226,10 +245,36 @@ event-date {
     }
 }
 
+.item-stacked-label {
+    background-color: white;
+}
+
 .item-assertive a {
     color: white;
 }
 
 .platform-ios ion-side-menu.menu.menu-left {
     top: 20px;
+}
+
+.item-divider-small {
+    height: 0;
+    min-height: 0;
+    padding: 0;
+}
+
+.card {
+    box-shadow: none;
+    border: 0;
+    border-bottom: 3px solid $uoc;
+
+    &.card-balanced {
+        border-color: $balanced;
+    }
+    &.card-energized {
+        border-color: $energized;
+    }
+    &.card-assertive {
+        border-color: $assertive;
+    }
 }

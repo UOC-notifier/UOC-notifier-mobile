@@ -13,6 +13,7 @@ angular.module('UOCNotifier')
             password: user.password
         };
         $scope.incorrectLogin = false;
+        $scope.loggedIn = false;
 
         var promise;
         if (reset) {
@@ -22,8 +23,12 @@ angular.module('UOCNotifier')
         }
         promise.then(function() {
             $scope.incorrectLogin = false;
+            $scope.loggedIn = true;
         }).catch(function() {
-            $scope.incorrectLogin = $app.is_online();
+            $scope.loggedIn = false;
+            $scope.incorrectLogin = $app.is_online() && user.username && user.password;
+        }).finally(function() {
+            $events.trigger('loginChanged');
         });
     }
 
@@ -31,15 +36,20 @@ angular.module('UOCNotifier')
 
     $scope.login = function() {
         $scope.incorrectLogin = false;
+        $scope.loggedIn = false;
         var changed = $session.has_user_changed($scope.settings.username);
         return $session.save_user($scope.settings.username, $scope.settings.password).then(function() {
             $scope.incorrectLogin = false;
+            $scope.loggedIn = true;
             purge(changed);
             $events.trigger('classesUpdated', true);
             $app.gotoMain();
         }).catch(function() {
             purge(changed);
-            $scope.incorrectLogin = true;
+            $scope.loggedIn = false;
+            $scope.incorrectLogin = $app.is_online() && user.username && user.password;
+        }).finally(function() {
+            $events.trigger('loginChanged');
         });
     };
 

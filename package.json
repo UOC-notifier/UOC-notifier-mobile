@@ -1,6 +1,6 @@
 {
   "name": "UOC-notifier",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "UOC-notifier: Notifier of news on UOC",
   "dependencies": {
     "cordova-custom-config": "node_modules/cordova-custom-config",
