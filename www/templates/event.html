@@ -28,11 +28,11 @@
           <i class="icon ion-arrow-right-b" ng-if="solution !== true && solution != 'TODAY' && solution"></i>
           <strong>{{"__SOLUTION__" |translate}}</strong>: {{event.solution}}
       </ion-item>
-      <ion-item class="item item-icon-left item-text-wrap" ng-if="event.grading">
-          <i class="icon ion-checkmark-round balanced" ng-if="grade === true"></i>
+      <ion-item class="item item-icon-left item-text-wrap" ng-if="event.grading || event.graded">
+          <i class="icon ion-checkmark-round balanced" ng-if="grade === true || (!event.grading && event.graded)"></i>
           <i class="icon ion-clock energized" ng-if="grade == 'TODAY'"></i>
           <i class="icon ion-arrow-right-b" ng-if="grade !== true && grade != 'TODAY' && grade"></i>
-          <strong>{{"__GRADE__" |translate}}</strong>: {{event.grading}}
+          <strong>{{"__GRADE__" |translate}}</strong>: {{event.grading || ""}}
           <span ng-if="event.graded"> - <span class="badge badge-inline badge-positive">{{event.graded}}</span></span>
       </ion-item>
       <ion-item class="item item-icon-left item-text-wrap" ng-if="event.commenttext">

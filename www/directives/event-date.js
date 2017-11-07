@@ -13,7 +13,8 @@ angular.module('UOCNotifier')
         templateUrl: 'templates/event-date.html',
         link: function(scope) {
             var date = scope.date;
-            if (!date) {
+
+            if (!date && !scope.graded && !scope.comment && !scope.hasStats) {
                 scope.show = false;
                 return;
             }
